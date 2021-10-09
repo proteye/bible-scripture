@@ -1,0 +1,12 @@
+appId: com.example.bible-scripture
+productName: Bible Scripture
+copyright: Copyright © 2021 Ramil Zaynetdinov
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
