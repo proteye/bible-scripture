@@ -1,19 +1,19 @@
-import React from 'react';
-import Head from 'next/head';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { theme } from '../lib/theme';
-import type { AppProps } from 'next/app';
+import React from 'react'
+import Head from 'next/head'
+import { ThemeProvider } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { theme } from '../lib/theme'
+import type { AppProps } from 'next/app'
 
-export default function(props: AppProps) {
-  const { Component, pageProps } = props;
+export default function (props: AppProps) {
+  const { Component, pageProps } = props
 
   React.useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side');
+    const jssStyles = document.querySelector('#jss-server-side')
     if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
+      jssStyles.parentElement.removeChild(jssStyles)
     }
-  }, []);
+  }, [])
 
   return (
     <React.Fragment>
@@ -25,5 +25,5 @@ export default function(props: AppProps) {
         <Component {...pageProps} />
       </ThemeProvider>
     </React.Fragment>
-  );
+  )
 }
