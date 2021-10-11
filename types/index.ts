@@ -1,6 +1,11 @@
-export type BibleInfo = { name: string; value: string }
+export type TAny = any
 
-export type BibleBook = {
+export interface IBibleInfo {
+  name: string
+  value: string
+}
+
+export interface IBibleBook {
   bookNumber: number
   shortName: string
   longName: string
@@ -8,20 +13,20 @@ export type BibleBook = {
   isPresent: boolean
 }
 
-export type BibleVerse = {
+export interface IBibleVerse {
   bookNumber: number
   chapter: number
   verse: number
   text: string
 }
 
-export type BibleItem = {
+export interface IBibleItem {
   id: string
-  info: BibleInfo[]
-  books: BibleBook[]
-  verses: BibleVerse[]
+  info: IBibleInfo[]
+  books: IBibleBook[]
+  verses: IBibleVerse[]
 }
 
 export interface BibleState {
-  items: BibleItem[]
+  items: IBibleItem[]
 }
