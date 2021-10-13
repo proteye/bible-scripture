@@ -1,16 +1,24 @@
 import { ipcMain } from 'electron'
-import { TModuleName } from 'common/types'
+import { TId, TModuleName } from 'common/types'
 import { IGetBibleVersesProps } from '../models/bible/types'
 import { bible } from '../models'
 
-ipcMain.handle('getBibleInfo', async (_event, moduleName: TModuleName) => {
-  return await bible.getBibleInfo(moduleName)
+ipcMain.handle('openBible', async (_event, moduleName: TModuleName, uid: TId) => {
+  return await bible.openBible(moduleName, uid)
 })
 
-ipcMain.handle('getBibleBooks', async (_event, moduleName: TModuleName) => {
-  return await bible.getBibleBooks(moduleName)
+ipcMain.handle('closeBibleByUid', async (_event, uid: TId) => {
+  return await bible.closeBibleByUid(uid)
 })
 
-ipcMain.handle('getBibleVerses', async (_event, moduleName: TModuleName, props: IGetBibleVersesProps) => {
-  return await bible.getBibleVerses(moduleName, props)
+ipcMain.handle('getBibleInfo', async (_event, uid: TId) => {
+  return await bible.getBibleInfo(uid)
+})
+
+ipcMain.handle('getBibleBooks', async (_event, uid: TId) => {
+  return await bible.getBibleBooks(uid)
+})
+
+ipcMain.handle('getBibleVerses', async (_event, uid: TId, props: IGetBibleVersesProps) => {
+  return await bible.getBibleVerses(uid, props)
 })

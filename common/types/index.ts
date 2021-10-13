@@ -4,4 +4,14 @@ export type TAny = any
 
 export type TModuleName = string
 
-export type TChannelName = 'openModule' | 'closeModule' | 'getBibleInfo' | 'getBibleBooks' | 'getBibleVerses'
+export type TId = string
+
+export type TChannelName =
+  | 'openModule'
+  | 'closeModuleByUid'
+  | 'closeModule'
+  | 'openBible'
+  | 'closeBibleByUid'
+  | 'getBibleInfo'
+  | 'getBibleBooks'
+  | 'getBibleVerses'

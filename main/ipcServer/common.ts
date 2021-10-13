@@ -1,11 +1,15 @@
 import { ipcMain } from 'electron'
-import { TModuleName } from 'common/types'
+import { TId, TModuleName } from 'common/types'
 import { common } from '../models'
 
-ipcMain.handle('openModule', async (_event, moduleName: TModuleName) => {
-  return common.openModule(moduleName)
+ipcMain.handle('openModule', async (_event, moduleName: TModuleName, uniqId: TId) => {
+  return common.openModule(moduleName, uniqId)
 })
 
-ipcMain.handle('closeModule', async (_event, moduleName: TModuleName, closeAll = false) => {
-  return common.closeModule(moduleName, closeAll)
+ipcMain.handle('closeModuleByUid', async (_event, moduleName: TModuleName, uniqId: TId) => {
+  return common.closeModuleByUid(moduleName, uniqId)
+})
+
+ipcMain.handle('closeModule', async (_event, moduleName: TModuleName) => {
+  return common.closeModule(moduleName)
 })

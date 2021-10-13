@@ -1,5 +1,4 @@
-import React, { FC, useEffect } from 'react'
-import { ipcRenderer } from 'electron'
+import React, { FC } from 'react'
 import noop from 'helpers/noop'
 
 import { MyButton } from './styled.index'

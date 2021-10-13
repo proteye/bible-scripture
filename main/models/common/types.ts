@@ -1,9 +1,5 @@
-import { TModuleName } from 'common/types'
-
-export interface IModuleInfo {
-  listenersCount: number
-}
+import { TId, TModuleName } from 'common/types'
 
 export interface IModules {
-  [moduleName: TModuleName]: IModuleInfo
+  [moduleName: TModuleName]: TId[]
 }
