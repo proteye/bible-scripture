@@ -1275,6 +1275,13 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
+"@types/sqlite3@^3.1.7":
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/@types/sqlite3/-/sqlite3-3.1.7.tgz#84fbc65946603d15cff4968d0cb283d1879dd156"
+  integrity sha512-8FHV/8Uzd7IwdHm5mvmF2Aif4aC/gjrt4axWD9SmfaxITnOjtOhCbOSTuqv/VbH1uq0QrwlaTj9aTz3gmR6u4w==
+  dependencies:
+    "@types/node" "*"
+
 "@types/verror@^1.10.3":
   version "1.10.5"
   resolved "https://registry.yarnpkg.com/@types/verror/-/verror-1.10.5.tgz#2a1413aded46e67a1fe2386800e291123ed75eb1"

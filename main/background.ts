@@ -1,8 +1,8 @@
 import { app } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
-import { closeAllDb } from './db'
-import './ipc'
+import { closeAllDb } from './database'
+import './ipcServer'
 
 const isProd: boolean = process.env.NODE_ENV === 'production'
 
@@ -30,6 +30,7 @@ if (isProd) {
 })()
 
 app.on('window-all-closed', () => {
-  closeAllDb()
-  app.quit()
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
 })

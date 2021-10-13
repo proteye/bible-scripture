@@ -1,3 +1,4 @@
+import common from './common'
 import bible from './bible'
 
-export { bible }
+export { common, bible }
