@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ipcRenderer } from 'electron'
 import { nanoid } from 'nanoid'
-import { IBibleVerse, IBibleInfo } from 'common/types'
+import { IBibleVerse, IBibleInfo } from '@common/types'
 import { EBibleNames } from './types'
 
 const BIBLE_NAME = EBibleNames.RST_STRONG.toString()

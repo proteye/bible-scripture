@@ -16,18 +16,21 @@
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
-    "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
+    "@types/muicss": "^0.9.3",
     "@types/nanoid": "^3.0.0",
     "@types/node": "^14.14.31",
     "@types/react": "^16.9.49",
     "@types/sqlite3": "^3.1.7",
+    "@types/styled-components": "^5.1.15",
+    "babel-plugin-styled-components": "^1.13.2",
     "electron": "^15.0.0",
     "electron-builder": "^22.11.7",
     "next": "^11.1.2",
     "nextron": "^7.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "styled-components": "^5.3.1",
     "typescript": "^4.4.3"
   }
 }

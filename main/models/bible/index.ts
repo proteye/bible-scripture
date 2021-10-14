@@ -1,4 +1,4 @@
-import { common } from '../index'
+import { module } from '../index'
 import { IBibleBook, IBibleInfo, IBibleVerse, TId, TModuleName } from 'common/types'
 import { IBibleByName, IBibleByUid, IGetBibleVersesProps } from './types'
 
@@ -14,7 +14,7 @@ const openBible = (moduleName: TModuleName, uid: TId) => {
 
   bibleByName[moduleName].push(uid)
 
-  return common.openModule(moduleName, uid)
+  return module.openModule(moduleName, uid)
 }
 
 const closeBibleByUid = (uid: TId) => {
@@ -36,15 +36,15 @@ const closeBibleByUid = (uid: TId) => {
 
   delete bibleByUid[uid]
 
-  common.closeModuleByUid(moduleName, uid)
+  module.closeModuleByUid(moduleName, uid)
 
-  return common.closeModuleByUid(moduleName, uid)
+  return module.closeModuleByUid(moduleName, uid)
 }
 
 const getBibleInfo = (uid: TId) => {
   return new Promise((resolve) => {
     const moduleName = bibleByUid[uid]
-    const bible = common.openModule(moduleName, uid)
+    const bible = module.openModule(moduleName, uid)
 
     bible.all('SELECT name, value FROM info', (_: any, info: IBibleInfo[]) => {
       resolve(info || [])
@@ -55,7 +55,7 @@ const getBibleInfo = (uid: TId) => {
 const getBibleBooks = (uid: TId) => {
   return new Promise((resolve) => {
     const moduleName = bibleByUid[uid]
-    const bible = common.openModule(moduleName, uid)
+    const bible = module.openModule(moduleName, uid)
 
     bible.all(
       'SELECT book_number AS bookNumber, short_name AS shortName, long_name AS longName, book_color AS bookColor, is_present AS isPresent FROM books_all',
@@ -68,7 +68,7 @@ const getBibleBooks = (uid: TId) => {
 
 const getBibleVerses = (uid: TId, { bookNumber, chapter }: IGetBibleVersesProps) => {
   const moduleName = bibleByUid[uid]
-  const bible = common.openModule(moduleName, uid)
+  const bible = module.openModule(moduleName, uid)
   const condition = `book_number = ${bookNumber} AND chapter = ${chapter}`
 
   return new Promise((resolve) => {

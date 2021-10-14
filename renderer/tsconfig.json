@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "common/types": ["../common/types"]
+      "@common/types": ["../common/types"]
     }
   },
   "include": [

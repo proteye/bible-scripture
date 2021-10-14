@@ -1,11 +1,19 @@
 import React from 'react'
+import { NextPage } from 'next'
 import Head from 'next/head'
-import { ThemeProvider } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import { theme } from '../lib/theme'
 import type { AppProps } from 'next/app'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { theme } from '../theme'
 
-export default function (props: AppProps) {
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+`
+
+const App: NextPage<AppProps> = (props: AppProps) => {
   const { Component, pageProps } = props
 
   React.useEffect(() => {
@@ -16,14 +24,17 @@ export default function (props: AppProps) {
   }, [])
 
   return (
-    <React.Fragment>
+    <>
       <Head>
+        <meta charSet="utf-8" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
+      <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
-    </React.Fragment>
+    </>
   )
 }
+
+export default App

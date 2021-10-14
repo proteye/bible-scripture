@@ -30,6 +30,8 @@ if (isProd) {
 })()
 
 app.on('window-all-closed', () => {
+  closeAllDb()
+
   if (process.platform !== 'darwin') {
     app.quit()
   }
