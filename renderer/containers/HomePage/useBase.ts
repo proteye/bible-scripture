@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { IDimensions } from 'components/types'
 
 const useBase = () => {
@@ -12,7 +12,7 @@ const useBase = () => {
     })
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (targetRef.current) {
       setDimensions({
         width: targetRef.current.offsetWidth,
