@@ -2,26 +2,16 @@ import React from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { theme } from '../theme'
+import { ThemeProvider } from 'styled-components'
+import { defaultTheme, darkTheme, GlobalStyle } from '../theme'
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-`
+// Material UI
+import 'muicss/dist/css/mui.min.css'
 
 const App: NextPage<AppProps> = (props: AppProps) => {
   const { Component, pageProps } = props
-
-  React.useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles)
-    }
-  }, [])
+  // TODO: get Light/Dark mode from state
+  const isDarkMode = false
 
   return (
     <>
@@ -29,8 +19,8 @@ const App: NextPage<AppProps> = (props: AppProps) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <GlobalStyle />
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={isDarkMode ? darkTheme : defaultTheme}>
+        <GlobalStyle />
         <Component {...pageProps} />
       </ThemeProvider>
     </>

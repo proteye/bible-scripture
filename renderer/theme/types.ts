@@ -1,5 +1,5 @@
-import { theme } from './index'
+import { defaultTheme } from './index'
 
 export interface AppTheme {
-  palette: typeof theme.palette
+  palette: typeof defaultTheme.palette
 }

@@ -4,4 +4,5 @@ export interface IBibleProps {
 
 export enum EBibleNames {
   RST_STRONG = 'RST+',
+  CASS = 'CAS',
 }
