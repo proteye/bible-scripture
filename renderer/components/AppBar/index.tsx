@@ -1,3 +1,3 @@
-import { Appbar } from 'muicss/react'
+import { SAppbar } from './styled.index'
 
-export default Appbar
+export default SAppbar
