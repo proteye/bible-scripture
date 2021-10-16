@@ -6,8 +6,8 @@ import { IBibleViewProps } from './types'
 import useBase from './useBase'
 import { ComponentWithScroll } from 'components'
 
-export const BibleView: FC<IBibleViewProps> = ({ dimensions }) => {
-  const { verses } = useBase()
+export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions }) => {
+  const { verses } = useBase({ moduleName })
 
   return (
     <ComponentWithScroll dimensions={dimensions}>

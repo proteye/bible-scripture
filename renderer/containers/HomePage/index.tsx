@@ -6,6 +6,7 @@ import { AppBar, Tabs, Tab } from 'components'
 import { BibleView } from 'containers/BibleView'
 import { SContainer, SContent } from './styled.index'
 import useBase from './useBase'
+import { EBibleNames } from 'containers/BibleView/types'
 
 export const HomePage: NextPage = () => {
   const { targetRef, dimensions, onTabsChange } = useBase()
@@ -19,10 +20,10 @@ export const HomePage: NextPage = () => {
       <SContent ref={targetRef}>
         <Tabs defaultSelectedIndex={0} onChange={onTabsChange}>
           <Tab value="tab1" label="RST+" onActive={console.info}>
-            <BibleView dimensions={dimensions} />
+            <BibleView moduleName={EBibleNames.RST_STR} dimensions={dimensions} />
           </Tab>
           <Tab value="tab2" label="CAS" onActive={console.info}>
-            <div>Panel 2</div>
+            <BibleView moduleName={EBibleNames.CAS} dimensions={dimensions} />
           </Tab>
         </Tabs>
       </SContent>

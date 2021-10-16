@@ -1,18 +1,21 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ipcRenderer } from 'electron'
 import { nanoid } from 'nanoid'
 import { IBibleVerse, IBibleInfo } from '@common/types'
-import { EBibleNames } from './types'
+import { IBibleViewProps } from './types'
 
-const BIBLE_NAME = EBibleNames.RST_STRONG.toString()
-const uid = nanoid()
-
-const useBase = () => {
+const useBase = ({ moduleName }: IBibleViewProps) => {
   const [info, setInfo] = useState<IBibleInfo[]>([])
   const [verses, setVerses] = useState<IBibleVerse[]>([])
 
+  const uid = useMemo(() => nanoid(), [])
+
   const getBible = useCallback(async () => {
-    await ipcRenderer.invoke('openBible', BIBLE_NAME, uid)
+    if (!moduleName) {
+      return
+    }
+
+    await ipcRenderer.invoke('openBible', moduleName, uid)
     const info = await ipcRenderer.invoke('getBibleInfo', uid)
     const books = await ipcRenderer.invoke('getBibleBooks', uid)
     const verses = await ipcRenderer.invoke('getBibleVerses', uid, {

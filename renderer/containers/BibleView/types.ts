@@ -1,8 +1,10 @@
 import { IComponentWithDimensions } from 'components/types'
 
-export interface IBibleViewProps extends IComponentWithDimensions {}
+export interface IBibleViewProps extends IComponentWithDimensions {
+  moduleName?: EBibleNames
+}
 
 export enum EBibleNames {
-  RST_STRONG = 'RST+',
-  CASS = 'CAS',
+  RST_STR = 'RST+',
+  CAS = 'CAS',
 }
