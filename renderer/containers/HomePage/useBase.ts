@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { IDimensions } from 'components/types'
+import { Tab } from 'components'
 
 const useBase = () => {
   const targetRef = useRef<HTMLDivElement>()
@@ -10,6 +11,10 @@ const useBase = () => {
       width: targetRef.current.offsetWidth,
       height: targetRef.current.offsetHeight,
     })
+  }, [])
+
+  const onTabsChange = useCallback((index: number, value: string) => {
+    console.info('onTabsChange', index, value)
   }, [])
 
   useEffect(() => {
@@ -27,7 +32,7 @@ const useBase = () => {
     }
   }, [targetRef])
 
-  return { targetRef, dimensions }
+  return { targetRef, dimensions, onTabsChange }
 }
 
 export default useBase

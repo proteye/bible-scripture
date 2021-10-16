@@ -10,6 +10,7 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.palette.primary};
     font-family: ${({ theme }) => theme.fonts.join(',')};
     font-size: 16px;
+    line-height: 1.429;
     font-weight: normal;
     height:  100vh;
     margin: 0;
