@@ -19,10 +19,10 @@ export const HomePage: NextPage = () => {
       <AppBar></AppBar>
       <SContent ref={targetRef}>
         <Tabs defaultSelectedIndex={0} onChange={onTabsChange}>
-          <Tab value="tab1" label="RST+" onActive={console.info}>
+          <Tab value="tab1" label="RST+" onActive={console.info} onClose={console.info}>
             <BibleView moduleName={EBibleNames.RST_STR} dimensions={dimensions} />
           </Tab>
-          <Tab value="tab2" label="CAS" onActive={console.info}>
+          <Tab value="tab2" label="CAS" onActive={console.info} onClose={console.info}>
             <BibleView moduleName={EBibleNames.CAS} dimensions={dimensions} />
           </Tab>
         </Tabs>

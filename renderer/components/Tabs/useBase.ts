@@ -13,19 +13,26 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
           throw new Error('`Tabs` only accepts children of type `Tab`.')
         }
 
-        const { label, value, onActive, children } = item.props
+        const { label, value, onActive, onClose, children } = item.props
 
-        const handleTab = (e: React.MouseEvent<HTMLLIElement>) => {
+        const handleActive = (e: React.MouseEvent<HTMLLIElement>) => {
           e.preventDefault()
-          const index = Number(e.currentTarget.dataset['index'])
           setSelectedIndex(index)
 
           if (onActive) {
-            onActive(index)
+            onActive(index, value)
           }
 
           if (onChange) {
             onChange(index, value, item, e)
+          }
+        }
+
+        const handleClose = (e: React.MouseEvent<HTMLLIElement>) => {
+          e.preventDefault()
+
+          if (onClose) {
+            onClose(index, value)
           }
         }
 
@@ -35,7 +42,7 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
           value,
           children,
           isActive: selectedIndex === index,
-          onTab: handleTab,
+          onActive: handleActive,
         }
       }),
     [selectedIndex, children],

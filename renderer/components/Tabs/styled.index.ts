@@ -1,7 +1,13 @@
 import styled, { css } from 'styled-components'
 import { ISTab } from './types'
 
-export const STabs = styled.div(() => css``)
+export const STabs = styled.div(
+  () => css`
+    display: block;
+    width: 100%;
+    height: 100%;
+  `,
+)
 
 export const STabsUl = styled.ul(
   () => css`
@@ -16,11 +22,9 @@ export const STabsUl = styled.ul(
 
 export const STabsPane = styled.div<ISTab>(
   ({ $isActive }) => css`
-    display: none;
-
-    ${$isActive &&
-    css`
-      display: block;
-    `}
+    position: relative;
+    display: ${$isActive ? 'block' : 'none'};
+    width: 100%;
+    height: 100%;
   `,
 )

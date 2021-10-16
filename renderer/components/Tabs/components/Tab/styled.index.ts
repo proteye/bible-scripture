@@ -7,13 +7,13 @@ export const STabLink = styled.a(
     white-space: nowrap;
     text-transform: uppercase;
     font-weight: 500;
-    font-size: 14px;
+    font-size: ${theme.fontSizes.small};
     color: ${theme.palette.primary};
     cursor: default;
-    height: 48px;
-    line-height: 48px;
-    padding-left: 24px;
-    padding-right: 24px;
+    height: ${theme.tabBar.height};
+    line-height: ${theme.tabBar.height};
+    padding-left: 36px;
+    padding-right: 36px;
     user-select: none;
 
     &:hover {
@@ -22,9 +22,33 @@ export const STabLink = styled.a(
   `,
 )
 
+export const SIconWrapper = styled.span(
+  () => css`
+    position: absolute;
+    right: 0;
+    top: 50%;
+    display: none;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-50%);
+
+    &:hover {
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    }
+  `,
+)
+
 export const STab = styled.li<ISTab>(
   ({ $isActive, theme }) => css`
-    display: inline-block;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    &:hover {
+      ${SIconWrapper} {
+        display: block;
+      }
+    }
 
     ${$isActive &&
     css`

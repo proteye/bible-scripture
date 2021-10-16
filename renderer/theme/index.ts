@@ -35,11 +35,17 @@ export const commonTheme = {
   appBar: {
     height: '64px',
   },
+  tabBar: {
+    height: '36px',
+  },
   fonts: ['Roboto', 'Helvetica Neue', 'Helvetica', 'sans-serif'],
   fontSizes: {
-    small: '1em',
+    extraSmall: '0.625em',
+    small: '0.875em',
+    normal: '1em',
     medium: '2em',
     large: '3em',
+    extraLarge: '4em',
   },
 }
 

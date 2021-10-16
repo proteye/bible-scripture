@@ -16,6 +16,7 @@
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
+    "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@types/muicss": "^0.9.3",
     "@types/nanoid": "^3.0.0",
