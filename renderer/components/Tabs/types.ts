@@ -18,7 +18,7 @@ export interface ITab extends Omit<ITabProps, 'onActive'> {
   index: number
   isActive: boolean
   children: ReactNode
-  onActive(e: React.MouseEvent<HTMLLIElement>): void
+  onActive?(e: React.MouseEvent<HTMLLIElement>): void
   onClose?(index: number, value: string): void
 }
 

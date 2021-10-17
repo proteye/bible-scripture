@@ -1,3 +1,4 @@
+import { ETabType } from 'components/Tab/types'
 import noop from 'helpers/noop'
 import React, { FC } from 'react'
 import Tab from './components/Tab'
@@ -15,11 +16,13 @@ const Tabs: FC<ITabsProps> = (props) => {
           <Tab {...props} key={props.index} />
         ))}
       </STabsUl>
-      {tabs.map(({ index, isActive, children }) => (
-        <STabsPane key={index} $isActive={isActive}>
-          {children}
-        </STabsPane>
-      ))}
+      {tabs
+        .filter(({ type }) => type === ETabType.tab)
+        .map(({ index, isActive, children }) => (
+          <STabsPane key={index} $isActive={isActive}>
+            {children}
+          </STabsPane>
+        ))}
     </STabs>
   )
 }

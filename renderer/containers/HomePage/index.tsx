@@ -10,7 +10,7 @@ import { EBibleNames } from 'containers/BibleView/types'
 import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
-  const { targetRef, dimensions, contextMenuItems, onTabsChange } = useBase()
+  const { tabs, targetRef, dimensions, contextMenuItems, onTabsChange, onSelectBible } = useBase()
 
   return (
     <SContainer>
@@ -20,14 +20,13 @@ export const HomePage: NextPage = () => {
       <AppBar></AppBar>
       <SContent ref={targetRef}>
         <Tabs defaultSelectedIndex={0} onChange={onTabsChange}>
-          <Tab value={EBibleNames.RST_STR} label={EBibleNames.RST_STR} onActive={console.info} onClose={console.info}>
-            <BibleView moduleName={EBibleNames.RST_STR} dimensions={dimensions} />
-          </Tab>
-          <Tab value={EBibleNames.CAS} label={EBibleNames.CAS} onActive={console.info} onClose={console.info}>
-            <BibleView moduleName={EBibleNames.CAS} dimensions={dimensions} />
-          </Tab>
+          {tabs.map(({ value, label }, index) => (
+            <Tab key={`${index}-${value}`} value={value} label={label} onActive={console.info} onClose={console.info}>
+              <BibleView moduleName={value} dimensions={dimensions} />
+            </Tab>
+          ))}
           <Tab type={ETabType.button}>
-            <ContextMenu label="+" items={contextMenuItems} />
+            <ContextMenu label="+" items={contextMenuItems} onSelect={onSelectBible} />
           </Tab>
         </Tabs>
       </SContent>
