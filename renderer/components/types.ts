@@ -19,3 +19,7 @@ export interface IComponentWithDimensions extends IComponentDefaultProps {
 export interface IStyledThemeWithDimensions extends IStyledTheme {
   $dimensions?: IDimensions
 }
+
+export interface IStyledThemeWithVisible extends IStyledTheme {
+  $isVisible?: boolean
+}

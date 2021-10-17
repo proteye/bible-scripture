@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Tab } from 'components'
 import { Children, useMemo } from 'react'
 import { ITab, ITabsProps } from './types'
+import { ETabType } from 'components/Tab/types'
 
 const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelectedIndex)
@@ -13,10 +14,14 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
           throw new Error('`Tabs` only accepts children of type `Tab`.')
         }
 
-        const { label, value, onActive, onClose, children } = item.props
+        const { label, value, type, onActive, onClose, children } = item.props
 
         const handleActive = (e: React.MouseEvent<HTMLLIElement>) => {
           e.preventDefault()
+          if (type !== ETabType.tab) {
+            return
+          }
+
           setSelectedIndex(index)
 
           if (onActive) {
@@ -40,6 +45,7 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
           index,
           label,
           value,
+          type,
           children,
           isActive: selectedIndex === index,
           onActive: handleActive,

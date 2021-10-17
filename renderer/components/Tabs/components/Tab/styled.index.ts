@@ -30,10 +30,11 @@ export const SIconWrapper = styled.span(
     display: none;
     width: 20px;
     height: 20px;
+    border-radius: 3px;
     transform: translateY(-50%);
 
     &:hover {
-      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.15);
     }
   `,
 )

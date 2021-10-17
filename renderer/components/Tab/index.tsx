@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import noop from 'helpers/noop'
 
-import { ITabProps } from './types'
+import { ETabType, ITabProps } from './types'
 
 const Tab: FC<ITabProps> = () => {
   return null
@@ -10,6 +10,7 @@ const Tab: FC<ITabProps> = () => {
 Tab.defaultProps = {
   label: '',
   value: '',
+  type: ETabType.tab,
   onActive: noop,
 }
 
