@@ -36,7 +36,7 @@ export const commonTheme = {
     height: '64px',
   },
   tabBar: {
-    height: '36px',
+    height: '34px',
   },
   fonts: ['Roboto', 'Helvetica Neue', 'Helvetica', 'sans-serif'],
   fontSizes: {

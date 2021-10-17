@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react'
 import { AppDefaultTheme } from 'theme/types'
+import { IDimensions } from 'hooks/useDimensions/types'
 
 export interface IComponentDefaultProps {
   className?: string
@@ -9,11 +10,6 @@ export interface IComponentDefaultProps {
 
 export interface IStyledTheme {
   theme: AppDefaultTheme
-}
-
-export interface IDimensions {
-  width: string | number
-  height: string | number
 }
 
 export interface IComponentWithDimensions extends IComponentDefaultProps {

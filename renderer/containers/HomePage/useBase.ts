@@ -1,38 +1,23 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { IDimensions } from 'components/types'
-import { Tab } from 'components'
+import { useCallback } from 'react'
+import useDimensions from 'hooks/useDimensions'
+import { defaultTheme } from 'theme'
+import { getNumberFromString } from 'helpers/getNumberFromString'
 
 const useBase = () => {
-  const targetRef = useRef<HTMLDivElement>()
-  const [dimensions, setDimensions] = useState<IDimensions>({ width: '100%', height: '100%' })
-
-  const onResize = useCallback(() => {
-    setDimensions({
-      width: targetRef.current.offsetWidth,
-      height: targetRef.current.offsetHeight,
-    })
-  }, [])
+  const {
+    targetRef,
+    dimensions: { width, height },
+  } = useDimensions()
 
   const onTabsChange = useCallback((index: number, value: string) => {
     console.info('onTabsChange', index, value)
   }, [])
 
-  useEffect(() => {
-    if (targetRef.current) {
-      setDimensions({
-        width: targetRef.current.offsetWidth,
-        height: targetRef.current.offsetHeight,
-      })
-
-      window.addEventListener('resize', onResize)
-    }
-
-    return () => {
-      window.removeEventListener('resize', onResize)
-    }
-  }, [targetRef])
-
-  return { targetRef, dimensions, onTabsChange }
+  return {
+    targetRef,
+    dimensions: { width, height: Number(height) - getNumberFromString(defaultTheme.tabBar.height) },
+    onTabsChange,
+  }
 }
 
 export default useBase

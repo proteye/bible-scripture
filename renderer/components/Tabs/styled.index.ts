@@ -5,7 +5,7 @@ export const STabs = styled.div(
   () => css`
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
   `,
 )
 
@@ -25,6 +25,6 @@ export const STabsPane = styled.div<ISTab>(
     position: relative;
     display: ${$isActive ? 'block' : 'none'};
     width: 100%;
-    height: 100%;
+    height: auto;
   `,
 )
