@@ -1,8 +1,7 @@
 export * from './bible'
+export * from './module'
 
 export type TAny = any
-
-export type TModuleName = string
 
 export type TId = string
 
