@@ -58,7 +58,7 @@ const getBibleBooks = (uid: TId) => {
     const bible = module.openModule(moduleName, uid)
 
     bible.all(
-      'SELECT book_number AS bookNumber, short_name AS shortName, long_name AS longName, book_color AS bookColor, is_present AS isPresent FROM books_all WHERE is_present=1',
+      'SELECT book_number AS bookNumber, short_name AS shortName, long_name AS longName, book_color AS bookColor, is_present AS isPresent, sorting_order AS sortingOrder FROM books_all WHERE is_present=1',
       (_: any, books: IBibleBook[]) => {
         resolve(books || [])
       },

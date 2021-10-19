@@ -1,5 +1,6 @@
-export * from './bible'
 export * from './module'
+export * from './bible'
+export * from './dictionary'
 
 export type TAny = any
 
