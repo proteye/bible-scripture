@@ -10,7 +10,7 @@ export interface IBibleBook {
   shortName: string
   longName: string
   isPresent: boolean
-  sortingOrder: number
+  sortingOrder?: number
 }
 
 export interface IBibleVerse {

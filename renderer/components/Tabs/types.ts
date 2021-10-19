@@ -14,12 +14,12 @@ export interface ITabsProps extends IComponentDefaultProps {
   ): void
 }
 
-export interface ITab extends Omit<ITabProps, 'onActive'> {
+export interface ITab extends Omit<ITabProps, 'onActive' | 'onClose'> {
   index: number
   isActive: boolean
   children: ReactNode
   onActive?(e: React.MouseEvent<HTMLLIElement>): void
-  onClose?(index: number, value: string): void
+  onClose?(e: React.MouseEvent<HTMLLIElement>): void
 }
 
 export interface ISTab extends IStyledTheme {

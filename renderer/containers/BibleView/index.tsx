@@ -14,7 +14,11 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions }) => {
       <SBibleView>
         {verses.map(({ verse, text }) => (
           <div key={verse}>
-            {verse}. {text.replace(/<[Sfi]>.+?[Sfi]>/gi, '').replace(/<pb\/>/gi, '')}
+            {verse}.{' '}
+            {text
+              .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
+              .replace(/<pb\/>/gi, '')
+              .replace(/<\/?t>/gi, '"')}
           </div>
         ))}
       </SBibleView>

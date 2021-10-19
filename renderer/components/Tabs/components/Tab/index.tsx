@@ -9,7 +9,7 @@ const Tab: FC<ITab> = ({ index, label, type, isActive, children, onActive, onClo
     <STab data-index={index} $isActive={type === ETabType.tab && isActive} onClick={onActive}>
       {type === ETabType.tab ? <STabLink>{label}</STabLink> : children}
       {type === ETabType.tab && (
-        <SIconWrapper>
+        <SIconWrapper onClick={onClose}>
           <Close fontSize="small" />
         </SIconWrapper>
       )}

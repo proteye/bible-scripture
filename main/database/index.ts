@@ -1,7 +1,7 @@
 import { TAny } from 'common/types'
 import { IDb } from './types'
 import dbSource from './sqlite3'
-import dbConfig from '../config/dbConfig'
+import moduleConfig from '../config/moduleConfig'
 
 const db: IDb = {}
 
@@ -10,7 +10,7 @@ const openDb = (dbName: string): TAny => {
     return db[dbName]
   }
 
-  const res = new dbSource.Database(`${dbConfig.path}/${dbName}${dbConfig.extension}`)
+  const res = new dbSource.Database(`${moduleConfig.path}/${dbName}${moduleConfig.extension}`)
   db[dbName] = res
 
   return res

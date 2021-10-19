@@ -6,11 +6,10 @@ import { AppBar, Tabs, Tab, ContextMenu } from 'components'
 import { BibleView } from 'containers/BibleView'
 import { SContainer, SContent } from './styled.index'
 import useBase from './useBase'
-import { EBibleNames } from 'containers/BibleView/types'
 import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
-  const { tabs, targetRef, dimensions, contextMenuItems, onTabsChange, onSelectBible } = useBase()
+  const { tabs, targetRef, dimensions, contextMenuItems, onCloseTab, onSelectBible } = useBase()
 
   return (
     <SContainer>
@@ -19,9 +18,9 @@ export const HomePage: NextPage = () => {
       </Head>
       <AppBar></AppBar>
       <SContent ref={targetRef}>
-        <Tabs defaultSelectedIndex={0} onChange={onTabsChange}>
+        <Tabs defaultSelectedIndex={0}>
           {tabs.map(({ value, label }, index) => (
-            <Tab key={`${index}-${value}`} value={value} label={label} onActive={console.info} onClose={console.info}>
+            <Tab key={`${index}-${value}`} value={value} label={label} onClose={onCloseTab}>
               <BibleView moduleName={value} dimensions={dimensions} />
             </Tab>
           ))}

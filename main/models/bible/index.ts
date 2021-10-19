@@ -1,11 +1,11 @@
 import { module } from '../index'
-import { IBibleBook, IBibleInfo, IBibleVerse, TId, TModuleName } from 'common/types'
+import { IBibleBook, IBibleInfo, IBibleVerse, TUid, TModuleName } from 'common/types'
 import { IBibleByName, IBibleByUid, IGetBibleVersesProps } from './types'
 
 const bibleByUid: IBibleByUid = {}
 const bibleByName: IBibleByName = {}
 
-const openBible = (moduleName: TModuleName, uid: TId) => {
+const openBible = (moduleName: TModuleName, uid: TUid) => {
   bibleByUid[uid] = moduleName
 
   if (!bibleByName[moduleName]) {
@@ -17,7 +17,7 @@ const openBible = (moduleName: TModuleName, uid: TId) => {
   return module.openModule(moduleName, uid)
 }
 
-const closeBibleByUid = (uid: TId) => {
+const closeBibleByUid = (uid: TUid) => {
   const moduleName = bibleByUid[uid]
 
   if (!moduleName) {
@@ -41,7 +41,7 @@ const closeBibleByUid = (uid: TId) => {
   return module.closeModuleByUid(moduleName, uid)
 }
 
-const getBibleInfo = (uid: TId) => {
+const getBibleInfo = (uid: TUid) => {
   return new Promise((resolve) => {
     const moduleName = bibleByUid[uid]
     const bible = module.openModule(moduleName, uid)
@@ -52,13 +52,13 @@ const getBibleInfo = (uid: TId) => {
   })
 }
 
-const getBibleBooks = (uid: TId) => {
+const getBibleBooks = (uid: TUid) => {
   return new Promise((resolve) => {
     const moduleName = bibleByUid[uid]
     const bible = module.openModule(moduleName, uid)
 
     bible.all(
-      'SELECT book_number AS bookNumber, short_name AS shortName, long_name AS longName, book_color AS bookColor, is_present AS isPresent, sorting_order AS sortingOrder FROM books_all WHERE is_present=1',
+      'SELECT book_number AS bookNumber, short_name AS shortName, long_name AS longName, book_color AS bookColor, is_present AS isPresent FROM books_all WHERE is_present=1',
       (_: any, books: IBibleBook[]) => {
         resolve(books || [])
       },
@@ -66,7 +66,7 @@ const getBibleBooks = (uid: TId) => {
   })
 }
 
-const getBibleVerses = (uid: TId, { bookNumber, chapter }: IGetBibleVersesProps) => {
+const getBibleVerses = (uid: TUid, { bookNumber, chapter }: IGetBibleVersesProps) => {
   const moduleName = bibleByUid[uid]
   const bible = module.openModule(moduleName, uid)
   const condition = `book_number = ${bookNumber} AND chapter = ${chapter}`

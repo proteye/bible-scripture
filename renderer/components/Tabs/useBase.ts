@@ -49,6 +49,7 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
           children,
           isActive: selectedIndex === index,
           onActive: handleActive,
+          onClose: handleClose,
         }
       }),
     [selectedIndex, children],

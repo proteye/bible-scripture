@@ -1,10 +1,37 @@
-import { TId, TModuleName } from 'common/types'
+import { readdir } from 'fs/promises'
+import { TUid, TModuleName, TModulesList, TModuleType } from 'common/types'
 import { openDb, closeDb } from '../../database'
 import { IModules } from './types'
+import moduleConfig from '../../config/moduleConfig'
 
 const modules: IModules = {}
 
-const openModule = (moduleName: TModuleName, uniqId?: TId) => {
+const getModules = async (): Promise<TModulesList> => {
+  try {
+    const files = await readdir(moduleConfig.path)
+
+    return files.map((file) => {
+      const splittedFile = file.split('.')
+      const id = splittedFile[0]
+      const type = splittedFile.length > 2 ? (splittedFile[1] as TModuleType) : 'bible'
+
+      return {
+        id,
+        shortName: id,
+        longName: '',
+        type,
+        description: '',
+        filename: file,
+      }
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const syncModules = () => {}
+
+const openModule = (moduleName: TModuleName, uniqId?: TUid) => {
   if (!modules[moduleName]) {
     modules[moduleName] = []
   }
@@ -16,7 +43,7 @@ const openModule = (moduleName: TModuleName, uniqId?: TId) => {
   return openDb(moduleName)
 }
 
-const closeModuleByUid = (moduleName: TModuleName, uniqId: TId) => {
+const closeModuleByUid = (moduleName: TModuleName, uniqId: TUid) => {
   if (!modules[moduleName]) {
     return false
   }
@@ -40,4 +67,4 @@ const closeModule = (moduleName: TModuleName) => {
   return closeDb(moduleName)
 }
 
-export default { openModule, closeModuleByUid, closeModule }
+export default { getModules, syncModules, openModule, closeModuleByUid, closeModule }

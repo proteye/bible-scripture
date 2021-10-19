@@ -1,6 +1,6 @@
-const dbConfig = {
+const moduleConfig = {
   path: './resources/modules',
   extension: '.SQLite3',
 }
 
-export default dbConfig
+export default moduleConfig
