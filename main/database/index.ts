@@ -20,14 +20,10 @@ const openDb = (dbName: string): TAny => {
     return db[dbName]
   }
 
-  try {
-    const res = new dbSource.Database(`${moduleConfig.path}/${dbName}${moduleConfig.extension}`, OPEN_READONLY)
-    db[dbName] = res
-    return res
-  } catch (e) {
-    console.error(e)
-    return null
-  }
+  const res = new dbSource.Database(`${moduleConfig.path}/${dbName}${moduleConfig.extension}`, OPEN_READONLY)
+  db[dbName] = res
+
+  return res
 }
 
 const closeDb = (dbName: string): boolean => {
@@ -48,4 +44,4 @@ const closeAllDb = (): void => {
   }
 }
 
-export { db, openDb, closeDb, closeAllDb }
+export { db, editOrCreateDb, openDb, closeDb, closeAllDb }
