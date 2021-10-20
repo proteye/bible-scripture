@@ -1,19 +1,33 @@
 import { TAny } from 'common/types'
 import { IDb } from './types'
-import dbSource from './sqlite3'
+import dbSource, { OPEN_READONLY, OPEN_READWRITE, OPEN_CREATE } from './sqlite3'
 import moduleConfig from '../config/moduleConfig'
 
 const db: IDb = {}
+
+const editOrCreateDb = (dbName: string): TAny => {
+  const res = new dbSource.Database(
+    `${moduleConfig.path}/${dbName}${moduleConfig.extension}`,
+    OPEN_READWRITE | OPEN_CREATE,
+  )
+  db[dbName] = res
+
+  return res
+}
 
 const openDb = (dbName: string): TAny => {
   if (db[dbName]) {
     return db[dbName]
   }
 
-  const res = new dbSource.Database(`${moduleConfig.path}/${dbName}${moduleConfig.extension}`)
-  db[dbName] = res
-
-  return res
+  try {
+    const res = new dbSource.Database(`${moduleConfig.path}/${dbName}${moduleConfig.extension}`, OPEN_READONLY)
+    db[dbName] = res
+    return res
+  } catch (e) {
+    console.error(e)
+    return null
+  }
 }
 
 const closeDb = (dbName: string): boolean => {
