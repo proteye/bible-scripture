@@ -38,6 +38,9 @@ export const commonTheme = {
   tabBar: {
     height: '34px',
   },
+  searchBar: {
+    height: '40px',
+  },
   fonts: ['Roboto', 'Helvetica Neue', 'Helvetica', 'sans-serif'],
   fontSizes: {
     extraSmall: '0.625em',

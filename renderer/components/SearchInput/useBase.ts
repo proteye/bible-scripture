@@ -10,7 +10,8 @@ const useBase = ({ initialValue, onChange, onSubmit }: ISearchInputProps) => {
     onChange(value)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
     onSubmit(value)
   }
 

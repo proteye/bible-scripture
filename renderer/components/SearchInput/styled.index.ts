@@ -7,3 +7,10 @@ export const SSearchInput = styled.input(
     padding: 0 16px;
   `,
 )
+
+export const SForm = styled.form(
+  () => css`
+    display: flex;
+    width: 100%;
+  `,
+)

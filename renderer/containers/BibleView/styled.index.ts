@@ -8,3 +8,13 @@ export const SBibleView = styled.div(
     padding: 16px;
   `,
 )
+
+export const SSearchPanel = styled.div(
+  ({ theme }) => css`
+    display: flex;
+    width: 100%;
+    height: ${theme.searchBar.height};
+    padding: 6px 12px;
+    background-color: ${theme.palette.secondary};
+  `,
+)

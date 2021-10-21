@@ -2,14 +2,14 @@ import React from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 
-import { AppBar, Tabs, Tab, ContextMenu, SearchInput } from 'components'
+import { AppBar, Tabs, Tab, ContextMenu } from 'components'
 import { BibleView } from 'containers/BibleView'
-import { SContainer, SContent, STopPanel } from './styled.index'
+import { SContainer, SContent } from './styled.index'
 import useBase from './useBase'
 import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
-  const { tabs, targetRef, dimensions, contextMenuItems, onCloseTab, onSelectBible } = useBase()
+  const { tabs, targetRef, dimensions, contextMenuItems, handleCloseTab, handleSelectBible } = useBase()
 
   return (
     <SContainer>
@@ -20,15 +20,12 @@ export const HomePage: NextPage = () => {
       <SContent ref={targetRef}>
         <Tabs defaultSelectedIndex={0}>
           {tabs.map(({ value, label }, index) => (
-            <Tab key={`${index}-${value}`} value={value} label={label} onClose={onCloseTab}>
-              <STopPanel>
-                <SearchInput />
-              </STopPanel>
+            <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
               <BibleView key={`${index}-${value}`} moduleName={value} dimensions={dimensions} />
             </Tab>
           ))}
           <Tab type={ETabType.button}>
-            <ContextMenu label="+" items={contextMenuItems} onSelect={onSelectBible} />
+            <ContextMenu label="+" items={contextMenuItems} onSelect={handleSelectBible} />
           </Tab>
         </Tabs>
       </SContent>

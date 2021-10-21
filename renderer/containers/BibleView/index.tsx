@@ -1,27 +1,32 @@
 import React, { FC } from 'react'
+import { ComponentWithScroll, SearchInput } from 'components'
 
-import { SBibleView } from './styled.index'
+import { SBibleView, SSearchPanel } from './styled.index'
 import { IBibleViewProps } from './types'
 
 import useBase from './useBase'
-import { ComponentWithScroll } from 'components'
 
 export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions }) => {
-  const { verses } = useBase({ moduleName })
+  const { verses, handleSearchSubmit } = useBase({ moduleName })
 
   return (
-    <ComponentWithScroll dimensions={dimensions}>
-      <SBibleView>
-        {verses.map(({ verse, text }) => (
-          <div key={verse}>
-            {verse}.{' '}
-            {text
-              .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
-              .replace(/<pb\/>/gi, '')
-              .replace(/<\/?t>/gi, '"')}
-          </div>
-        ))}
-      </SBibleView>
-    </ComponentWithScroll>
+    <>
+      <SSearchPanel>
+        <SearchInput onSubmit={handleSearchSubmit} />
+      </SSearchPanel>
+      <ComponentWithScroll dimensions={dimensions}>
+        <SBibleView>
+          {verses.map(({ verse, text }) => (
+            <div key={verse}>
+              {verse}.{' '}
+              {text
+                .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
+                .replace(/<pb\/>/gi, '')
+                .replace(/<\/?t>/gi, '"')}
+            </div>
+          ))}
+        </SBibleView>
+      </ComponentWithScroll>
+    </>
   )
 }

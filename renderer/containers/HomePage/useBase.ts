@@ -15,17 +15,22 @@ const useBase = () => {
     dimensions: { width, height },
   } = useDimensions()
 
+  const scrollHeight =
+    Number(height) -
+    getNumberFromString(defaultTheme.tabBar.height) -
+    getNumberFromString(defaultTheme.searchBar.height)
+
   const contextMenuItems = useMemo(() => bibles.map(({ id, shortName }) => ({ title: shortName, value: id })), [bibles])
 
-  const onTabsChange = useCallback((index: number, value: string) => {
-    console.info('onTabsChange', index, value)
+  const handleTabsChange = useCallback((index: number, value: string) => {
+    console.info('handleTabsChange', index, value)
   }, [])
 
-  const onCloseTab = useCallback((index: number) => {
+  const handleCloseTab = useCallback((index: number) => {
     setTabs((prevState) => prevState.filter((_, i) => i !== index))
   }, [])
 
-  const onSelectBible = useCallback((value: string) => {
+  const handleSelectBible = useCallback((value: string) => {
     setTabs((prevState) => [...prevState, { value, label: value }])
   }, [])
 
@@ -43,11 +48,11 @@ const useBase = () => {
   return {
     tabs,
     targetRef,
-    dimensions: { width, height: Number(height) - getNumberFromString(defaultTheme.tabBar.height) },
+    dimensions: { width, height: scrollHeight },
     contextMenuItems,
-    onTabsChange,
-    onCloseTab,
-    onSelectBible,
+    handleTabsChange,
+    handleCloseTab,
+    handleSelectBible,
   }
 }
 

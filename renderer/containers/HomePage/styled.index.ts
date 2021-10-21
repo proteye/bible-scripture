@@ -17,13 +17,3 @@ export const SContent = styled.div(
     overflow: hidden;
   `,
 )
-
-export const STopPanel = styled.div(
-  ({ theme }) => css`
-    display: flex;
-    width: 100%;
-    height: 36px;
-    padding: 6px 12px;
-    background-color: ${theme.palette.secondary};
-  `,
-)
