@@ -12,7 +12,7 @@ const getModules = async (): Promise<TModulesList> => {
     const files = await readdir(moduleConfig.path)
 
     const modules = files
-      .filter((file) => !file.includes(MODULES_CONFIG_DB))
+      .filter((file) => file.includes(moduleConfig.extension) && !file.includes(MODULES_CONFIG_DB))
       .map((file) => {
         const splittedFile = file.split('.')
         const id = splittedFile[0]
@@ -20,9 +20,9 @@ const getModules = async (): Promise<TModulesList> => {
 
         return {
           id,
+          type,
           shortName: id,
           longName: '',
-          type,
           description: '',
           filename: file,
         }
@@ -31,17 +31,22 @@ const getModules = async (): Promise<TModulesList> => {
     const db = editOrCreateDb(MODULES_CONFIG_DB)
     db.serialize(() => {
       db.run(
-        'CREATE TABLE IF NOT EXISTS modules (id TEXT, short_name TEXT, long_name TEXT, type TEXT, description TEXT, filename TEXT)',
+        'CREATE TABLE IF NOT EXISTS modules (id TEXT, type TEXT, short_name TEXT, long_name TEXT, description TEXT, filename TEXT, created_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY (id, type))',
       )
-      const stmt = db.prepare('INSERT OR REPLACE INTO modules VALUES (?, ?, ?, ?, ?, ?)')
-      modules.forEach(({ id, shortName, longName, type, description, filename }) => {
-        stmt.run(id, shortName, longName, type, description, filename)
+      const stmt = db.prepare(
+        'INSERT OR REPLACE INTO modules(id, type, short_name, long_name, description, filename) VALUES (?, ?, ?, ?, ?, ?)',
+      )
+      modules.forEach(({ id, type, shortName, longName, description, filename }) => {
+        stmt.run(id, type, shortName, longName, description, filename)
       })
       stmt.finalize()
 
-      db.each('SELECT rowid AS id, short_name AS shortName FROM modules', function (_, row) {
-        console.log(row.id + ': ' + row.shortName)
-      })
+      db.each(
+        'SELECT rowid AS id, short_name AS shortName, created_at AS createdAt, updated_at AS updatedAt FROM modules',
+        function (_, row) {
+          console.log(`${row.id}: ${row.shortName} - ${row.createdAt} - ${row.updatedAt}`)
+        },
+      )
     })
     db.close()
 
