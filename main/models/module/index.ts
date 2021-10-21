@@ -4,15 +4,30 @@ import { editOrCreateDb, openDb, closeDb } from '../../database'
 import { IModules } from './types'
 import moduleConfig from '../../config/moduleConfig'
 
-const MODULES_CONFIG_DB = 'modules.config'
+const MODULES_DB = 'modules'
 const modules: IModules = {}
 
-const getModules = async (): Promise<TModulesList> => {
+const getModules = (): Promise<TModulesList> => {
+  const db = openDb(MODULES_DB)
+
+  return new Promise((resolve) => {
+    db.all(
+      'SELECT id, type, short_name AS shortName, long_name AS longName, description, filename FROM modules',
+      (e: any, modules: TModulesList) => {
+        resolve(modules || [])
+      },
+    )
+
+    closeDb(MODULES_DB)
+  })
+}
+
+const syncModules = async (): Promise<TModulesList> => {
   try {
     const files = await readdir(moduleConfig.path)
 
     const modules = files
-      .filter((file) => file.includes(moduleConfig.extension) && !file.includes(MODULES_CONFIG_DB))
+      .filter((file) => file.includes(moduleConfig.extension) && !file.includes(MODULES_DB))
       .map((file) => {
         const splittedFile = file.split('.')
         const id = splittedFile[0]
@@ -28,7 +43,8 @@ const getModules = async (): Promise<TModulesList> => {
         }
       })
 
-    const db = editOrCreateDb(MODULES_CONFIG_DB)
+    const db = editOrCreateDb(MODULES_DB)
+
     db.serialize(() => {
       db.run(
         'CREATE TABLE IF NOT EXISTS modules (id TEXT, type TEXT, short_name TEXT, long_name TEXT, description TEXT, filename TEXT, created_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY (id, type))',
@@ -40,23 +56,21 @@ const getModules = async (): Promise<TModulesList> => {
         stmt.run(id, type, shortName, longName, description, filename)
       })
       stmt.finalize()
-
-      db.each(
-        'SELECT rowid AS id, short_name AS shortName, created_at AS createdAt, updated_at AS updatedAt FROM modules',
-        function (_, row) {
-          console.log(`${row.id}: ${row.shortName} - ${row.createdAt} - ${row.updatedAt}`)
-        },
-      )
+      // db.each(
+      //   'SELECT rowid AS id, short_name AS shortName, type, created_at AS createdAt, updated_at AS updatedAt FROM modules',
+      //   function (_, row) {
+      //     console.log(`${row.id}: ${row.shortName} - ${row.type}`)
+      //   },
+      // )
     })
-    db.close()
+
+    closeDb(MODULES_DB)
 
     return modules
   } catch (err) {
     console.error(err)
   }
 }
-
-const syncModules = () => {}
 
 const openModule = (moduleName: TModuleName, uniqId?: TUid) => {
   if (!modules[moduleName]) {

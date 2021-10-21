@@ -14,7 +14,7 @@ const useBase = ({ moduleName }: IBibleViewProps) => {
     if (!moduleName) {
       return
     }
-    console.log('moduleName', moduleName, uid)
+
     await ipcRenderer.invoke('openBible', moduleName, uid)
     const info = await ipcRenderer.invoke('getBibleInfo', uid)
     const books = await ipcRenderer.invoke('getBibleBooks', uid)

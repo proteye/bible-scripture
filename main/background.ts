@@ -2,6 +2,7 @@ import { app } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 import { closeAllDb } from './database'
+import { module } from './models'
 import './ipcServer'
 
 const isProd: boolean = process.env.NODE_ENV === 'production'
@@ -19,6 +20,8 @@ if (isProd) {
     width: 1000,
     height: 600,
   })
+
+  await module.syncModules()
 
   if (isProd) {
     await mainWindow.loadURL('app://./home.html')
