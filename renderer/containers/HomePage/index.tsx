@@ -21,7 +21,7 @@ export const HomePage: NextPage = () => {
         <Tabs defaultSelectedIndex={0}>
           {tabs.map(({ value, label }, index) => (
             <Tab key={`${index}-${value}`} value={value} label={label} onClose={onCloseTab}>
-              <BibleView moduleName={value} dimensions={dimensions} />
+              <BibleView key={`${index}-${value}`} moduleName={value} dimensions={dimensions} />
             </Tab>
           ))}
           <Tab type={ETabType.button}>
