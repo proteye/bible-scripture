@@ -18,7 +18,8 @@ const useBase = () => {
   const scrollHeight =
     Number(height) -
     getNumberFromString(defaultTheme.tabBar.height) -
-    getNumberFromString(defaultTheme.searchBar.height)
+    getNumberFromString(defaultTheme.searchBar.height) -
+    getNumberFromString(defaultTheme.instantView.height)
 
   const contextMenuItems = useMemo(() => bibles.map(({ id, shortName }) => ({ title: shortName, value: id })), [bibles])
 
@@ -26,12 +27,12 @@ const useBase = () => {
     console.info('handleTabsChange', index, value)
   }, [])
 
-  const handleCloseTab = useCallback((index: number) => {
-    setTabs((prevState) => prevState.filter((_, i) => i !== index))
+  const handleAddTab = useCallback((value: string) => {
+    setTabs((prevState) => [...prevState, { value, label: value }])
   }, [])
 
-  const handleSelectBible = useCallback((value: string) => {
-    setTabs((prevState) => [...prevState, { value, label: value }])
+  const handleCloseTab = useCallback((index: number) => {
+    setTabs((prevState) => prevState.filter((_, i) => i !== index))
   }, [])
 
   const getModules = useCallback(async () => {
@@ -49,10 +50,11 @@ const useBase = () => {
     tabs,
     targetRef,
     dimensions: { width, height: scrollHeight },
+    instantDimensions: { width, height: defaultTheme.instantView.height },
     contextMenuItems,
     handleTabsChange,
+    handleAddTab,
     handleCloseTab,
-    handleSelectBible,
   }
 }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { ISearchInputProps } from './types'
+import { IInputSearchProps } from './types'
 
-const useBase = ({ initialValue, onChange, onSubmit }: ISearchInputProps) => {
+const useBase = ({ initialValue, onChange, onSubmit }: IInputSearchProps) => {
   const [value, setValue] = useState<string>(initialValue)
 
   const handleChange = (e: any) => {

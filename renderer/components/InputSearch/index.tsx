@@ -1,17 +1,17 @@
 import React, { FC } from 'react'
 import noop from 'helpers/noop'
 
-import { ISearchInputProps } from './types'
-import { SSearchInput, SForm } from './styled.index'
+import { IInputSearchProps } from './types'
+import { SInputSearch, SForm } from './styled.index'
 import useBase from './useBase'
 
-const SearchInput: FC<ISearchInputProps> = ({ className, style, qa, ...props }) => {
+const InputSearch: FC<IInputSearchProps> = ({ className, style, qa, ...props }) => {
   const { placeholder } = props
   const { value, handleChange, handleSubmit } = useBase(props)
 
   return (
     <SForm onSubmit={handleSubmit}>
-      <SSearchInput
+      <SInputSearch
         className={className}
         style={style}
         data-qa={qa}
@@ -23,12 +23,12 @@ const SearchInput: FC<ISearchInputProps> = ({ className, style, qa, ...props }) 
   )
 }
 
-SearchInput.defaultProps = {
-  qa: 'SearchInput',
+InputSearch.defaultProps = {
+  qa: 'InputSearch',
   initialValue: '',
   placeholder: 'Enter a verse reference',
   onChange: noop,
   onSubmit: noop,
 }
 
-export default SearchInput
+export default InputSearch

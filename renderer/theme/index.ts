@@ -41,6 +41,9 @@ export const commonTheme = {
   searchBar: {
     height: '40px',
   },
+  instantView: {
+    height: '200px',
+  },
   fonts: ['Roboto', 'Helvetica Neue', 'Helvetica', 'sans-serif'],
   fontSizes: {
     extraSmall: '0.625em',
@@ -58,7 +61,7 @@ export const defaultTheme = {
     primary: '#0a0a0a',
     secondary: '#58a6ff',
     error: '#ef5350',
-    grey: '#9e9e9e',
+    gray: '#9e9e9e',
     background: '#ffffff',
   },
 }
@@ -69,6 +72,7 @@ export const darkTheme = {
     primary: '#c9d1d9',
     secondary: '#58a6ff',
     error: '#ef5350',
+    gray: '#9e9e9e',
     background: '#0d1117',
   },
 }

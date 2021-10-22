@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-export const SSearchInput = styled.input(
+export const SInputSearch = styled.input(
   () => css`
     display: inline-block;
     width: 100%;

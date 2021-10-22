@@ -4,12 +4,13 @@ import Head from 'next/head'
 
 import { AppBar, Tabs, Tab, ContextMenu } from 'components'
 import { BibleView } from 'containers/BibleView'
+import { InstantView } from 'containers/InstantView'
 import { SContainer, SContent } from './styled.index'
 import useBase from './useBase'
 import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
-  const { tabs, targetRef, dimensions, contextMenuItems, handleCloseTab, handleSelectBible } = useBase()
+  const { tabs, targetRef, dimensions, instantDimensions, contextMenuItems, handleAddTab, handleCloseTab } = useBase()
 
   return (
     <SContainer>
@@ -25,9 +26,10 @@ export const HomePage: NextPage = () => {
             </Tab>
           ))}
           <Tab type={ETabType.button}>
-            <ContextMenu label="+" items={contextMenuItems} onSelect={handleSelectBible} />
+            <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
           </Tab>
         </Tabs>
+        <InstantView htmlText="InstantView" dimensions={instantDimensions} />
       </SContent>
     </SContainer>
   )

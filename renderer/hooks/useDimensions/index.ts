@@ -9,10 +9,8 @@ const useDimensions = () => {
 
   const onResize = () => {
     if (targetRef.current) {
-      setDimensions({
-        width: targetRef.current.clientWidth,
-        height: targetRef.current.clientHeight,
-      })
+      const result = targetRef.current.getBoundingClientRect()
+      setDimensions(result)
     }
   }
 
