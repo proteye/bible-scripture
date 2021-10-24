@@ -10,7 +10,17 @@ import useBase from './useBase'
 import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
-  const { tabs, targetRef, dimensions, instantDimensions, contextMenuItems, handleAddTab, handleCloseTab } = useBase()
+  const {
+    tabs,
+    targetRef,
+    dimensions,
+    instantDimensions,
+    contextMenuItems,
+    topic,
+    handleAddTab,
+    handleCloseTab,
+    handleGetDictionaryTopic,
+  } = useBase()
 
   return (
     <SContainer>
@@ -22,14 +32,19 @@ export const HomePage: NextPage = () => {
         <Tabs defaultSelectedIndex={0}>
           {tabs.map(({ value, label }, index) => (
             <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
-              <BibleView key={`${index}-${value}`} moduleName={value} dimensions={dimensions} />
+              <BibleView
+                key={`${index}-${value}`}
+                moduleName={value}
+                dimensions={dimensions}
+                onGetDictionaryTopic={handleGetDictionaryTopic}
+              />
             </Tab>
           ))}
           <Tab type={ETabType.button}>
             <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
           </Tab>
         </Tabs>
-        <InstantView htmlText="InstantView" dimensions={instantDimensions} />
+        <InstantView htmlText={topic?.definition} dimensions={instantDimensions} />
       </SContent>
     </SContainer>
   )

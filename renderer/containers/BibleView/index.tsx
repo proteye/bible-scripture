@@ -6,8 +6,8 @@ import { IBibleViewProps } from './types'
 
 import useBase from './useBase'
 
-export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions }) => {
-  const { verses, handleSearchSubmit } = useBase({ moduleName })
+export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions, onGetDictionaryTopic }) => {
+  const { verses, handleSearchSubmit } = useBase({ moduleName, onGetDictionaryTopic })
 
   return (
     <>
@@ -16,13 +16,9 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions }) => {
       </SSearchPanel>
       <ComponentWithScroll dimensions={dimensions}>
         <SBibleView>
-          {verses.map(({ verse, text }) => (
+          {verses.map(({ verse, preparedText }) => (
             <div key={verse}>
-              {verse}.{' '}
-              {text
-                .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
-                .replace(/<pb\/>/gi, '')
-                .replace(/<\/?t>/gi, '"')}
+              {verse}. {preparedText}
             </div>
           ))}
         </SBibleView>
