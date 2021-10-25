@@ -18,3 +18,11 @@ export const SSearchPanel = styled.div(
     background-color: ${theme.palette.secondary};
   `,
 )
+
+export const SWord = styled.span(
+  ({ theme }) => css`
+    &:hover {
+      background: ${theme.palette.secondary};
+    }
+  `,
+)

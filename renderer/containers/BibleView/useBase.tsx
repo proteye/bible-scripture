@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ipcRenderer } from 'electron'
 import { nanoid } from 'nanoid'
 import { IBibleVerse, IBibleInfo, IBibleBook } from '@common/types'
 import { IBiblePreapredVerse, IBibleViewProps } from './types'
+import { SWord } from './styled.index'
+import { getBookNumberByName } from 'helpers/getBookNumber'
 
 const NT_BEGIN_BOOK_NUMBER = 470
 
@@ -10,26 +12,44 @@ const verseRegexp = /(.+?)\s*([0-9]+)[:\s]?([0-9]+)?/i
 
 const strongRegexp = /<S>([0-9]+)<\/S>/i
 
-const prepareVerseText = (text: string, bookNumber: number, onMouseEnter: (e) => void) => {
+const morphologyRegexp = /<m>([0-9A-z-\/]+)<\/m>/i
+
+const prepareVerseText = ({
+  text,
+  bookNumber,
+  strongNumbersPrefix,
+  onMouseEnter,
+}: {
+  text: string
+  bookNumber: number
+  strongNumbersPrefix?: string
+  onMouseEnter?: (e) => void
+}) => {
   const splittedText = text.split(' ')
 
   return splittedText.map((word, index) => {
+    // Strong
     const strongMatches = word.match(strongRegexp)
     const strongNumber = strongMatches?.length > 1 ? strongMatches[1] : null
-    const strongPrefix = bookNumber < NT_BEGIN_BOOK_NUMBER ? 'H' : 'G'
-    const preapredWord = word
+    const strongPrefix = strongNumbersPrefix || bookNumber < NT_BEGIN_BOOK_NUMBER ? 'H' : 'G'
+    // Morphology
+    const morphologyMatches = word.match(morphologyRegexp)
+    const morphologyIndication = morphologyMatches?.length > 1 ? morphologyMatches[1] : null
+
+    const preparedWord = word
       .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
       .replace(/<pb\/>/gi, '')
       .replace(/<\/?t>/gi, '"')
 
     return (
-      <span
-        key={`${index}-${preapredWord}`}
+      <SWord
+        key={`${index}-${preparedWord}`}
         data-strong={strongNumber ? `${strongPrefix}${strongNumber}` : null}
+        data-morphology={morphologyIndication}
         onMouseEnter={onMouseEnter}
       >
-        {preapredWord}{' '}
-      </span>
+        {preparedWord}{' '}
+      </SWord>
     )
   })
 }
@@ -37,7 +57,7 @@ const prepareVerseText = (text: string, bookNumber: number, onMouseEnter: (e) =>
 const prepareVerses = (verses: IBibleVerse[], onMouseEnter: (e) => void): IBiblePreapredVerse[] =>
   verses?.map((verse: IBibleVerse) => ({
     ...verse,
-    preparedText: prepareVerseText(verse.text, verse.bookNumber, onMouseEnter),
+    preparedText: prepareVerseText({ text: verse.text, bookNumber: verse.bookNumber, onMouseEnter }),
   }))
 
 const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
@@ -50,8 +70,10 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
   const handleVerseMouseEnter = useCallback(
     (e) => {
       const strong = e.currentTarget.dataset['strong']
+      const morphology = e.currentTarget.dataset['morphology']
+
       if (strong) {
-        onGetDictionaryTopic?.(strong)
+        onGetDictionaryTopic?.(strong, morphology)
       }
     },
     [onGetDictionaryTopic],
@@ -64,15 +86,13 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
         return
       }
 
-      const [, bookName, chapter, verse] = matches
+      const [, bookName, chapter] = matches
 
-      const book = books.find(({ shortName, longName }) => {
-        return shortName.toLowerCase().includes(bookName) || longName.toLowerCase().includes(bookName)
-      })
+      const bookNumber = getBookNumberByName(bookName)
 
-      if (book) {
+      if (bookNumber) {
         const verses = await ipcRenderer.invoke('getBibleVerses', uid, {
-          bookNumber: book.bookNumber,
+          bookNumber,
           chapter,
         })
         setVerses(prepareVerses(verses, handleVerseMouseEnter))

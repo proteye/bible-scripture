@@ -13,6 +13,7 @@ const useBase = () => {
   const [bibles, setBibles] = useState<TModulesList>([])
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
+  const [morphology, setMorphology] = useState<string>(null)
 
   const {
     targetRef,
@@ -52,9 +53,12 @@ const useBase = () => {
     await ipcRenderer.invoke('openDictionary', dictionaryModuleName, uid)
   }, [uid])
 
-  const handleGetDictionaryTopic = useCallback(async (topic: string) => {
+  const handleGetDictionaryTopic = useCallback(async (topic: string, morphology?: string) => {
     const result = await ipcRenderer.invoke('getDictionaryByTopic', uid, { topic })
+    const morphologyHtml = morphology ? `<p>${morphology}</p>` : ''
+
     setTopic(result)
+    setMorphology(morphologyHtml)
   }, [])
 
   useEffect(() => {
@@ -73,6 +77,7 @@ const useBase = () => {
     instantDimensions: { width, height: defaultTheme.instantView.height },
     contextMenuItems,
     topic,
+    morphology,
     handleTabsChange,
     handleAddTab,
     handleCloseTab,
