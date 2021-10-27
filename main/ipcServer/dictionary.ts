@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import { TId, TModuleName } from 'common/types'
-import { IGetDictionaryTopicProps } from '../models/dictionary/types'
+import { IGetDictionaryTopicProps, IGetMorphologyIndicationProps } from '../models/dictionary/types'
 import { dictionary } from '../models'
 
 ipcMain.handle('openDictionary', async (_event, moduleName: TModuleName, uid: TId) => {
@@ -17,4 +17,8 @@ ipcMain.handle('getDictionaryInfo', async (_event, uid: TId) => {
 
 ipcMain.handle('getDictionaryByTopic', async (_event, uid: TId, props: IGetDictionaryTopicProps) => {
   return await dictionary.getDictionaryByTopic(uid, props)
+})
+
+ipcMain.handle('getMorphologyIndication', async (_event, uid: TId, props: IGetMorphologyIndicationProps) => {
+  return await dictionary.getMorphologyIndication(uid, props)
 })

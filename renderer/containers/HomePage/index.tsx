@@ -16,8 +16,7 @@ export const HomePage: NextPage = () => {
     dimensions,
     instantDimensions,
     contextMenuItems,
-    topic,
-    morphology,
+    instantHtmlText,
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
@@ -45,7 +44,7 @@ export const HomePage: NextPage = () => {
             <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
           </Tab>
         </Tabs>
-        <InstantView htmlText={morphology + topic?.definition} dimensions={instantDimensions} />
+        <InstantView htmlText={instantHtmlText} dimensions={instantDimensions} />
       </SContent>
     </SContainer>
   )

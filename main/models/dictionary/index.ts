@@ -1,6 +1,12 @@
 import { module } from '../index'
-import { IDictionaryDictionary, IDictionaryInfo, TUid, TModuleName } from 'common/types'
-import { IDictionaryByName, IDictionaryByUid, IGetDictionaryTopicProps } from './types'
+import {
+  IDictionaryDictionary,
+  IDictionaryInfo,
+  TUid,
+  TModuleName,
+  IDictionaryMorphologyIndications,
+} from 'common/types'
+import { IDictionaryByName, IDictionaryByUid, IGetDictionaryTopicProps, IGetMorphologyIndicationProps } from './types'
 
 const dictionarySuffix = '.dictionary'
 
@@ -70,4 +76,25 @@ const getDictionaryByTopic = (uid: TUid, { topic }: IGetDictionaryTopicProps) =>
   })
 }
 
-export default { openDictionary, closeDictionaryByUid, getDictionaryInfo, getDictionaryByTopic }
+const getMorphologyIndication = (uid: TUid, { indication }: IGetMorphologyIndicationProps) => {
+  return new Promise((resolve) => {
+    const moduleName = dictionaryByUid[uid]
+    const dictionary = module.openModule(moduleName, uid)
+
+    dictionary.get(
+      'SELECT indication, applicable_to AS applicableTo, meaning FROM morphology_indication WHERE indication=?',
+      [indication],
+      (_: any, item: IDictionaryMorphologyIndications) => {
+        resolve(item || null)
+      },
+    )
+  })
+}
+
+export default {
+  openDictionary,
+  closeDictionaryByUid,
+  getDictionaryInfo,
+  getDictionaryByTopic,
+  getMorphologyIndication,
+}

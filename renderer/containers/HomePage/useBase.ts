@@ -13,7 +13,9 @@ const useBase = () => {
   const [bibles, setBibles] = useState<TModulesList>([])
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
-  const [morphology, setMorphology] = useState<string>(null)
+  const [morphology, setMorphology] = useState<string>('')
+
+  const instantHtmlText = morphology || topic ? morphology + (topic?.definition || '') : ''
 
   const {
     targetRef,
@@ -76,8 +78,7 @@ const useBase = () => {
     dimensions: { width, height: scrollHeight },
     instantDimensions: { width, height: defaultTheme.instantView.height },
     contextMenuItems,
-    topic,
-    morphology,
+    instantHtmlText,
     handleTabsChange,
     handleAddTab,
     handleCloseTab,

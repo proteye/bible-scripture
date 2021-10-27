@@ -11,3 +11,7 @@ export interface IDictionaryByName {
 export interface IGetDictionaryTopicProps {
   topic: string
 }
+
+export interface IGetMorphologyIndicationProps {
+  indication: string
+}
