@@ -82,7 +82,7 @@ const getMorphologyIndication = (uid: TUid, { indication }: IGetMorphologyIndica
     const dictionary = module.openModule(moduleName, uid)
 
     dictionary.get(
-      'SELECT indication, applicable_to AS applicableTo, meaning FROM morphology_indication WHERE indication=?',
+      'SELECT indication, applicable_to AS applicableTo, meaning FROM morphology_indications WHERE indication=?',
       [indication],
       (_: any, item: IDictionaryMorphologyIndications) => {
         resolve(item || null)

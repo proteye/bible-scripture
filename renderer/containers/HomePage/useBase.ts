@@ -4,7 +4,7 @@ import { defaultTheme } from 'theme'
 import { getNumberFromString } from 'helpers/getNumberFromString'
 import { ITabProps } from 'components/Tab/types'
 import { ipcRenderer } from 'electron'
-import { IDictionaryDictionary, TModulesList } from '@common/types'
+import { IDictionaryDictionary, IDictionaryMorphologyIndications, TModulesList } from '@common/types'
 import { nanoid } from 'nanoid'
 
 const dictionaryModuleName = 'Журом'
@@ -13,9 +13,11 @@ const useBase = () => {
   const [bibles, setBibles] = useState<TModulesList>([])
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
-  const [morphology, setMorphology] = useState<string>('')
+  const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications>(null)
 
-  const instantHtmlText = morphology || topic ? morphology + (topic?.definition || '') : ''
+  const morphologyMeaningHtml = morphology ? `<p>${morphology.meaning}</p>` : ''
+  const topicDefinitionHtml = topic?.definition || ''
+  const instantHtmlText = morphologyMeaningHtml + topicDefinitionHtml
 
   const {
     targetRef,
@@ -55,12 +57,12 @@ const useBase = () => {
     await ipcRenderer.invoke('openDictionary', dictionaryModuleName, uid)
   }, [uid])
 
-  const handleGetDictionaryTopic = useCallback(async (topic: string, morphology?: string) => {
+  const handleGetDictionaryTopic = useCallback(async (topic: string, morphologyIndication?: string) => {
     const result = await ipcRenderer.invoke('getDictionaryByTopic', uid, { topic })
-    const morphologyHtml = morphology ? `<p>${morphology}</p>` : ''
+    const morphology = await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication })
 
     setTopic(result)
-    setMorphology(morphologyHtml)
+    setMorphology(morphology)
   }, [])
 
   useEffect(() => {
