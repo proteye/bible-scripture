@@ -14,6 +14,12 @@ const strongRegexp = /<S>([0-9]+)<\/S>/i
 
 const morphologyRegexp = /<m>([0-9A-z-\/]+)<\/m>/i
 
+const getStrongNumbersPrefix = (info: IBibleInfo[]) => {
+  const strongNumbersPrefix = info.find(({ name }) => name === 'strong_numbers_prefix')
+
+  return strongNumbersPrefix?.value
+}
+
 const prepareVerseText = ({
   text,
   bookNumber,
@@ -31,7 +37,7 @@ const prepareVerseText = ({
     // Strong
     const strongMatches = word.match(strongRegexp)
     const strongNumber = strongMatches?.length > 1 ? strongMatches[1] : null
-    const strongPrefix = strongNumbersPrefix || bookNumber < NT_BEGIN_BOOK_NUMBER ? 'H' : 'G'
+    const strongPrefix = strongNumbersPrefix || (bookNumber < NT_BEGIN_BOOK_NUMBER ? 'H' : 'G')
     // Morphology
     const morphologyMatches = word.match(morphologyRegexp)
     const morphologyIndication = morphologyMatches?.length > 1 ? morphologyMatches[1] : null
@@ -54,10 +60,10 @@ const prepareVerseText = ({
   })
 }
 
-const prepareVerses = (verses: IBibleVerse[], onMouseEnter: (e) => void): IBiblePreapredVerse[] =>
+const prepareVerses = (verses: IBibleVerse[], strongNumbersPrefix: string, onMouseEnter: (e) => void): IBiblePreapredVerse[] =>
   verses?.map((verse: IBibleVerse) => ({
     ...verse,
-    preparedText: prepareVerseText({ text: verse.text, bookNumber: verse.bookNumber, onMouseEnter }),
+    preparedText: prepareVerseText({ text: verse.text, bookNumber: verse.bookNumber, strongNumbersPrefix, onMouseEnter }),
   }))
 
 const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
@@ -95,7 +101,7 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
           bookNumber,
           chapter,
         })
-        setVerses(prepareVerses(verses, handleVerseMouseEnter))
+        setVerses(prepareVerses(verses, getStrongNumbersPrefix(info), handleVerseMouseEnter))
       }
     },
     [books, handleVerseMouseEnter],
@@ -115,7 +121,7 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
     })
     setInfo(info)
     setBooks(books)
-    setVerses(prepareVerses(verses, handleVerseMouseEnter))
+    setVerses(prepareVerses(verses, getStrongNumbersPrefix(info), handleVerseMouseEnter))
   }, [handleVerseMouseEnter])
 
   useEffect(() => {
