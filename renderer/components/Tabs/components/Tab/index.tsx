@@ -7,12 +7,12 @@ import { ETabType } from 'components/Tab/types'
 const Tab: FC<ITab> = ({ index, label, type, isActive, children, onActive, onClose }) => {
   return (
     <STab data-index={index} $isActive={type === ETabType.tab && isActive} onClick={onActive}>
-      {type === ETabType.tab ? <STabLink>{label}</STabLink> : children}
-      {type === ETabType.tab && (
+      {type === ETabType.tab ? <>
+        <STabLink>{label}</STabLink>
         <SIconWrapper onClick={onClose}>
-          <Close fontSize="small" />
+          <Close fontSize="small" id="close" />
         </SIconWrapper>
-      )}
+      </> : children}
     </STab>
   )
 }

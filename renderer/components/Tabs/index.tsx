@@ -7,19 +7,19 @@ import { ITabsProps } from './types'
 import useBase from './useBase'
 
 const Tabs: FC<ITabsProps> = (props) => {
-  const { tabs } = useBase(props)
+  const { tabs, selectedIndex } = useBase(props)
 
   return (
     <STabs>
       <STabsUl>
-        {tabs.map((props) => (
-          <Tab {...props} key={props.index} />
+        {tabs.map((tabProps, index) => (
+          <Tab {...tabProps} key={tabProps.index} isActive={selectedIndex === index} />
         ))}
       </STabsUl>
       {tabs
         .filter(({ type }) => type === ETabType.tab)
-        .map(({ index, isActive, children }) => (
-          <STabsPane key={index} $isActive={isActive}>
+        .map(({ index, children }) => (
+          <STabsPane key={index} $isActive={selectedIndex === index}>
             {children}
           </STabsPane>
         ))}
@@ -28,6 +28,7 @@ const Tabs: FC<ITabsProps> = (props) => {
 }
 
 Tabs.defaultProps = {
+  selectedIndex: 0,
   onChange: noop,
 }
 

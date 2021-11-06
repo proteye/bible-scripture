@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Tab } from 'components'
 import { Children, useMemo } from 'react'
 import { ITab, ITabsProps } from './types'
 import { ETabType } from 'components/Tab/types'
 
-const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) => {
-  const [selectedIndex, setSelectedIndex] = useState(defaultSelectedIndex)
-
+const useBase = ({ selectedIndex, children, onChange }: ITabsProps) => {
   const tabs: ITab[] = useMemo(
     () =>
       Children.toArray(children).map((item, index) => {
@@ -18,11 +16,11 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
 
         const handleActive = (e: React.MouseEvent<HTMLLIElement>) => {
           e.preventDefault()
-          if (type !== ETabType.tab) {
+          const isCloseButton = (e.target as HTMLElement).id === 'close'
+
+          if (type !== ETabType.tab || selectedIndex === index || isCloseButton) {
             return
           }
-
-          setSelectedIndex(index)
 
           if (onActive) {
             onActive(index, value)
@@ -35,7 +33,6 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
 
         const handleClose = (e: React.MouseEvent<HTMLLIElement>) => {
           e.preventDefault()
-
           if (onClose) {
             onClose(index, value)
           }
@@ -47,7 +44,6 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
           value,
           type,
           children,
-          isActive: selectedIndex === index,
           onActive: handleActive,
           onClose: handleClose,
         }
@@ -57,6 +53,7 @@ const useBase = ({ defaultSelectedIndex = 0, children, onChange }: ITabsProps) =
 
   return {
     tabs,
+    selectedIndex,
   }
 }
 

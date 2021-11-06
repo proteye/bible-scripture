@@ -4,7 +4,7 @@ import { Tab } from 'components'
 import { ITabProps } from 'components/Tab/types'
 
 export interface ITabsProps extends IComponentDefaultProps {
-  defaultSelectedIndex?: number
+  selectedIndex?: number
   children?: ReactNode
   onChange?(
     index: number,
@@ -16,8 +16,8 @@ export interface ITabsProps extends IComponentDefaultProps {
 
 export interface ITab extends Omit<ITabProps, 'onActive' | 'onClose'> {
   index: number
-  isActive: boolean
   children: ReactNode
+  isActive?: boolean
   onActive?(e: React.MouseEvent<HTMLLIElement>): void
   onClose?(e: React.MouseEvent<HTMLLIElement>): void
 }

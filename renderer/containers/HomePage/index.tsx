@@ -13,10 +13,12 @@ export const HomePage: NextPage = () => {
   const {
     tabs,
     targetRef,
+    selectedIndex,
     dimensions,
     instantDimensions,
     contextMenuItems,
     instantHtmlText,
+    handleChangeTab,
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
@@ -29,7 +31,7 @@ export const HomePage: NextPage = () => {
       </Head>
       <AppBar></AppBar>
       <SContent ref={targetRef}>
-        <Tabs defaultSelectedIndex={0}>
+        <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
           {tabs.map(({ value, label }, index) => (
             <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
               <BibleView
