@@ -16,7 +16,8 @@ const useBase = ({ selectedIndex, children, onChange }: ITabsProps) => {
 
         const handleActive = (e: React.MouseEvent<HTMLLIElement>) => {
           e.preventDefault()
-          const isCloseButton = (e.target as HTMLElement).id === 'close'
+
+          const isCloseButton = (e.target as HTMLElement).id === 'close' || (e.target as HTMLElement).parentElement.id === 'close'
 
           if (type !== ETabType.tab || selectedIndex === index || isCloseButton) {
             return
