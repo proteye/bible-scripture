@@ -88,7 +88,6 @@ const useBase = () => {
     targetRef,
     selectedIndex,
     dimensions: { width, height: scrollHeight },
-    instantDimensions: { width, height: defaultTheme.instantView.height },
     contextMenuItems,
     instantHtmlText,
     handleChangeTab,

@@ -2,7 +2,8 @@ import styled, { css } from 'styled-components'
 
 export const SBibleView = styled.div(
   () => css`
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: auto;
     padding: 16px;

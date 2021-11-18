@@ -5,7 +5,7 @@ import Head from 'next/head'
 import { AppBar, Tabs, Tab, ContextMenu } from 'components'
 import { BibleView } from 'containers/BibleView'
 import { InstantView } from 'containers/InstantView'
-import { SContainer, SContent } from './styled.index'
+import { SContainer, SContent, SMainView } from './styled.index'
 import useBase from './useBase'
 import { ETabType } from 'components/Tab/types'
 
@@ -15,7 +15,6 @@ export const HomePage: NextPage = () => {
     targetRef,
     selectedIndex,
     dimensions,
-    instantDimensions,
     contextMenuItems,
     instantHtmlText,
     handleChangeTab,
@@ -31,22 +30,24 @@ export const HomePage: NextPage = () => {
       </Head>
       <AppBar></AppBar>
       <SContent ref={targetRef}>
-        <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
-          {tabs.map(({ value, label }, index) => (
-            <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
-              <BibleView
-                key={`${index}-${value}`}
-                moduleName={value}
-                dimensions={dimensions}
-                onGetDictionaryTopic={handleGetDictionaryTopic}
-              />
+        <SMainView>
+          <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
+            {tabs.map(({ value, label }, index) => (
+              <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
+                <BibleView
+                  key={`${index}-${value}`}
+                  moduleName={value}
+                  dimensions={dimensions}
+                  onGetDictionaryTopic={handleGetDictionaryTopic}
+                />
+              </Tab>
+            ))}
+            <Tab type={ETabType.button}>
+              <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
             </Tab>
-          ))}
-          <Tab type={ETabType.button}>
-            <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
-          </Tab>
-        </Tabs>
-        <InstantView htmlText={instantHtmlText} dimensions={instantDimensions} />
+          </Tabs>
+        </SMainView>
+        <InstantView htmlText={instantHtmlText} />
       </SContent>
     </SContainer>
   )

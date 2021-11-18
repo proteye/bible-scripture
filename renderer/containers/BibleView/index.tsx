@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { ComponentWithScroll, InputSearch } from 'components'
+import { Scrollable, InputSearch } from 'components'
 
 import { SBibleView, SSearchPanel } from './styled.index'
 import { IBibleViewProps } from './types'
@@ -14,7 +14,7 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions, onGetDi
       <SSearchPanel>
         <InputSearch onSubmit={handleSearchSubmit} />
       </SSearchPanel>
-      <ComponentWithScroll dimensions={dimensions}>
+      <Scrollable>
         <SBibleView>
           {verses.map(({ verse, preparedText }) => (
             <div key={verse}>
@@ -22,7 +22,7 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions, onGetDi
             </div>
           ))}
         </SBibleView>
-      </ComponentWithScroll>
+      </Scrollable>
     </>
   )
 }

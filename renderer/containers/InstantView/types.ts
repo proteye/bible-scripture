@@ -1,5 +1,3 @@
-import { IComponentWithDimensions } from 'components/types'
-
-export interface IInstantViewProps extends IComponentWithDimensions {
+export interface IInstantViewProps {
   htmlText?: string
 }

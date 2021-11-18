@@ -1,15 +1,17 @@
 import React, { FC } from 'react'
-import { HtmlExecutor } from 'components'
+import { HtmlExecutor, Scrollable } from 'components'
 
-import { SInstantView, SComponentWithScroll } from './styled.index'
+import { SInstantView, SWrapper } from './styled.index'
 import { IInstantViewProps } from './types'
 
-export const InstantView: FC<IInstantViewProps> = ({ htmlText, dimensions }) => {
+export const InstantView: FC<IInstantViewProps> = ({ htmlText }) => {
   return (
-    <SComponentWithScroll dimensions={dimensions}>
-      <SInstantView>
-        <HtmlExecutor>{htmlText}</HtmlExecutor>
-      </SInstantView>
-    </SComponentWithScroll>
+    <SInstantView>
+      <Scrollable >
+        <SWrapper>
+          <HtmlExecutor>{htmlText}</HtmlExecutor>
+        </SWrapper>
+      </Scrollable>
+    </SInstantView>
   )
 }

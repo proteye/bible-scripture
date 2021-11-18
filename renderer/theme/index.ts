@@ -4,6 +4,10 @@ import fonts from './fonts'
 export const GlobalStyle = createGlobalStyle`
   ${fonts}
 
+  html {
+    height: 100%;
+  }
+
   body {
     position: relative;
     background-color: ${({ theme }) => theme.palette.background};

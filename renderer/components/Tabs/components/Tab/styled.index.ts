@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 
 export const STabLink = styled.a(
   ({ theme }) => css`
-    display: block;
+    display: flex;
     white-space: nowrap;
     text-transform: uppercase;
     font-weight: 500;
@@ -47,7 +47,7 @@ export const STab = styled.li<ISTab>(
 
     &:hover {
       ${SIconWrapper} {
-        display: block;
+        display: flex;
       }
     }
 
