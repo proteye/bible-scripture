@@ -4,3 +4,5 @@ node_modules
 app
 dist
 .vscode
+.DS_Store
+resources/modules

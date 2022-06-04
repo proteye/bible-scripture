@@ -1,29 +1,30 @@
-import React from 'react';
-import Head from 'next/head';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { theme } from '../lib/theme';
-import type { AppProps } from 'next/app';
+import React from 'react'
+import { NextPage } from 'next'
+import Head from 'next/head'
+import type { AppProps } from 'next/app'
+import { ThemeProvider } from 'styled-components'
+import { defaultTheme, darkTheme, GlobalStyle } from '../theme'
 
-export default function(props: AppProps) {
-  const { Component, pageProps } = props;
+// Material UI
+import 'muicss/dist/css/mui.min.css'
 
-  React.useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
+const App: NextPage<AppProps> = (props: AppProps) => {
+  const { Component, pageProps } = props
+  // TODO: get Light/Dark mode from state
+  const isDarkMode = false
 
   return (
-    <React.Fragment>
+    <>
       <Head>
+        <meta charSet="utf-8" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <ThemeProvider theme={isDarkMode ? darkTheme : defaultTheme}>
+        <GlobalStyle />
         <Component {...pageProps} />
       </ThemeProvider>
-    </React.Fragment>
-  );
+    </>
+  )
 }
+
+export default App
