@@ -1,17 +1,14 @@
 import React, { FC } from 'react'
-import { HtmlExecutor, Scrollable } from 'components'
+import { HtmlExecutor } from 'components'
 
-import { SInstantView, SWrapper } from './styled.index'
 import { IInstantViewProps } from './types'
 
 export const InstantView: FC<IInstantViewProps> = ({ htmlText }) => {
   return (
-    <SInstantView>
-      <Scrollable >
-        <SWrapper>
-          <HtmlExecutor>{htmlText}</HtmlExecutor>
-        </SWrapper>
-      </Scrollable>
-    </SInstantView>
+    <div className='flex flex-col flex-shrink-0 w-full h-1/4 border-t border-gray-300 bg-gray-100 overflow-y-scroll'>
+      <div className='p-4'>
+        <HtmlExecutor>{htmlText}</HtmlExecutor>
+      </div>
+    </div>
   )
 }

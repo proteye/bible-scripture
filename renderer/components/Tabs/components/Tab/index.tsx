@@ -1,19 +1,18 @@
 import React, { FC } from 'react'
-import { SIconWrapper, STab, STabLink } from './styled.index'
 import { ITab } from '../../types'
-import { Close } from '@material-ui/icons'
 import { ETabType } from 'components/Tab/types'
+import { XIcon } from '@heroicons/react/outline'
 
 const Tab: FC<ITab> = ({ index, label, type, isActive, children, onActive, onClose }) => {
   return (
-    <STab data-index={index} $isActive={type === ETabType.tab && isActive} onClick={onActive}>
+    <li data-index={index} $isActive={type === ETabType.tab && isActive} onClick={onActive}>
       {type === ETabType.tab ? <>
-        <STabLink>{label}</STabLink>
-        <SIconWrapper onClick={onClose}>
-          <Close fontSize="small" id="close" />
-        </SIconWrapper>
+        <div>{label}</div>
+        <span onClick={onClose}>
+          <XIcon id="close" className="h-6 w-6" />
+        </span>
       </> : children}
-    </STab>
+    </li>
   )
 }
 

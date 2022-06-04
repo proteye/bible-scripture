@@ -3,7 +3,7 @@ import { sanitize } from 'helpers/sanitize'
 
 import { IHtmlExecutorProps } from './types'
 
-export const HtmlExecutor: FC<IHtmlExecutorProps> = ({ as, children }) => {
+const HtmlExecutor: FC<IHtmlExecutorProps> = ({ as, children }) => {
   const innerHtml = sanitize(children)
 
   return as === 'p' ? <p dangerouslySetInnerHTML={innerHtml} /> : <span dangerouslySetInnerHTML={innerHtml} />
@@ -12,3 +12,5 @@ export const HtmlExecutor: FC<IHtmlExecutorProps> = ({ as, children }) => {
 HtmlExecutor.defaultProps = {
   as: 'span',
 }
+
+export default HtmlExecutor

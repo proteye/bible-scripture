@@ -2,12 +2,11 @@ import React from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 
-import { AppBar, Tabs, Tab, ContextMenu } from 'components'
-import { BibleView } from 'containers/BibleView'
+import { AppBar } from 'components'
+// import { BibleView } from 'containers/BibleView'
 import { InstantView } from 'containers/InstantView'
-import { SContainer, SContent, SMainView } from './styled.index'
 import useBase from './useBase'
-import { ETabType } from 'components/Tab/types'
+// import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
   const {
@@ -24,31 +23,46 @@ export const HomePage: NextPage = () => {
   } = useBase()
 
   return (
-    <SContainer>
+    <div className='relative block w-screen h-screen'>
       <Head>
         <title>Bible Scripture</title>
       </Head>
       <AppBar></AppBar>
-      <SContent ref={targetRef}>
-        <SMainView>
-          <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
-            {tabs.map(({ value, label }, index) => (
-              <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
-                <BibleView
-                  key={`${index}-${value}`}
-                  moduleName={value}
-                  dimensions={dimensions}
-                  onGetDictionaryTopic={handleGetDictionaryTopic}
-                />
-              </Tab>
-            ))}
-            <Tab type={ETabType.button}>
-              <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
-            </Tab>
-          </Tabs>
-        </SMainView>
+      <div className='absolute inset-0 flex flex-col mt-16'>
+        <div className='flex flex-col flex-grow w-full overflow-y-scroll'>
+          Home Page
+        </div>
         <InstantView htmlText={instantHtmlText} />
-      </SContent>
-    </SContainer>
+      </div>
+    </div>
   )
+
+  // return (
+  //   <div>
+  //     <Head>
+  //       <title>Bible Scripture</title>
+  //     </Head>
+  //     <AppBar></AppBar>
+  //     <div ref={targetRef}>
+  //       <div>
+  //         <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
+  //           {tabs.map(({ value, label }, index) => (
+  //             <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
+  //               <BibleView
+  //                 key={`${index}-${value}`}
+  //                 moduleName={value}
+  //                 dimensions={dimensions}
+  //                 onGetDictionaryTopic={handleGetDictionaryTopic}
+  //               />
+  //             </Tab>
+  //           ))}
+  //           <Tab type={ETabType.button}>
+  //             <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
+  //           </Tab>
+  //         </Tabs>
+  //       </div>
+  //       <InstantView htmlText={instantHtmlText} />
+  //     </div>
+  //   </div>
+  // )
 }

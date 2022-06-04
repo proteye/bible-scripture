@@ -1,12 +1,12 @@
 import { useEffect, useCallback, useMemo, useState } from 'react'
 import useDimensions from 'hooks/useDimensions'
-import { defaultTheme } from 'theme'
 import { getNumberFromString } from 'helpers/getNumberFromString'
 import { ITabProps } from 'components/Tab/types'
 import { ipcRenderer } from 'electron'
 import { IDictionaryDictionary, IDictionaryMorphologyIndications, TModulesList } from '@common/types'
 import { nanoid } from 'nanoid'
 import useTabs from 'hooks/useTabs'
+import { defaultTheme } from 'constants/theme'
 
 const dictionaryModuleName = 'Журом'
 
