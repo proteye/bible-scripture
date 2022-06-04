@@ -3,7 +3,6 @@ import { ipcRenderer } from 'electron'
 import { nanoid } from 'nanoid'
 import { IBibleVerse, IBibleInfo, IBibleBook } from '@common/types'
 import { IBiblePreapredVerse, IBibleViewProps } from './types'
-import { SWord } from './styled.index'
 import { getBookNumberByName } from 'helpers/getBookNumber'
 
 const NT_BEGIN_BOOK_NUMBER = 470
@@ -48,14 +47,15 @@ const prepareVerseText = ({
       .replace(/<\/?t>/gi, '"')
 
     return (
-      <SWord
+      <span
         key={`${index}-${preparedWord}`}
+        className='hover:bg-blue-200'
         data-strong={strongNumber ? `${strongPrefix}${strongNumber}` : null}
         data-morphology={morphologyIndication}
         onMouseEnter={onMouseEnter}
       >
         {preparedWord}{' '}
-      </SWord>
+      </span>
     )
   })
 }

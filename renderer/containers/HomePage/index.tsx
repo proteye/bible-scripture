@@ -2,11 +2,11 @@ import React from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 
-import { AppBar } from 'components'
-// import { BibleView } from 'containers/BibleView'
+import { AppBar, ContextMenu, Tab, Tabs } from 'components'
+import { BibleView } from 'containers/BibleView'
 import { InstantView } from 'containers/InstantView'
 import useBase from './useBase'
-// import { ETabType } from 'components/Tab/types'
+import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
   const {
@@ -30,7 +30,21 @@ export const HomePage: NextPage = () => {
       <AppBar></AppBar>
       <div className='absolute inset-0 flex flex-col mt-16'>
         <div className='flex flex-col flex-grow w-full overflow-y-scroll'>
-          Home Page
+          <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
+            {tabs.map(({ value, label }, index) => (
+              <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
+                <BibleView
+                  key={`${index}-${value}`}
+                  moduleName={value}
+                  dimensions={dimensions}
+                  onGetDictionaryTopic={handleGetDictionaryTopic}
+                />
+              </Tab>
+            ))}
+            <Tab type={ETabType.button}>
+              <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
+            </Tab>
+          </Tabs>
         </div>
         <InstantView htmlText={instantHtmlText} />
       </div>

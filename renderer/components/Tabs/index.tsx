@@ -2,7 +2,6 @@ import { ETabType } from 'components/Tab/types'
 import noop from 'helpers/noop'
 import React, { FC } from 'react'
 import Tab from './components/Tab'
-import { STabs, STabsPane, STabsUl } from './styled.index'
 import { ITabsProps } from './types'
 import useBase from './useBase'
 
@@ -10,20 +9,20 @@ const Tabs: FC<ITabsProps> = (props) => {
   const { tabs, selectedIndex } = useBase(props)
 
   return (
-    <STabs>
-      <STabsUl>
+    <div className='relative flex flex-col w-full h-auto'>
+      <ul className='bg-transparent whitespace-nowrap overflow-x-auto'>
         {tabs.map((tabProps, index) => (
           <Tab {...tabProps} key={tabProps.index} isActive={selectedIndex === index} />
         ))}
-      </STabsUl>
+      </ul>
       {tabs
         .filter(({ type }) => type === ETabType.tab)
         .map(({ index, children }) => (
-          <STabsPane key={index} $isActive={selectedIndex === index}>
+          <div key={index} className={`${selectedIndex === index ? 'flex' : 'hidden'} relative flex-1 flex-col w-full h-full`}>
             {children}
-          </STabsPane>
+          </div>
         ))}
-    </STabs>
+    </div>
   )
 }
 
