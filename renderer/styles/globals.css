@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-gray-50;
+        @apply text-gray-900;
+    }
+}
+
+@layer components {
+
+    article {
+        @apply text-lg;
+    }
+
+    article h1,
+    article h2,
+    article h3,
+    article h4,
+    article h5,
+    article h6 {
+        @apply font-bold;
+    }
+
+    article h1 {
+        @apply text-4xl;
+        @apply mb-4;
+    }
+
+    article h2 {
+        @apply text-3xl;
+        @apply mb-4;
+    }
+
+    article h3 {
+        @apply text-2xl;
+        @apply mb-4;
+    }
+
+    article h4 {
+        @apply text-xl;
+        @apply mb-2;
+    }
+
+    article h5 {
+        @apply text-lg;
+        @apply mb-2;
+    }
+
+    article h6 {
+        @apply text-base;
+        @apply mb-2;
+    }
+
+    article ol,
+    article ul {
+        @apply ml-5;
+        @apply mb-2;
+    }
+
+    article p {
+        @apply mb-4;
+    }
+
+    article a {
+        @apply underline;
+        @apply underline-offset-2;
+        @apply text-blue-600;
+        @apply transition-colors;
+    }
+
+    article a:hover {
+        @apply text-blue-700;
+    }
+
+    article a:focus {
+        @apply text-blue-800;
+    }
+
+    article hr {
+        @apply mt-8;
+        @apply mb-8;
+        @apply mx-16;
+        @apply border-gray-300;
+    }
+
+    article blockquote {
+        @apply mt-4;
+        @apply mb-4;
+        @apply pl-4;
+        @apply border-l-4;
+        @apply border-slate-300;
+    }
+
+    article u {
+        @apply underline;
+        @apply underline-offset-2;
+    }
+
+    @media screen(md) {
+        article hr {
+            @apply mx-32;
+        }
+    }
+}
