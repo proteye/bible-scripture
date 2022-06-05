@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid'
 import { IBibleVerse, IBibleInfo, IBibleBook } from '@common/types'
 import { IBiblePreapredVerse, IBibleViewProps } from './types'
 import { getBookNumberByName } from 'helpers/getBookNumber'
+import { getFontByLanguage } from 'helpers/getFontByLanguage'
 
 const NT_BEGIN_BOOK_NUMBER = 470
 
@@ -73,6 +74,12 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
 
   const uid = useMemo(() => nanoid(), [])
 
+  const language = useMemo(() => {
+    const lang = info.find(({ name }) => name === 'language')
+
+    return lang?.value
+  }, [info])
+
   const handleVerseMouseEnter = useCallback(
     (e) => {
       const strong = e.currentTarget.dataset['strong']
@@ -131,6 +138,7 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
   return {
     info,
     verses,
+    language,
     handleSearchSubmit,
   }
 }

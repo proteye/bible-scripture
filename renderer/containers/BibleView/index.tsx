@@ -1,12 +1,16 @@
 import React, { FC } from 'react'
-import { InputSearch } from 'components'
+import { ContentByLang, InputSearch } from 'components'
 
 import { IBibleViewProps } from './types'
 
 import useBase from './useBase'
 
 export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions, onGetDictionaryTopic }) => {
-  const { verses, handleSearchSubmit } = useBase({ moduleName, onGetDictionaryTopic })
+  const { verses, language, handleSearchSubmit } = useBase({ moduleName, onGetDictionaryTopic })
+
+  if (!language) {
+    return null
+  }
 
   return (
     <>
@@ -14,12 +18,14 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, dimensions, onGetDi
         <InputSearch onSubmit={handleSearchSubmit} />
       </div>
       {/* <Scrollable> */}
-      <div className='flex flex-col w-full h-auto p-4 text-2xl'>
-        {verses.map(({ verse, preparedText }) => (
-          <div key={verse}>
-            {verse}. {preparedText}
-          </div>
-        ))}
+      <div className={`flex flex-col w-full h-auto p-4 text-lg`}>
+        <ContentByLang lang={language}>
+          {verses.map(({ verse, preparedText }) => (
+            <div key={verse}>
+              {verse}. {preparedText}
+            </div>
+          ))}
+        </ContentByLang>
       </div>
       {/* </Scrollable> */}
     </>

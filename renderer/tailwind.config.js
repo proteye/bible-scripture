@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   darkMode: 'class',
   content: [
@@ -6,6 +8,12 @@ module.exports = {
     "./renderer/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      ...defaultTheme.fontFamily,
+      sans: ['Roboto', ...defaultTheme.fontFamily.sans],
+      greek: ['SBL-Greek', 'BW-Greek'],
+      hebrew: ['SBL-Hebrew', 'BW-Hebrew'],
+    },
     extend: {},
   },
   plugins: [

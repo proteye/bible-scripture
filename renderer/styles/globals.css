@@ -3,6 +3,92 @@
 @tailwind utilities;
 
 @layer base {
+    @font-face {
+        font-family: Roboto;
+        font-weight: 300;
+        src: local('Roboto Light'),
+            local('Roboto-Light'),
+            url('/fonts/RobotoLight.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: Roboto;
+        font-weight: 400;
+        src: local('Roboto Regular'),
+            local('Roboto-Regular'),
+            url('/fonts/RobotoRegular.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: Roboto;
+        font-weight: 500;
+        src: local('Roboto Medium'),
+            local('Roboto-Medium'),
+            url('/fonts/RobotoMedium.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: Roboto;
+        font-weight: 700;
+        src: local('Roboto Bold'),
+            local('Roboto-Bold'),
+            url('/fonts/RobotoBold.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: SBL-Greek;
+        font-weight: 400;
+        src: local('SBL Greek'),
+            local('SBL Greek Normal'),
+            local('SBL Greek-Normal'),
+            url('/fonts/SBL_Grk.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: SBL-Hebrew;
+        font-weight: 400;
+        src: local('SBL Hebrew'),
+            local('SBL Hebrew Normal'),
+            local('SBL Hebrew-Normal'),
+            url('/fonts/SBL_Hbrw.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: BW-Greek;
+        font-weight: 300;
+        src: local('Bwgrkl'),
+            local('Bwgrkl Normal'),
+            local('Bwgrkl-Normal'),
+            url('/fonts/bwgrkl.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: BW-Greek;
+        font-weight: 400;
+        src: local('Bwgrkn'),
+            local('Bwgrkn Normal'),
+            local('Bwgrkn-Normal'),
+            url('/fonts/bwgrkn.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: BW-Hebrew;
+        font-weight: 300;
+        src: local('Bwhebl'),
+            local('Bwhebl Normal'),
+            local('Bwhebl-Normal'),
+            url('/fonts/bwhebl.woff2') format('woff2');
+    }
+
+    @font-face {
+        font-family: BW-Hebrew;
+        font-weight: 400;
+        src: local('Bwhebb'),
+            local('Bwhebb Normal'),
+            local('Bwhebb-Normal'),
+            url('/fonts/bwhebb.woff2') format('woff2');
+    }
+
     body {
         @apply min-h-screen;
         @apply bg-gray-50;
@@ -11,7 +97,6 @@
 }
 
 @layer components {
-
     article {
         @apply text-lg;
     }

@@ -5,7 +5,6 @@ function Document() {
     <Html lang="en" dir="ltr">
       <Head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <body>
