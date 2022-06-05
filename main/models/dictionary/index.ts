@@ -80,12 +80,17 @@ const getMorphologyIndication = (uid: TUid, { indication }: IGetMorphologyIndica
   return new Promise((resolve) => {
     const moduleName = dictionaryByUid[uid]
     const dictionary = module.openModule(moduleName, uid)
+    let indicationValue = [indication]
+    const splittedIndication = indication.split('-')
+    if (splittedIndication.length) {
+      indicationValue = splittedIndication.length > 2 ? [splittedIndication[0], `-${splittedIndication[1]}`, `-${splittedIndication[2]}`] : [indication, splittedIndication[0], `-${splittedIndication[1]}`]
+    }
 
-    dictionary.get(
-      'SELECT indication, applicable_to AS applicableTo, meaning FROM morphology_indications WHERE indication=?',
-      [indication],
-      (_: any, item: IDictionaryMorphologyIndications) => {
-        resolve(item || null)
+    dictionary.all(
+      'SELECT indication, applicable_to AS applicableTo, meaning FROM morphology_indications WHERE indication IN (?,?,?)',
+      indicationValue,
+      (_: any, item: IDictionaryMorphologyIndications[]) => {
+        resolve(item ? item.reverse() : [])
       },
     )
   })

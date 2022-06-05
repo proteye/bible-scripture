@@ -9,8 +9,8 @@ const Tabs: FC<ITabsProps> = (props) => {
   const { tabs, selectedIndex } = useBase(props)
 
   return (
-    <div className='relative flex flex-col w-full h-auto'>
-      <ul className='bg-transparent whitespace-nowrap overflow-x-auto'>
+    <div className="flex flex-col flex-grow w-full">
+      <ul className="flex h-10 bg-transparent whitespace-nowrap overflow-x-auto">
         {tabs.map((tabProps, index) => (
           <Tab {...tabProps} key={tabProps.index} isActive={selectedIndex === index} />
         ))}
@@ -18,7 +18,7 @@ const Tabs: FC<ITabsProps> = (props) => {
       {tabs
         .filter(({ type }) => type === ETabType.tab)
         .map(({ index, children }) => (
-          <div key={index} className={`${selectedIndex === index ? 'flex' : 'hidden'} relative flex-1 flex-col w-full h-full`}>
+          <div key={index} className={`relative ${selectedIndex === index ? 'flex' : 'hidden'} flex-grow w-full`}>
             {children}
           </div>
         ))}

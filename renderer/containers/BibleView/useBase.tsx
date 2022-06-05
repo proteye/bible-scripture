@@ -4,7 +4,6 @@ import { nanoid } from 'nanoid'
 import { IBibleVerse, IBibleInfo, IBibleBook } from '@common/types'
 import { IBiblePreapredVerse, IBibleViewProps } from './types'
 import { getBookNumberByName } from 'helpers/getBookNumber'
-import { getFontByLanguage } from 'helpers/getFontByLanguage'
 
 const NT_BEGIN_BOOK_NUMBER = 470
 
@@ -31,7 +30,8 @@ const prepareVerseText = ({
   strongNumbersPrefix?: string
   onMouseEnter?: (e) => void
 }) => {
-  const splittedText = text.split(' ')
+  const spaceClearedText = text.replace(/(<[Sfim]>)\s*(.+?)\s*([Sfim]>)/gi, '$1$2$3')
+  const splittedText = spaceClearedText.split(' ')
 
   return splittedText.map((word, index) => {
     // Strong
@@ -50,7 +50,7 @@ const prepareVerseText = ({
     return (
       <span
         key={`${index}-${preparedWord}`}
-        className='hover:bg-blue-200'
+        className="hover:bg-blue-200 selection:hover:bg-blue-200"
         data-strong={strongNumber ? `${strongPrefix}${strongNumber}` : null}
         data-morphology={morphologyIndication}
         onMouseEnter={onMouseEnter}
@@ -61,10 +61,19 @@ const prepareVerseText = ({
   })
 }
 
-const prepareVerses = (verses: IBibleVerse[], strongNumbersPrefix: string, onMouseEnter: (e) => void): IBiblePreapredVerse[] =>
+const prepareVerses = (
+  verses: IBibleVerse[],
+  strongNumbersPrefix: string,
+  onMouseEnter: (e) => void,
+): IBiblePreapredVerse[] =>
   verses?.map((verse: IBibleVerse) => ({
     ...verse,
-    preparedText: prepareVerseText({ text: verse.text, bookNumber: verse.bookNumber, strongNumbersPrefix, onMouseEnter }),
+    preparedText: prepareVerseText({
+      text: verse.text,
+      bookNumber: verse.bookNumber,
+      strongNumbersPrefix,
+      onMouseEnter,
+    }),
   }))
 
 const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
@@ -79,6 +88,17 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
 
     return lang?.value
   }, [info])
+
+  const verseClass = useMemo(() => {
+    switch (language) {
+      case 'grc':
+        return 'text-xl'
+      case 'iw':
+        return 'text-2xl'
+      default:
+        return 'text-base'
+    }
+  }, [language])
 
   const handleVerseMouseEnter = useCallback(
     (e) => {
@@ -95,7 +115,7 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
   const handleSearchSubmit = useCallback(
     async (value: string) => {
       const matches = value.toLowerCase().match(verseRegexp)
-      if (matches.length < 3) {
+      if (!matches || matches.length < 3) {
         return
       }
 
@@ -139,6 +159,7 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
     info,
     verses,
     language,
+    verseClass,
     handleSearchSubmit,
   }
 }

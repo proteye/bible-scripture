@@ -11,9 +11,7 @@ import { ETabType } from 'components/Tab/types'
 export const HomePage: NextPage = () => {
   const {
     tabs,
-    targetRef,
     selectedIndex,
-    dimensions,
     contextMenuItems,
     instantHtmlText,
     handleChangeTab,
@@ -23,20 +21,19 @@ export const HomePage: NextPage = () => {
   } = useBase()
 
   return (
-    <div className='relative block w-screen h-screen'>
+    <div className="relative block w-screen h-screen">
       <Head>
         <title>Bible Scripture</title>
       </Head>
       <AppBar></AppBar>
-      <div className='absolute inset-0 flex flex-col mt-16'>
-        <div className='flex flex-col flex-grow w-full overflow-y-scroll'>
+      <div className="absolute inset-0 flex flex-col mt-16">
+        <div className="relative flex flex-col flex-grow w-full overflow-hidden">
           <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
             {tabs.map(({ value, label }, index) => (
               <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
                 <BibleView
                   key={`${index}-${value}`}
                   moduleName={value}
-                  dimensions={dimensions}
                   onGetDictionaryTopic={handleGetDictionaryTopic}
                 />
               </Tab>
@@ -50,33 +47,4 @@ export const HomePage: NextPage = () => {
       </div>
     </div>
   )
-
-  // return (
-  //   <div>
-  //     <Head>
-  //       <title>Bible Scripture</title>
-  //     </Head>
-  //     <AppBar></AppBar>
-  //     <div ref={targetRef}>
-  //       <div>
-  //         <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
-  //           {tabs.map(({ value, label }, index) => (
-  //             <Tab key={`${index}-${value}`} value={value} label={label} onClose={handleCloseTab}>
-  //               <BibleView
-  //                 key={`${index}-${value}`}
-  //                 moduleName={value}
-  //                 dimensions={dimensions}
-  //                 onGetDictionaryTopic={handleGetDictionaryTopic}
-  //               />
-  //             </Tab>
-  //           ))}
-  //           <Tab type={ETabType.button}>
-  //             <ContextMenu label="+" items={contextMenuItems} onSelect={handleAddTab} />
-  //           </Tab>
-  //         </Tabs>
-  //       </div>
-  //       <InstantView htmlText={instantHtmlText} />
-  //     </div>
-  //   </div>
-  // )
 }

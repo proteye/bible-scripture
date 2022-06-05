@@ -14,9 +14,12 @@ const useBase = () => {
   const [bibles, setBibles] = useState<TModulesList>([])
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
-  const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications>(null)
+  const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications[]>([])
 
-  const morphologyMeaningHtml = morphology ? `<p>${morphology.meaning}</p>` : ''
+  const morphologyMeaningHtml = useMemo(() => {
+    const meanings = morphology.map(({ meaning }) => meaning)
+    return meanings.length > 0 ? `<p>${meanings.join(', ')}</p>` : ''
+  }, [morphology])
   const topicDefinitionHtml = topic?.definition || ''
   const instantHtmlText = morphologyMeaningHtml + topicDefinitionHtml
 
@@ -68,7 +71,7 @@ const useBase = () => {
 
   const handleGetDictionaryTopic = useCallback(async (topic: string, morphologyIndication?: string) => {
     const result = await ipcRenderer.invoke('getDictionaryByTopic', uid, { topic })
-    const morphology = await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication })
+    const morphology = morphologyIndication ? await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication }) : []
 
     setTopic(result)
     setMorphology(morphology)

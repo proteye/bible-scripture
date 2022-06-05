@@ -9,9 +9,9 @@ const InputSearch: FC<IInputSearchProps> = ({ className, style, qa, ...props }) 
   const { value, handleChange, handleSubmit } = useBase(props)
 
   return (
-    <form className='flex w-full' onSubmit={handleSubmit}>
+    <form className="flex w-full" onSubmit={handleSubmit}>
       <input
-        className={`inline-block w-full px-4 ${className}`}
+        className={`inline-block w-full px-4 rounded ${className}`}
         style={style}
         data-qa={qa}
         value={value}

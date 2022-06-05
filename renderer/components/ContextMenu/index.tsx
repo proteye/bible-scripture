@@ -8,8 +8,12 @@ const ContextMenu: FC<IContextMenuProps> = ({ label, items, onSelect }) => {
   const { handleSelect } = useBase({ onSelect })
 
   return (
-    <div className='block px-4'>
-      <select className='block w-full bg-transparent border-none sahdow-none appearance-none outline-none select-none focus:outline-none focus:ring-0' value={label} onChange={handleSelect}>
+    <div className="block px-4">
+      <select
+        className="block w-full bg-transparent border-none appearance-none outline-none select-none focus:outline-none focus:ring-0"
+        value={label}
+        onChange={handleSelect}
+      >
         <option value={label} hidden>
           {label}
         </option>

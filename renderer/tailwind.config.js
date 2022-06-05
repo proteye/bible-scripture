@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     fontFamily: {
       ...defaultTheme.fontFamily,
-      sans: ['Roboto', ...defaultTheme.fontFamily.sans],
+      sans: ['Roboto', '"Helvetica Neue"', 'Helvetica', 'sans-serif', ...defaultTheme.fontFamily.sans],
       greek: ['SBL-Greek', 'BW-Greek'],
       hebrew: ['SBL-Hebrew', 'BW-Hebrew'],
     },
