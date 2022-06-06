@@ -2,7 +2,7 @@
   "private": true,
   "name": "bible-scripture",
   "description": "Bible Scripture is the Bible study application",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Ramil Zaynetdinov <ramil.zv@gmail.com>",
   "main": "app/background.js",
   "scripts": {
