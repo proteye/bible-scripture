@@ -3,8 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@common/types": ["../common/types"]
-    }
+      "@common/types": [
+        "../common/types"
+      ]
+    },
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",

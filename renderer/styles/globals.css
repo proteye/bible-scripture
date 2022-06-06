@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: Roboto;
+    font-weight: 300;
+    src: local('Roboto Light'), local('Roboto-Light'), url('/fonts/RobotoLight.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: Roboto;
+    font-weight: 400;
+    src: local('Roboto Regular'), local('Roboto-Regular'), url('/fonts/RobotoRegular.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: Roboto;
+    font-weight: 500;
+    src: local('Roboto Medium'), local('Roboto-Medium'), url('/fonts/RobotoMedium.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: Roboto;
+    font-weight: 700;
+    src: local('Roboto Bold'), local('Roboto-Bold'), url('/fonts/RobotoBold.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: SBL-Greek;
+    font-weight: 400;
+    src: local('SBL Greek'), local('SBL Greek Normal'), local('SBL Greek-Normal'),
+      url('/fonts/SBL_Grk.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: SBL-Hebrew;
+    font-weight: 400;
+    src: local('SBL Hebrew'), local('SBL Hebrew Normal'), local('SBL Hebrew-Normal'),
+      url('/fonts/SBL_Hbrw.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: BW-Greek;
+    font-weight: 300;
+    src: local('Bwgrkl'), local('Bwgrkl Normal'), local('Bwgrkl-Normal'), url('/fonts/bwgrkl.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: BW-Greek;
+    font-weight: 400;
+    src: local('Bwgrkn'), local('Bwgrkn Normal'), local('Bwgrkn-Normal'), url('/fonts/bwgrkn.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: BW-Hebrew;
+    font-weight: 300;
+    src: local('Bwhebl'), local('Bwhebl Normal'), local('Bwhebl-Normal'), url('/fonts/bwhebl.woff2') format('woff2');
+  }
+
+  @font-face {
+    font-family: BW-Hebrew;
+    font-weight: 400;
+    src: local('Bwhebb'), local('Bwhebb Normal'), local('Bwhebb-Normal'), url('/fonts/bwhebb.woff2') format('woff2');
+  }
+
+  body {
+    @apply min-h-screen;
+    @apply bg-white;
+    @apply text-gray-900;
+  }
+
+  .ScrollbarsCustom-Wrapper {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+@layer components {
+  article {
+    @apply text-lg;
+  }
+
+  article h1,
+  article h2,
+  article h3,
+  article h4,
+  article h5,
+  article h6 {
+    @apply font-bold;
+  }
+
+  article h1 {
+    @apply text-4xl;
+    @apply mb-4;
+  }
+
+  article h2 {
+    @apply text-3xl;
+    @apply mb-4;
+  }
+
+  article h3 {
+    @apply text-2xl;
+    @apply mb-4;
+  }
+
+  article h4 {
+    @apply text-xl;
+    @apply mb-2;
+  }
+
+  article h5 {
+    @apply text-lg;
+    @apply mb-2;
+  }
+
+  article h6 {
+    @apply text-base;
+    @apply mb-2;
+  }
+
+  article ol,
+  article ul {
+    @apply ml-5;
+    @apply mb-2;
+  }
+
+  article p {
+    @apply mb-4;
+  }
+
+  article a {
+    @apply underline;
+    @apply underline-offset-2;
+    @apply text-blue-600;
+    @apply transition-colors;
+  }
+
+  article a:hover {
+    @apply text-blue-700;
+  }
+
+  article a:focus {
+    @apply text-blue-800;
+  }
+
+  article hr {
+    @apply mt-8;
+    @apply mb-8;
+    @apply mx-16;
+    @apply border-gray-300;
+  }
+
+  article blockquote {
+    @apply mt-4;
+    @apply mb-4;
+    @apply pl-4;
+    @apply border-l-4;
+    @apply border-slate-300;
+  }
+
+  article u {
+    @apply underline;
+    @apply underline-offset-2;
+  }
+
+  @media screen(md) {
+    article hr {
+      @apply mx-32;
+    }
+  }
+}
