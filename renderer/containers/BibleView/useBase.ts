@@ -1,80 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ipcRenderer } from 'electron'
 import { nanoid } from 'nanoid'
-import { IBibleVerse, IBibleInfo, IBibleBook } from '@common/types'
+import { IBibleInfo, IBibleBook } from '@common/types'
 import { IBiblePreapredVerse, IBibleViewProps } from './types'
 import { getBookNumberByName } from 'helpers/getBookNumber'
-
-const NT_BEGIN_BOOK_NUMBER = 470
-
-const verseRegexp = /(.+?)\s*([0-9]+)[:\s]?([0-9]+)?/i
-
-const strongRegexp = /<S>([0-9]+)<\/S>/i
-
-const morphologyRegexp = /<m>([0-9A-z-\/]+)<\/m>/i
-
-const getStrongNumbersPrefix = (info: IBibleInfo[]) => {
-  const strongNumbersPrefix = info.find(({ name }) => name === 'strong_numbers_prefix')
-
-  return strongNumbersPrefix?.value
-}
-
-const prepareVerseText = ({
-  text,
-  bookNumber,
-  strongNumbersPrefix,
-  onMouseEnter,
-}: {
-  text: string
-  bookNumber: number
-  strongNumbersPrefix?: string
-  onMouseEnter?: (e) => void
-}) => {
-  const spaceClearedText = text.replace(/(<[Sfim]>)\s*(.+?)\s*([Sfim]>)/gi, '$1$2$3')
-  const splittedText = spaceClearedText.split(' ')
-
-  return splittedText.map((word, index) => {
-    // Strong
-    const strongMatches = word.match(strongRegexp)
-    const strongNumber = strongMatches?.length > 1 ? strongMatches[1] : null
-    const strongPrefix = strongNumbersPrefix || (bookNumber < NT_BEGIN_BOOK_NUMBER ? 'H' : 'G')
-    // Morphology
-    const morphologyMatches = word.match(morphologyRegexp)
-    const morphologyIndication = morphologyMatches?.length > 1 ? morphologyMatches[1] : null
-
-    const preparedWord = word
-      .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
-      .replace(/<pb\/>/gi, '')
-      .replace(/<\/?t>/gi, '"')
-
-    return (
-      <span
-        key={`${index}-${preparedWord}`}
-        className="hover:bg-blue-200 selection:hover:bg-blue-200"
-        data-strong={strongNumber ? `${strongPrefix}${strongNumber}` : null}
-        data-morphology={morphologyIndication}
-        onMouseEnter={onMouseEnter}
-      >
-        {preparedWord}{' '}
-      </span>
-    )
-  })
-}
-
-const prepareVerses = (
-  verses: IBibleVerse[],
-  strongNumbersPrefix: string,
-  onMouseEnter: (e) => void,
-): IBiblePreapredVerse[] =>
-  verses?.map((verse: IBibleVerse) => ({
-    ...verse,
-    preparedText: prepareVerseText({
-      text: verse.text,
-      bookNumber: verse.bookNumber,
-      strongNumbersPrefix,
-      onMouseEnter,
-    }),
-  }))
+import { verseRegexp } from './constants'
+import { getStrongNumbersPrefix, prepareVerses } from './helpers'
 
 const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
   const [info, setInfo] = useState<IBibleInfo[]>([])

@@ -15,6 +15,7 @@ const useBase = () => {
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
   const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications[]>([])
+  const [isShowInstant, setShowInstant] = useState(true)
 
   const morphologyMeaningHtml = useMemo(() => {
     const meanings = morphology.map(({ meaning }) => meaning)
@@ -70,11 +71,19 @@ const useBase = () => {
   }, [uid])
 
   const handleGetDictionaryTopic = useCallback(async (topic: string, morphologyIndication?: string) => {
+    if (!isShowInstant) {
+      return
+    }
+
     const result = await ipcRenderer.invoke('getDictionaryByTopic', uid, { topic })
     const morphology = morphologyIndication ? await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication }) : []
 
     setTopic(result)
     setMorphology(morphology)
+  }, [isShowInstant])
+
+  const toggleInstant = useCallback(async () => {
+    setShowInstant((prevValue) => !prevValue)
   }, [])
 
   useEffect(() => {
@@ -86,6 +95,14 @@ const useBase = () => {
     }
   }, [getModules])
 
+  // Clear Instant when closed
+  // useEffect(() => {
+  //   if (!isShowInstant) {
+  //     setTopic(null)
+  //     setMorphology([])
+  //   }
+  // }, [isShowInstant])
+
   return {
     tabs,
     targetRef,
@@ -93,10 +110,12 @@ const useBase = () => {
     dimensions: { width, height: scrollHeight },
     contextMenuItems,
     instantHtmlText,
+    isShowInstant,
     handleChangeTab,
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
+    toggleInstant,
   }
 }
 

@@ -1,12 +1,13 @@
 import React from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
+import { LightningBoltIcon } from '@heroicons/react/outline'
 
 import { AppBar, ContextMenu, Tab, Tabs } from 'components'
+import { ETabType } from 'components/Tab/types'
 import { BibleView } from 'containers/BibleView'
 import { InstantView } from 'containers/InstantView'
 import useBase from './useBase'
-import { ETabType } from 'components/Tab/types'
 
 export const HomePage: NextPage = () => {
   const {
@@ -14,10 +15,12 @@ export const HomePage: NextPage = () => {
     selectedIndex,
     contextMenuItems,
     instantHtmlText,
+    isShowInstant,
     handleChangeTab,
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
+    toggleInstant,
   } = useBase()
 
   return (
@@ -25,7 +28,14 @@ export const HomePage: NextPage = () => {
       <Head>
         <title>Bible Scripture</title>
       </Head>
-      <AppBar></AppBar>
+      <AppBar className="items-center justify-center">
+        <button
+          className="flex items-center justify-center w-10 h-10 mx-2 rounded shadow-md bg-gradient-to-b from-white to-gray-100 active:shadow-sm"
+          onClick={toggleInstant}
+        >
+          <LightningBoltIcon className="w-6 h-6 text-gray-700" />
+        </button>
+      </AppBar>
       <div className="absolute inset-0 flex flex-col mt-16">
         <div className="relative flex flex-col flex-grow w-full overflow-hidden">
           <Tabs selectedIndex={selectedIndex} onChange={handleChangeTab}>
@@ -43,7 +53,7 @@ export const HomePage: NextPage = () => {
             </Tab>
           </Tabs>
         </div>
-        <InstantView htmlText={instantHtmlText} />
+        {isShowInstant && <InstantView htmlText={instantHtmlText} />}
       </div>
     </div>
   )
