@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import noop from 'helpers/noop'
 
 import { IInputSearchProps } from './types'
-import { SInputSearch, SForm } from './styled.index'
 import useBase from './useBase'
 
 const InputSearch: FC<IInputSearchProps> = ({ className, style, qa, ...props }) => {
@@ -10,16 +9,16 @@ const InputSearch: FC<IInputSearchProps> = ({ className, style, qa, ...props }) 
   const { value, handleChange, handleSubmit } = useBase(props)
 
   return (
-    <SForm onSubmit={handleSubmit}>
-      <SInputSearch
-        className={className}
+    <form className="flex w-full" onSubmit={handleSubmit}>
+      <input
+        className={`inline-block w-full px-4 rounded ${className}`}
         style={style}
         data-qa={qa}
         value={value}
         placeholder={placeholder}
         onChange={handleChange}
       />
-    </SForm>
+    </form>
   )
 }
 

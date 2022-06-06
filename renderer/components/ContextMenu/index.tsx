@@ -2,15 +2,18 @@ import React, { FC } from 'react'
 import noop from 'helpers/noop'
 
 import { IContextMenuProps } from './types'
-import { SContextMenu, SSelect } from './styled.index'
 import useBase from './useBase'
 
 const ContextMenu: FC<IContextMenuProps> = ({ label, items, onSelect }) => {
   const { handleSelect } = useBase({ onSelect })
 
   return (
-    <SContextMenu>
-      <SSelect value={label} onChange={handleSelect}>
+    <div className="block px-4">
+      <select
+        className="block w-full bg-transparent border-none appearance-none outline-none select-none focus:outline-none focus:ring-0"
+        value={label}
+        onChange={handleSelect}
+      >
         <option value={label} hidden>
           {label}
         </option>
@@ -19,8 +22,8 @@ const ContextMenu: FC<IContextMenuProps> = ({ label, items, onSelect }) => {
             {title}
           </option>
         ))}
-      </SSelect>
-    </SContextMenu>
+      </select>
+    </div>
   )
 }
 

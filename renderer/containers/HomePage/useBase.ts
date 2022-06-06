@@ -1,12 +1,12 @@
 import { useEffect, useCallback, useMemo, useState } from 'react'
 import useDimensions from 'hooks/useDimensions'
-import { defaultTheme } from 'theme'
 import { getNumberFromString } from 'helpers/getNumberFromString'
 import { ITabProps } from 'components/Tab/types'
 import { ipcRenderer } from 'electron'
 import { IDictionaryDictionary, IDictionaryMorphologyIndications, TModulesList } from '@common/types'
 import { nanoid } from 'nanoid'
 import useTabs from 'hooks/useTabs'
+import { defaultTheme } from 'constants/theme'
 
 const dictionaryModuleName = 'Журом'
 
@@ -14,9 +14,13 @@ const useBase = () => {
   const [bibles, setBibles] = useState<TModulesList>([])
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
-  const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications>(null)
+  const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications[]>([])
+  const [isShowInstant, setShowInstant] = useState(true)
 
-  const morphologyMeaningHtml = morphology ? `<p>${morphology.meaning}</p>` : ''
+  const morphologyMeaningHtml = useMemo(() => {
+    const meanings = morphology.map(({ meaning }) => meaning)
+    return meanings.length > 0 ? `<p>${meanings.join(', ')}</p>` : ''
+  }, [morphology])
   const topicDefinitionHtml = topic?.definition || ''
   const instantHtmlText = morphologyMeaningHtml + topicDefinitionHtml
 
@@ -67,11 +71,19 @@ const useBase = () => {
   }, [uid])
 
   const handleGetDictionaryTopic = useCallback(async (topic: string, morphologyIndication?: string) => {
+    if (!isShowInstant) {
+      return
+    }
+
     const result = await ipcRenderer.invoke('getDictionaryByTopic', uid, { topic })
-    const morphology = await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication })
+    const morphology = morphologyIndication ? await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication }) : []
 
     setTopic(result)
     setMorphology(morphology)
+  }, [isShowInstant])
+
+  const toggleInstant = useCallback(async () => {
+    setShowInstant((prevValue) => !prevValue)
   }, [])
 
   useEffect(() => {
@@ -83,6 +95,14 @@ const useBase = () => {
     }
   }, [getModules])
 
+  // Clear Instant when closed
+  // useEffect(() => {
+  //   if (!isShowInstant) {
+  //     setTopic(null)
+  //     setMorphology([])
+  //   }
+  // }, [isShowInstant])
+
   return {
     tabs,
     targetRef,
@@ -90,10 +110,12 @@ const useBase = () => {
     dimensions: { width, height: scrollHeight },
     contextMenuItems,
     instantHtmlText,
+    isShowInstant,
     handleChangeTab,
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
+    toggleInstant,
   }
 }
 

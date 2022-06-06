@@ -1,16 +1,25 @@
 import { TAny } from '@common/types'
 import React, { FC, forwardRef } from 'react'
-import { SScrollable } from './styled.index'
 import { IScrollableProps } from './types'
+import { getStyleNumber } from 'helpers/getStyleNumber'
 
 const Scrollable: FC<IScrollableProps> = forwardRef<TAny, IScrollableProps>(
-  ({ dimensions, className, style, qa, children }, ref) => (
-    <SScrollable noDefaultStyles noScrollX $dimensions={dimensions} className={className} style={style} data-qa={qa} ref={ref}>{children}</SScrollable>
-  )
+  ({ dimensions: { width, height }, className = '', style, qa, children }, ref) => (
+    <div
+      className={`flex flex-col ${height ? `h-[${getStyleNumber(String(height))}]` : 'flex-grow'} ${
+        width ? `w-[${getStyleNumber(String(width))}]` : 'w-full'
+      } overflow-y-scroll ${className}`}
+      style={style}
+      data-qa={qa}
+      ref={ref}
+    >
+      {children}
+    </div>
+  ),
 )
 
 Scrollable.defaultProps = {
-  dimensions: { width: '100%', height: '100%' },
+  dimensions: { width: null, height: null },
   qa: 'Scrollable',
 }
 
