@@ -4,6 +4,8 @@ copyright: Copyright © 2021 Ramil Zaynetdinov
 directories:
   output: dist
   buildResources: resources
+extraFiles:
+  resources/modules
 files:
   - from: .
     filter:
