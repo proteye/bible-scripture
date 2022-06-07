@@ -1,5 +1,7 @@
+const isProd: boolean = process.env.NODE_ENV === 'production'
+
 const moduleConfig = {
-  path: './resources/modules',
+  path: isProd ? `${process.resourcesPath}/modules` : './resources/modules',
   extension: '.SQLite3',
 }
 

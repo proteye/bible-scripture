@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { IComponentDefaultProps, IStyledTheme } from 'components/types'
+import { IComponentDefaultProps } from 'components/types'
 import { Tab } from 'components'
 import { ITabProps } from 'components/Tab/types'
 
@@ -20,8 +20,4 @@ export interface ITab extends Omit<ITabProps, 'onActive' | 'onClose'> {
   isActive?: boolean
   onActive?(e: React.MouseEvent<HTMLLIElement>): void
   onClose?(e: React.MouseEvent<HTMLLIElement>): void
-}
-
-export interface ISTab extends IStyledTheme {
-  $isActive: boolean
 }
