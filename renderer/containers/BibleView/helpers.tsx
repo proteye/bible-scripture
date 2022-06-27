@@ -1,7 +1,7 @@
 import React from 'react'
 import { IBibleVerse, IBibleInfo, TAny } from '@common/types'
 import { IBiblePreapredVerse } from './types'
-import { MAKKEF, morphologyRegexp, NT_BEGIN_BOOK_NUMBER, strongRegexp } from './constants'
+import { MAKKEF, morphologyRegexp, NT_BEGIN_BOOK_NUMBER, PIPE, strongRegexp } from './constants'
 
 export const getStrongNumbersPrefix = (info: IBibleInfo[]) => {
   const strongNumbersPrefix = info.find(({ name }) => name === 'strong_numbers_prefix')
@@ -43,8 +43,8 @@ export const prepareVerseText = ({
       return ' '
     }
 
-    if (preparedWord === MAKKEF) {
-      return <span>{MAKKEF}</span>
+    if (preparedWord === MAKKEF || preparedWord === PIPE) {
+      return <span>{preparedWord}</span>
     }
 
     return (
