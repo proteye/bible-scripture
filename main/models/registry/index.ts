@@ -23,7 +23,7 @@ const getRegistry = (): IRegistry => {
 
 const syncRegistry = async (): Promise<IRegistry> => {
   try {
-    const dest = `${registryConfig.path}/${registryConfig.zipFilename}`
+    const destZip = `${registryConfig.path}/${registryConfig.zipFilename}`
     const destJson = `${registryConfig.path}/${registryConfig.filename}`
     const infoDest = `${registryConfig.path}/${registryConfig.infoFilename}`
 
@@ -44,7 +44,9 @@ const syncRegistry = async (): Promise<IRegistry> => {
       index += 1
     }
 
-    if (registryInfo?.version <= currentRegistryInfo?.version && existsSync(destJson)) {
+    const isLastRegistry = registryInfo?.version <= currentRegistryInfo?.version
+
+    if (isLastRegistry && existsSync(destJson)) {
       return getRegistry()
     }
 
@@ -61,13 +63,13 @@ const syncRegistry = async (): Promise<IRegistry> => {
 
     while (!result && index < registryConfig.urls.length) {
       url = registryConfig.urls[index].registry
-      result = await download(url, dest)
+      result = await download(url, destZip)
       index += 1
     }
 
-    await unzip(dest, registryConfig.path)
+    await unzip(destZip, registryConfig.path)
 
-    unlink(dest, () => {})
+    unlink(destZip, () => {})
 
     return getRegistry()
   } catch (err) {
