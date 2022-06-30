@@ -1,7 +1,7 @@
 import { createReadStream } from 'fs'
 import { Extract } from 'unzipper'
 
-const unzip = (srcFile: string, destPath: string): Promise<boolean> => {
+const unzip = (srcFile: string, destPath: string): Promise<boolean | string> => {
   const readStream = createReadStream(srcFile)
 
   return new Promise((resolve, reject) => {
