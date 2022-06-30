@@ -1,14 +1,13 @@
 import { readFileSync, writeFileSync, existsSync, unlink } from 'fs'
-import { IRegistryInfoJson, IRegistryJson } from 'common/types'
-import { IRegistry } from './types'
+import { IRegistry, IRegistryInfoJson, IRegistryJson } from 'common/types'
 import registryConfig from '../../config/registryConfig'
 import { convertRegistryDownloads } from './helpers'
 import { getUrl, download, unzip } from '../../helpers'
 
-const registry: IRegistry = { hosts: [], downloads: [] }
+const registry: IRegistry = { version: 0, hosts: [], downloads: [] }
 
 const getRegistry = () => {
-  if (registry.downloads.length > 0) {
+  if (registry.hosts.length > 0 && registry.downloads.length > 0) {
     return registry
   }
 

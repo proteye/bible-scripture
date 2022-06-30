@@ -40,24 +40,33 @@ const useBase = () => {
 
   const contextMenuItems = useMemo(() => bibles.map(({ id, shortName }) => ({ title: shortName, value: id })), [bibles])
 
-  const handleChangeTab = useCallback((index: number) => {
-    handleSelectTab(index)
-  }, [handleSelectTab])
+  const handleChangeTab = useCallback(
+    (index: number) => {
+      handleSelectTab(index)
+    },
+    [handleSelectTab],
+  )
 
-  const handleAddTab = useCallback((value: string) => {
-    setTabs((prevState) => [...prevState, { value, label: value }])
-    handleSelectTab(tabs.length)
-  }, [tabs, handleSelectTab])
+  const handleAddTab = useCallback(
+    (value: string) => {
+      setTabs((prevState) => [...prevState, { value, label: value }])
+      handleSelectTab(tabs.length)
+    },
+    [tabs, handleSelectTab],
+  )
 
-  const handleCloseTab = useCallback((index: number) => {
-    setTabs((prevState) => prevState.filter((_, i) => i !== index))
-    if (selectedIndex === tabs.length - 1) {
-      handleSelectTab(tabs.length - 2)
-    }
-    if (index < selectedIndex) {
-      handleSelectTab(selectedIndex - 1)
-    }
-  }, [tabs, selectedIndex, handleSelectTab])
+  const handleCloseTab = useCallback(
+    (index: number) => {
+      setTabs((prevState) => prevState.filter((_, i) => i !== index))
+      if (selectedIndex === tabs.length - 1) {
+        handleSelectTab(tabs.length - 2)
+      }
+      if (index < selectedIndex) {
+        handleSelectTab(selectedIndex - 1)
+      }
+    },
+    [tabs, selectedIndex, handleSelectTab],
+  )
 
   const getModules = useCallback(async () => {
     const modules = await ipcRenderer.invoke('getModules')
@@ -66,21 +75,30 @@ const useBase = () => {
     setBibles(bibles)
   }, [])
 
+  const getRegistry = useCallback(async () => {
+    const registry = await ipcRenderer.invoke('getRegistry')
+  }, [])
+
   const openDictionary = useCallback(async () => {
     await ipcRenderer.invoke('openDictionary', dictionaryModuleName, uid)
   }, [uid])
 
-  const handleGetDictionaryTopic = useCallback(async (topic: string, morphologyIndication?: string) => {
-    if (!isShowInstant) {
-      return
-    }
+  const handleGetDictionaryTopic = useCallback(
+    async (topic: string, morphologyIndication?: string) => {
+      if (!isShowInstant) {
+        return
+      }
 
-    const result = await ipcRenderer.invoke('getDictionaryByTopic', uid, { topic })
-    const morphology = morphologyIndication ? await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication }) : []
+      const result = await ipcRenderer.invoke('getDictionaryByTopic', uid, { topic })
+      const morphology = morphologyIndication
+        ? await ipcRenderer.invoke('getMorphologyIndication', uid, { indication: morphologyIndication })
+        : []
 
-    setTopic(result)
-    setMorphology(morphology)
-  }, [isShowInstant])
+      setTopic(result)
+      setMorphology(morphology)
+    },
+    [isShowInstant],
+  )
 
   const toggleInstant = useCallback(async () => {
     setShowInstant((prevValue) => !prevValue)
@@ -88,20 +106,21 @@ const useBase = () => {
 
   useEffect(() => {
     getModules()
+    getRegistry()
     openDictionary()
 
     return () => {
       ipcRenderer.invoke('closeDictionaryByUid', uid)
     }
-  }, [getModules])
+  }, [getModules, getRegistry, openDictionary])
 
   // Clear Instant when closed
-  // useEffect(() => {
-  //   if (!isShowInstant) {
-  //     setTopic(null)
-  //     setMorphology([])
-  //   }
-  // }, [isShowInstant])
+  useEffect(() => {
+    if (!isShowInstant) {
+      setTopic(null)
+      setMorphology([])
+    }
+  }, [isShowInstant])
 
   return {
     tabs,
