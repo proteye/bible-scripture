@@ -81,3 +81,7 @@ export interface IRegistryJson {
   hosts: IRegistryHost[]
   downloads: IRegistryDownloadJson[]
 }
+
+export interface IRegistryInfoJson {
+  version: number
+}

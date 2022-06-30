@@ -2,7 +2,7 @@ import { createWriteStream, unlink, WriteStream } from 'fs'
 import { get as getHttp } from 'http'
 import { get as getHttps } from 'https'
 
-const getUrl = (
+const getFile = (
   url: string,
   dest: string,
   file: WriteStream,
@@ -24,7 +24,7 @@ const getUrl = (
     }
 
     if (res.statusCode === 301 || res.statusCode === 302) {
-      return getUrl(res.headers.location, dest, file, resolve, reject)
+      return getFile(res.headers.location, dest, file, resolve, reject)
     }
 
     res.pipe(file)
@@ -60,7 +60,7 @@ const download = (url: string, dest: string): Promise<boolean> => {
   const file = createWriteStream(dest)
 
   return new Promise((resolve, reject) => {
-    getUrl(url, dest, file, resolve, reject)
+    getFile(url, dest, file, resolve, reject)
   })
 }
 

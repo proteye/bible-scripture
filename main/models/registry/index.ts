@@ -1,9 +1,9 @@
-import { readFileSync, unlink } from 'fs'
-import { IRegistryJson } from 'common/types'
+import { readFileSync, writeFileSync, existsSync, unlink } from 'fs'
+import { IRegistryInfoJson, IRegistryJson } from 'common/types'
 import { IRegistry } from './types'
 import registryConfig from '../../config/registryConfig'
 import { convertRegistryDownloads } from './helpers'
-import { download, unzip } from '../../helpers'
+import { getUrl, download, unzip } from '../../helpers'
 
 const registry: IRegistry = { hosts: [], downloads: [] }
 
@@ -12,9 +12,8 @@ const getRegistry = (): IRegistry => {
     return registry
   }
 
-  const registryJSON: IRegistryJson = JSON.parse(
-    readFileSync(`${registryConfig.path}/${registryConfig.filename}`, 'utf8'),
-  )
+  const dest = `${registryConfig.path}/${registryConfig.filename}`
+  const registryJSON: IRegistryJson = JSON.parse(readFileSync(dest, 'utf8'))
 
   registry.hosts = registryJSON.hosts
   registry.downloads = convertRegistryDownloads(registryJSON.downloads)
@@ -30,30 +29,45 @@ const syncRegistry = async (): Promise<IRegistry> => {
 
     let index = 0
     let result = false
-    let url = registryConfig.urls[index].registry
-    let infoUrl = registryConfig.urls[index].info
+    let url = ''
+    let infoUrl = ''
+    let currentRegistryInfo: IRegistryInfoJson = { version: 0 }
+    let registryInfo: IRegistryInfoJson = null
 
-    unlink(infoDest, () => {})
-
-    while (!result && index < registryConfig.urls.length) {
-      result = await download(infoUrl, infoDest)
-      index += 1
-      infoUrl = registryConfig.urls[index].info
+    if (existsSync(infoDest)) {
+      currentRegistryInfo = JSON.parse(readFileSync(infoDest, 'utf8'))
     }
 
-    unlink(dest, () => {})
+    while (!registryInfo?.version && index < registryConfig.urls.length) {
+      infoUrl = registryConfig.urls[index].info
+      registryInfo = await getUrl(infoUrl)
+      index += 1
+    }
 
+    if (registryInfo?.version <= currentRegistryInfo?.version && existsSync(destJson)) {
+      return getRegistry()
+    }
+
+    unlink(infoDest, () => {})
+    unlink(destJson, () => {})
+
+    writeFileSync(infoDest, JSON.stringify(registryInfo))
+
+    infoUrl = registryConfig.urls[index - 1].info
+    await download(infoUrl, infoDest)
+
+    index = 0
     result = false
 
     while (!result && index < registryConfig.urls.length) {
+      url = registryConfig.urls[index].registry
       result = await download(url, dest)
       index += 1
-      url = registryConfig.urls[index].registry
     }
 
-    unlink(destJson, () => {})
-
     await unzip(dest, registryConfig.path)
+
+    unlink(dest, () => {})
 
     return getRegistry()
   } catch (err) {
