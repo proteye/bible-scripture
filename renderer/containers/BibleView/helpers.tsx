@@ -20,7 +20,7 @@ export const prepareVerseText = ({
   strongNumbersPrefix?: string
   onMouseEnter?: (e: TAny) => void
 }) => {
-  const spaceClearedText = text.replace(/(<[Sfim]>)\s*(.+?)\s*([Sfim]>)/gi, '$1$2$3')
+  const spaceClearedText = text.replace(/(<[SJfim]>)\s*(.+?)\s*([SJfim]>)/gi, '$1$2$3')
   const preparedMakkefText = spaceClearedText.split(MAKKEF).join(` ${MAKKEF} `)
   const splittedText = preparedMakkefText.split(' ')
   const preparedSplittedText = splittedText.reduce((prev, curr, idx) => curr === MAKKEF || splittedText[idx + 1] === MAKKEF ? prev.concat(curr) : prev.concat(curr, ' '), [])
@@ -36,6 +36,7 @@ export const prepareVerseText = ({
 
     const preparedWord = word
       .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
+      .replace(/<\/?J>/gi, '')
       .replace(/<pb\/>/gi, '')
       .replace(/<\/?t>/gi, '"')
 
@@ -44,7 +45,7 @@ export const prepareVerseText = ({
     }
 
     if (preparedWord === MAKKEF || preparedWord === PIPE) {
-      return <span>{preparedWord}</span>
+      return <span key={`${index}-${preparedWord}`}>{preparedWord}</span>
     }
 
     return (

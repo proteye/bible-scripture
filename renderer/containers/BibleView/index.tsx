@@ -23,8 +23,8 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, onGetDictionaryTopi
             <div key={verse}>
               <span className={verseClass}>
                 {verse}
-                {language !== 'iw' ? '.' : ''}
-              </span>{' '}
+                {language !== 'iw' ? '. ' : ' '}
+              </span>
               {preparedText}
             </div>
           ))}

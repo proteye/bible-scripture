@@ -1,8 +1,6 @@
-export type TRegistryId = number
+export type TRegistryId = string
 
 export type TRegistryName = string
-
-export type IRegistryDownloadJsonList = IRegistryDownloadJson[]
 
 export interface IRegistryDownloadLds {
   /** language */
@@ -11,9 +9,18 @@ export interface IRegistryDownloadLds {
   des: string
 }
 
-export interface IRegistryDownloadInfo {
-  /** ID */
-  id?: TRegistryId
+export interface IRegistryHost {
+  /** host URL with %s */
+  path: string
+  /** host alias */
+  alias: string
+  /** host priority */
+  priority: number
+  /** host weight */
+  weight: number
+}
+
+export interface IRegistryDownload {
   /** abbreviation */
   abr: string
   /** language */
@@ -50,15 +57,7 @@ export interface IRegistryDownloadInfo {
   lic: string
 }
 
-export interface IRegistryHost {
-  path: string
-  alias: string
-  priority: number
-  weight: number
-}
-
 export interface IRegistryDownloadJson {
-  id?: TRegistryId
   abr: string
   lng: string
   aln: string
