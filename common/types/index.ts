@@ -1,4 +1,5 @@
 export * from './module'
+export * from './registry'
 export * from './bible'
 export * from './dictionary'
 

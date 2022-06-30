@@ -56,12 +56,6 @@ const syncModules = async (): Promise<TModulesList> => {
         stmt.run(id, type, shortName, longName, description, filename)
       })
       stmt.finalize()
-      // db.each(
-      //   'SELECT rowid AS id, short_name AS shortName, type, created_at AS createdAt, updated_at AS updatedAt FROM modules',
-      //   function (_, row) {
-      //     console.log(`${row.id}: ${row.shortName} - ${row.type}`)
-      //   },
-      // )
     })
 
     closeDb(MODULES_DB)
