@@ -1,7 +1,7 @@
 import React from 'react'
 import { IBibleVerse, IBibleInfo, TAny } from '@common/types'
 import { IBiblePreapredVerse } from './types'
-import { morphologyRegexp, NT_BEGIN_BOOK_NUMBER, strongRegexp } from './constants'
+import { MAKKEF, morphologyRegexp, NT_BEGIN_BOOK_NUMBER, PIPE, strongRegexp } from './constants'
 
 export const getStrongNumbersPrefix = (info: IBibleInfo[]) => {
   const strongNumbersPrefix = info.find(({ name }) => name === 'strong_numbers_prefix')
@@ -21,9 +21,11 @@ export const prepareVerseText = ({
   onMouseEnter?: (e: TAny) => void
 }) => {
   const spaceClearedText = text.replace(/(<[Sfim]>)\s*(.+?)\s*([Sfim]>)/gi, '$1$2$3')
-  const splittedText = spaceClearedText.split(' ')
+  const preparedMakkefText = spaceClearedText.split(MAKKEF).join(` ${MAKKEF} `)
+  const splittedText = preparedMakkefText.split(' ')
+  const preparedSplittedText = splittedText.reduce((prev, curr, idx) => curr === MAKKEF || splittedText[idx + 1] === MAKKEF ? prev.concat(curr) : prev.concat(curr, ' '), [])
 
-  return splittedText.map((word, index) => {
+  return preparedSplittedText.map((word, index) => {
     // Strong
     const strongMatches = word.match(strongRegexp)
     const strongNumber = strongMatches?.length > 1 ? strongMatches[1] : null
@@ -37,6 +39,14 @@ export const prepareVerseText = ({
       .replace(/<pb\/>/gi, '')
       .replace(/<\/?t>/gi, '"')
 
+    if (preparedWord === ' ') {
+      return ' '
+    }
+
+    if (preparedWord === MAKKEF || preparedWord === PIPE) {
+      return <span>{preparedWord}</span>
+    }
+
     return (
       <span
         key={`${index}-${preparedWord}`}
@@ -45,7 +55,7 @@ export const prepareVerseText = ({
         data-morphology={morphologyIndication}
         onMouseEnter={onMouseEnter}
       >
-        {preparedWord}{' '}
+        {preparedWord}
       </span>
     )
   })

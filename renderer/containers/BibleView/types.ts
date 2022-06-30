@@ -7,5 +7,5 @@ export interface IBibleViewProps extends IComponentWithDimensions {
 }
 
 export interface IBiblePreapredVerse extends IBibleVerse {
-  preparedText: JSX.Element[]
+  preparedText: (JSX.Element | ' ')[]
 }
