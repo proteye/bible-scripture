@@ -6,6 +6,10 @@ ipcMain.handle('getModules', async (_event) => {
   return module.getModules()
 })
 
+ipcMain.handle('downloadModule', async (_event, moduleName: TModuleName) => {
+  return module.downloadModule(moduleName)
+})
+
 ipcMain.handle('openModule', async (_event, moduleName: TModuleName, uniqId: TId) => {
   return module.openModule(moduleName, uniqId)
 })

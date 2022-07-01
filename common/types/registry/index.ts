@@ -1,7 +1,3 @@
-export type TRegistryId = string
-
-export type TRegistryName = string
-
 export interface IRegistry {
   version: number
   hosts: IRegistryHost[]
