@@ -15,6 +15,7 @@ const getRegistry = () => {
 
   if (existsSync(dest)) {
     const registryJSON: IRegistryJson = JSON.parse(readFileSync(dest, 'utf8'))
+    registry.version = registryJSON.version
     registry.hosts = registryJSON.hosts
     registry.downloads = convertRegistryDownloads(registryJSON.downloads)
   }

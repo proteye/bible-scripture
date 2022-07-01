@@ -7,6 +7,7 @@ import { IDictionaryDictionary, IDictionaryMorphologyIndications, TModulesList }
 import { nanoid } from 'nanoid'
 import useTabs from 'hooks/useTabs'
 import { defaultTheme } from 'constants/theme'
+import useVisibleSwitch from 'hooks/useVisibleSwitch'
 
 const dictionaryModuleName = 'Журом'
 
@@ -15,7 +16,8 @@ const useBase = () => {
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
   const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications[]>([])
-  const [isShowInstant, setShowInstant] = useState(true)
+  const [isShowInstant, toggleShowInstant] = useVisibleSwitch(true)
+  const [isShowModules, toggleShowModules] = useVisibleSwitch(false)
 
   const morphologyMeaningHtml = useMemo(() => {
     const meanings = morphology.map(({ meaning }) => meaning)
@@ -100,10 +102,6 @@ const useBase = () => {
     [isShowInstant],
   )
 
-  const toggleInstant = useCallback(async () => {
-    setShowInstant((prevValue) => !prevValue)
-  }, [])
-
   useEffect(() => {
     getModules()
     getRegistry()
@@ -130,11 +128,13 @@ const useBase = () => {
     contextMenuItems,
     instantHtmlText,
     isShowInstant,
+    isShowModules,
     handleChangeTab,
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
-    toggleInstant,
+    toggleShowInstant,
+    toggleShowModules,
   }
 }
 
