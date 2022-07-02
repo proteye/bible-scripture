@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import { TId, TModuleName } from 'common/types'
-import { module } from '../models'
+import { module } from '../services'
 
 ipcMain.handle('getModules', async (_event) => {
   return module.getModules()

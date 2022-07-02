@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron'
 import { TId, TModuleName } from 'common/types'
-import { IGetBibleVersesProps } from '../models/bible/types'
-import { bible } from '../models'
+import { IGetBibleVersesProps } from '../services/bible/types'
+import { bible } from '../services'
 
 ipcMain.handle('openBible', async (_event, moduleName: TModuleName, uid: TId) => {
   return await bible.openBible(moduleName, uid)

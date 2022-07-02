@@ -2,7 +2,7 @@ import { app } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 import { closeAllDb } from './database'
-import { module, registry } from './models'
+import { module, registry } from './services'
 import './ipcServer'
 
 const isProd: boolean = process.env.NODE_ENV === 'production'
