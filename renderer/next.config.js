@@ -6,4 +6,8 @@ module.exports = {
 
     return config;
   },
+  // Fix exporting enums from outside Next root
+  // experimental: {
+  //   externalDir: true,
+  // },
 };

@@ -2,7 +2,7 @@ import { MouseEvent } from 'react'
 import { IRegistryModulesProps } from './types'
 
 const useBase = ({ onItemClick }: IRegistryModulesProps) => {
-  const handleClick = (event: MouseEvent<HTMLTableRowElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     const moduleName = event.currentTarget.dataset['abr']
     onItemClick(moduleName)
   }

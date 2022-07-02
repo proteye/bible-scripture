@@ -1,7 +1,7 @@
 import { IComponentDefaultProps } from 'components/types'
-import { IRegistryDownload } from '@common/types'
+import { TPreparedRegistryModules } from 'types/common'
 
 export interface IRegistryModulesProps extends IComponentDefaultProps {
-  downloads: IRegistryDownload[]
+  modules: TPreparedRegistryModules
   onItemClick?(moduleName: string): void
 }

@@ -10,7 +10,10 @@ export type TId = string
 export type TUid = string
 
 export type TChannelName =
+  | 'getRegistry'
+  | 'getModules'
   | 'openModule'
+  | 'downloadModule'
   | 'closeModuleByUid'
   | 'closeModule'
   | 'openBible'

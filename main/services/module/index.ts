@@ -103,6 +103,10 @@ const downloadModule = async (moduleName: TModuleName) => {
       index += 1
     }
 
+    if (!result) {
+      return null
+    }
+
     const files = await unzip(dest, moduleConfig.path, true)
     await unlink(dest)
 
