@@ -3,5 +3,5 @@ import { IRegistryDownload } from '@common/types'
 
 export interface IRegistryModulesProps extends IComponentDefaultProps {
   downloads: IRegistryDownload[]
-  onClick?(): void
+  onItemClick?(moduleName: string): void
 }

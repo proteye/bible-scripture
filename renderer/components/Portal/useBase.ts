@@ -2,7 +2,7 @@ import { isServer } from 'helpers/isServer'
 import { useEffect, useRef } from 'react'
 import { addRootElement } from './helpers'
 
-const usePortal = (className?: string, qa?: string): HTMLElement => {
+const useBase = (className?: string, qa?: string) => {
   const rootElemRef = useRef<HTMLElement | null>(isServer() ? null : document.createElement('div'))
   const root = rootElemRef?.current
 
@@ -23,7 +23,7 @@ const usePortal = (className?: string, qa?: string): HTMLElement => {
     }
   }, [className, qa, root])
 
-  return root
+  return { root }
 }
 
-export default usePortal
+export default useBase

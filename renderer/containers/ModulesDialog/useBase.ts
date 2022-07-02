@@ -11,6 +11,18 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     setRegistry(registry)
   }, [])
 
+  const downloadModule = useCallback(async (moduleName: string) => {
+    await ipcRenderer.invoke('downloadModule', moduleName)
+  }, [])
+
+  const handleModuleClick = useCallback(
+    async (moduleName: string) => {
+      console.log('moduleName', moduleName)
+      downloadModule(moduleName)
+    },
+    [downloadModule],
+  )
+
   useEffect(() => {
     if (!registry && isVisible) {
       getRegistry()
@@ -19,6 +31,7 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
 
   return {
     registry,
+    handleModuleClick,
   }
 }
 

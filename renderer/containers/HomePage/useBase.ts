@@ -77,10 +77,6 @@ const useBase = () => {
     setBibles(bibles)
   }, [])
 
-  const getRegistry = useCallback(async () => {
-    const registry = await ipcRenderer.invoke('getRegistry')
-  }, [])
-
   const openDictionary = useCallback(async () => {
     await ipcRenderer.invoke('openDictionary', dictionaryModuleName, uid)
   }, [uid])
@@ -104,13 +100,12 @@ const useBase = () => {
 
   useEffect(() => {
     getModules()
-    getRegistry()
     openDictionary()
 
     return () => {
       ipcRenderer.invoke('closeDictionaryByUid', uid)
     }
-  }, [getModules, getRegistry, openDictionary])
+  }, [getModules, openDictionary])
 
   // Clear Instant when closed
   useEffect(() => {
