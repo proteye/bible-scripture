@@ -12,7 +12,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
-      <div className="bg-white px-4 py-4 sm:p-6 sm:pb-4">
+      <div className="h-96 bg-white px-4 py-4 overflow-y-scroll sm:p-6 sm:pb-4">
         <div className="sm:flex sm:items-start">
           <RegistryModules downloads={registry?.downloads} onItemClick={handleModuleClick} />
         </div>
