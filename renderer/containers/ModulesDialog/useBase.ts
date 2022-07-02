@@ -17,7 +17,6 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
 
   const handleModuleClick = useCallback(
     async (moduleName: string) => {
-      console.log('moduleName', moduleName)
       downloadModule(moduleName)
     },
     [downloadModule],

@@ -115,6 +115,13 @@ const useBase = () => {
     }
   }, [isShowInstant])
 
+  // Refetch modules
+  useEffect(() => {
+    if (!isShowModules) {
+      getModules()
+    }
+  }, [isShowModules, getModules])
+
   return {
     tabs,
     targetRef,

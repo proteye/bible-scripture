@@ -97,7 +97,7 @@ const downloadModule = async (moduleName: TModuleName) => {
 
     while (!result && index < downloadUrls.length) {
       const url = downloadUrls[index].path
-      filename = url.split('/').pop()
+      filename = decodeURIComponent(url.split('/').pop())
       dest = `${moduleConfig.path}/${filename}`
       result = await download(downloadUrls[index].path, dest)
       index += 1
@@ -110,22 +110,24 @@ const downloadModule = async (moduleName: TModuleName) => {
       return null
     }
 
-    const modules = (files as string[]).map((filename) => {
-      const splittedFile = filename.split('.')
-      const id = splittedFile[0]
-      const type = splittedFile.length > 2 ? (splittedFile[1] as TModuleType) : 'bible'
-      const fileStats = statSync(`${moduleConfig.path}/${filename}`)
+    const modules = (files as string[])
+      .filter((file) => file.includes(moduleConfig.extension))
+      .map((filename) => {
+        const splittedFile = filename.split('.')
+        const id = splittedFile[0]
+        const type = splittedFile.length > 2 ? (splittedFile[1] as TModuleType) : 'bible'
+        const fileStats = statSync(`${moduleConfig.path}/${filename}`)
 
-      return {
-        id,
-        type,
-        shortName: id,
-        longName: '',
-        description: '',
-        filename,
-        size: fileStats.size,
-      }
-    })
+        return {
+          id,
+          type,
+          shortName: id,
+          longName: '',
+          description: '',
+          filename,
+          size: fileStats.size,
+        }
+      })
 
     const db = editOrCreateDb(MODULES_DB)
 

@@ -1,6 +1,5 @@
 import { TAny } from 'common/types'
-import { createReadStream, createWriteStream } from 'fs'
-import moduleConfig from '../config/moduleConfig'
+import { createReadStream, createWriteStream, existsSync, mkdirSync } from 'fs'
 import { Extract, Parse } from 'unzipper'
 
 const unzip = (srcFile: string, destPath: string, isModule = false): Promise<boolean | string | string[]> => {
@@ -14,13 +13,16 @@ const unzip = (srcFile: string, destPath: string, isModule = false): Promise<boo
       stream = readStream.pipe(Parse())
       stream.on('entry', (entry: TAny) => {
         let fileName = entry.path
+        let dest = `${destPath}/${fileName}`
         const type = entry.type // 'Directory' or 'File'
-        if (type === 'File' && fileName.includes(moduleConfig.extension)) {
+        if (type === 'File') {
           if (fileName[0] === '.') {
             fileName = `${moduleName}${fileName}`
           }
           entry.pipe(createWriteStream(`${destPath}/${fileName}`))
           files.push(fileName)
+        } else if (!existsSync(dest)) {
+          mkdirSync(dest, { recursive: true })
         } else {
           entry.autodrain()
         }
