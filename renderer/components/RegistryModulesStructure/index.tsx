@@ -57,6 +57,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
 }
 
 RegistryModulesStructure.defaultProps = {
+  languagesISO: {},
   className: '',
 }
 

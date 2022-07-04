@@ -2,8 +2,11 @@ import { MouseEvent, useEffect, useMemo, useState } from 'react'
 import { prepareModulesStructure } from 'helpers/prepareModulesStructure'
 import { IRegistryModulesStructureProps } from './types'
 
-const useBase = ({ modulesStructure }: IRegistryModulesStructureProps) => {
-  const defaultPreparedStructure = useMemo(() => prepareModulesStructure(modulesStructure), [modulesStructure])
+const useBase = ({ modulesStructure, languagesISO }: IRegistryModulesStructureProps) => {
+  const defaultPreparedStructure = useMemo(
+    () => prepareModulesStructure(modulesStructure, languagesISO),
+    [modulesStructure, languagesISO],
+  )
 
   const [preparedStructure, setPreparedStructure] = useState(defaultPreparedStructure)
 

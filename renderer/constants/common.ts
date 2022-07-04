@@ -4,3 +4,5 @@ export const sanitizeDefaultOptions = {
     a: ['href'],
   },
 }
+
+export const languagesISO639Url = '/json/ISO_639-2.min.json'

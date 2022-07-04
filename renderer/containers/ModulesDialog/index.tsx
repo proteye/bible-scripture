@@ -8,13 +8,17 @@ import useBase from './useBase'
 export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
   const { isVisible, onClose } = props
 
-  const { modulesStructure, handleDownloadModule } = useBase(props)
+  const { languagesISO, modulesStructure, handleDownloadModule } = useBase(props)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <div className="bg-white px-4 py-4 sm:p-6 sm:pb-4">
         <div className="sm:flex sm:items-start">
-          <RegistryModulesStructure modulesStructure={modulesStructure} onDownload={handleDownloadModule} />
+          <RegistryModulesStructure
+            languagesISO={languagesISO}
+            modulesStructure={modulesStructure}
+            onDownload={handleDownloadModule}
+          />
         </div>
       </div>
       <div className="bg-gray-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

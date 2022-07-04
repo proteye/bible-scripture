@@ -4,6 +4,10 @@ export type TPreparedRegistryModules = {
   [key in EModuleType]: { [lng: string]: IRegistryDownload[] }
 }
 
+export type TLanguagesISO639 = {
+  [lang: string]: { int: string[]; native: string[] }
+}
+
 export enum EModuleType {
   bible = 'bible',
   dictionary = 'dictionary',
