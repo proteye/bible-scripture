@@ -1,23 +1,43 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useEffect, useMemo, useState } from 'react'
+import { prepareModulesStructure } from 'helpers/prepareModulesStructure'
 import { IRegistryModulesStructureProps } from './types'
 
 const useBase = ({ modulesStructure }: IRegistryModulesStructureProps) => {
-  const defaultModuleTypesKeys = Object.keys(modulesStructure).map((type) => ({
-    type,
-    label: type[0].toUpperCase() + type.substring(1),
-    isClosed: true,
-  }))
+  const defaultPreparedStructure = useMemo(() => prepareModulesStructure(modulesStructure), [modulesStructure])
 
-  const [moduleTypeKeys, setModuleTypeKeys] = useState(defaultModuleTypesKeys)
+  const [preparedStructure, setPreparedStructure] = useState(defaultPreparedStructure)
 
   const toggleModuleType = (event: MouseEvent<HTMLButtonElement>) => {
     const moduleType = event.currentTarget.dataset['type']
-    setModuleTypeKeys((prevState) =>
-      prevState.map((item) => ({ ...item, isClosed: moduleType === item.type ? !item.isClosed : item.isClosed })),
+
+    setPreparedStructure((prevState) =>
+      prevState.map((item) => ({ ...item, isOpen: moduleType === item.type ? !item.isOpen : item.isOpen })),
     )
   }
 
-  return { moduleTypeKeys, toggleModuleType }
+  const toggleModuleLang = (event: MouseEvent<HTMLButtonElement>) => {
+    const moduleType = event.currentTarget.dataset['type']
+    const moduleLang = event.currentTarget.dataset['lang']
+
+    setPreparedStructure((prevState) =>
+      prevState.map((module) => ({
+        ...module,
+        languages:
+          moduleType === module.type
+            ? module.languages.map((item) => ({
+                ...item,
+                isOpen: item.lang === moduleLang ? !item.isOpen : item.isOpen,
+              }))
+            : module.languages,
+      })),
+    )
+  }
+
+  useEffect(() => {
+    setPreparedStructure(defaultPreparedStructure)
+  }, [defaultPreparedStructure])
+
+  return { preparedStructure, toggleModuleType, toggleModuleLang }
 }
 
 export default useBase

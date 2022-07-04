@@ -14,7 +14,8 @@ const getRegistry = () => {
   const dest = `${registryConfig.path}/${registryConfig.filename}`
 
   if (existsSync(dest)) {
-    const registryJSON: IRegistryJson = JSON.parse(readFileSync(dest, 'utf8'))
+    const file = readFileSync(dest, 'utf8')
+    const registryJSON: IRegistryJson = JSON.parse(file.trim())
     registry.version = registryJSON.version
     registry.hosts = registryJSON.hosts
     registry.downloads = convertRegistryDownloads(registryJSON.downloads)

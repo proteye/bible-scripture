@@ -24,7 +24,7 @@ const getFollowingUrl = (
 
     res.on('data', (data) => {
       if (isJson) {
-        resolve(JSON.parse(data))
+        resolve(JSON.parse(data.trim()))
       } else {
         resolve(data)
       }
