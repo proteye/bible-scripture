@@ -28,6 +28,7 @@ const Modal: FC<IModalProps> = ({ children, isVisible, onClose }) => {
 
 Modal.defaultProps = {
   title: '',
+  className: '',
   onClose: noop,
 }
 

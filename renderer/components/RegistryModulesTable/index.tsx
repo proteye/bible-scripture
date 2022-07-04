@@ -1,19 +1,24 @@
 import React, { FC } from 'react'
 import noop from 'helpers/noop'
 import { DownloadIcon } from '@heroicons/react/outline'
-import { IRegistryModulesProps } from './types'
+import { IRegistryModulesTableProps } from './types'
 import useBase from './useBase'
 
-const RegistryModules: FC<IRegistryModulesProps> = (props) => {
-  const { modules, className, style, qa } = props
+const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
+  const { modules = [], theadClassName, className, style, qa } = props
 
-  const { handleClick } = useBase(props)
+  const { handleDownload } = useBase(props)
+
+  if (!modules.length) {
+    return <div className="flex justify-center w-full text-gray-500">Nothing found</div>
+  }
 
   return (
-    <div className={`flex w-full h-96 overflow-y-scroll ${className}`} style={style} data-qa={qa}>
+    <div className={`flex w-full h-full ${className}`} style={style} data-qa={qa}>
       <table className="table-fixed w-full">
-        <thead className="sticky top-0">
+        <thead className={theadClassName}>
           <tr>
+            <th className="px-4 bg-blue-300">#</th>
             <th className="px-4 bg-blue-300">Name</th>
             <th className="px-4 bg-blue-300">Last update</th>
             <th className="px-4 bg-blue-300">Size</th>
@@ -21,8 +26,9 @@ const RegistryModules: FC<IRegistryModulesProps> = (props) => {
           </tr>
         </thead>
         <tbody>
-          {modules.bible.ru?.map(({ abr, upd, siz }) => (
+          {modules.map(({ abr, upd, siz }, index) => (
             <tr key={abr} className="hover:bg-blue-100 cursor-default">
+              <td className="px-4">{index + 1}</td>
               <td className="px-4">{abr}</td>
               <td className="px-4">{upd}</td>
               <td className="px-4">{siz}</td>
@@ -30,7 +36,7 @@ const RegistryModules: FC<IRegistryModulesProps> = (props) => {
                 <button
                   className="text-gray-600 hover:text-blue-600 active:text-blue-800"
                   data-abr={abr}
-                  onClick={handleClick}
+                  onClick={handleDownload}
                 >
                   <DownloadIcon className="w-6 h-6" />
                 </button>
@@ -43,8 +49,10 @@ const RegistryModules: FC<IRegistryModulesProps> = (props) => {
   )
 }
 
-RegistryModules.defaultProps = {
-  onItemClick: noop,
+RegistryModulesTable.defaultProps = {
+  className: '',
+  theadClassName: '',
+  onDownload: noop,
 }
 
-export default RegistryModules
+export default RegistryModulesTable

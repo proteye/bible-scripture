@@ -7,8 +7,7 @@ import { prepareRegistryModules } from 'helpers/prepareRegistryModules'
 const useBase = ({ isVisible }: IModulesDialogProps) => {
   const [registry, setRegistry] = useState<IRegistry>({ version: 0, hosts: [], downloads: [] })
 
-  const preparedRegistryModules = useMemo(() => prepareRegistryModules(registry.downloads), [registry.downloads])
-  console.log('preparedRegistryModules', preparedRegistryModules)
+  const modulesStructure = useMemo(() => prepareRegistryModules(registry.downloads), [registry.downloads])
 
   const getRegistry = useCallback(async () => {
     const registry = await ipcRenderer.invoke('getRegistry')
@@ -19,7 +18,7 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     await ipcRenderer.invoke('downloadModule', moduleName)
   }, [])
 
-  const handleModuleClick = useCallback(
+  const handleDownloadModule = useCallback(
     async (moduleName: string) => {
       downloadModule(moduleName)
     },
@@ -33,8 +32,8 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
   }, [registry, isVisible, getRegistry])
 
   return {
-    preparedRegistryModules,
-    handleModuleClick,
+    modulesStructure,
+    handleDownloadModule,
   }
 }
 

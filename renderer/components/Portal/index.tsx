@@ -17,8 +17,8 @@ const Portal: FC<IPortalProps> = ({ children, className, qa }) => {
 }
 
 Portal.defaultProps = {
-  className: null,
-  qa: null,
+  className: '',
+  qa: '',
 }
 
 export default Portal
