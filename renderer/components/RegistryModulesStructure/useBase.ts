@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useMemo, useState } from 'react'
 import { prepareModulesStructure } from 'helpers/prepareModulesStructure'
-import { IRegistryModulesStructureProps } from './types'
+import { IRegistryModulesStructureProps, TModuleTypeOpen } from './types'
 
 const useBase = ({ modulesStructure, languagesISO6392 }: IRegistryModulesStructureProps) => {
   const defaultPreparedStructure = useMemo(
@@ -9,38 +9,41 @@ const useBase = ({ modulesStructure, languagesISO6392 }: IRegistryModulesStructu
   )
 
   const [preparedStructure, setPreparedStructure] = useState(defaultPreparedStructure)
+  const [structureOpened, setStructureOpened] = useState({} as TModuleTypeOpen)
 
   const toggleModuleType = (event: MouseEvent<HTMLButtonElement>) => {
     const moduleType = event.currentTarget.dataset['type']
 
-    setPreparedStructure((prevState) =>
-      prevState.map((item) => ({ ...item, isOpen: moduleType === item.type ? !item.isOpen : item.isOpen })),
-    )
+    setStructureOpened((prevState) => ({
+      ...prevState,
+      [moduleType]: { ...prevState[moduleType], isOpen: !prevState[moduleType]?.isOpen },
+    }))
   }
 
   const toggleModuleLang = (event: MouseEvent<HTMLButtonElement>) => {
     const moduleType = event.currentTarget.dataset['type']
     const moduleLang = event.currentTarget.dataset['lang']
 
-    setPreparedStructure((prevState) =>
-      prevState.map((module) => ({
-        ...module,
-        languages:
-          moduleType === module.type
-            ? module.languages.map((item) => ({
-                ...item,
-                isOpen: item.lang === moduleLang ? !item.isOpen : item.isOpen,
-              }))
-            : module.languages,
-      })),
-    )
+    setStructureOpened((prevState) => ({
+      ...prevState,
+      [moduleType]: {
+        ...prevState[moduleType],
+        languages: {
+          ...prevState[moduleType]?.languages,
+          [moduleLang]: {
+            ...prevState[moduleType]?.languages?.[moduleLang],
+            isOpen: !prevState[moduleType]?.languages?.[moduleLang]?.isOpen,
+          },
+        },
+      },
+    }))
   }
 
   useEffect(() => {
     setPreparedStructure(defaultPreparedStructure)
   }, [defaultPreparedStructure])
 
-  return { preparedStructure, toggleModuleType, toggleModuleLang }
+  return { preparedStructure, structureOpened, toggleModuleType, toggleModuleLang }
 }
 
 export default useBase

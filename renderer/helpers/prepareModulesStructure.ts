@@ -8,7 +8,6 @@ export const prepareModulesStructure = (
   Object.keys(modulesStructure).map((type) => ({
     type,
     label: capitalizeString(type),
-    isOpen: false,
     languages: Object.keys(modulesStructure[type])
       .map((lang) => {
         const langIso = languagesISO6392?.[lang]
@@ -19,7 +18,6 @@ export const prepareModulesStructure = (
           lang,
           intl,
           label,
-          isOpen: false,
         }
       })
       .sort((a, b) => (/^[^a-z]/gi.test(a.intl) ? 1 : /^[^a-z]/gi.test(b.intl) ? -1 : a.intl?.localeCompare(b.intl))),

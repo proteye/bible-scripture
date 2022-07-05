@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Modal, RegistryModulesStructure } from 'components'
+import { InputSearch, Modal, RegistryModulesStructure } from 'components'
 
 import { IModulesDialogProps } from './types'
 import noop from 'helpers/noop'
@@ -8,12 +8,16 @@ import useBase from './useBase'
 export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
   const { isVisible, onClose } = props
 
-  const { modulesStructure, downloadedModules, languagesISO6392, handleDownloadModule } = useBase(props)
+  const { modulesStructure, downloadedModules, languagesISO6392, handleDownloadModule, handleSearchSubmit } =
+    useBase(props)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <div className="bg-white px-4 py-4 sm:p-6 sm:pb-4">
-        <div className="sm:flex sm:items-start">
+        <div className="flex flex-shrink-0 w-full h-12 py-2 px-3 rounded bg-blue-300">
+          <InputSearch placeholder="Filter modules..." onSubmit={handleSearchSubmit} />
+        </div>
+        <div className="mt-2 sm:flex sm:items-start">
           <RegistryModulesStructure
             modulesStructure={modulesStructure}
             downloadedModules={downloadedModules}

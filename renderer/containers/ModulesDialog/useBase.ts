@@ -8,14 +8,19 @@ import { getLanguagesISO6392 } from 'helpers/getLanguagesISO6392'
 
 const useBase = ({ isVisible }: IModulesDialogProps) => {
   const [registry, setRegistry] = useState<IRegistry>({ version: 0, hosts: [], downloads: [] })
+  const [filteredRegistry, setFilteredRegistry] = useState<IRegistry>(registry)
   const [downloadedModules, setDownloadedModules] = useState<TModulesList>([])
   const [languagesISO6392, setLanguagesISO6392] = useState<TLanguagesISO6392>({})
 
-  const modulesStructure = useMemo(() => prepareRegistryModules(registry.downloads), [registry.downloads])
+  const modulesStructure = useMemo(
+    () => prepareRegistryModules(filteredRegistry.downloads),
+    [filteredRegistry.downloads],
+  )
 
   const getRegistry = useCallback(async () => {
     const registry = await ipcRenderer.invoke('getRegistry')
     setRegistry(registry)
+    setFilteredRegistry(registry)
   }, [])
 
   const getDownloadedModules = useCallback(async () => {
@@ -39,6 +44,26 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     [downloadModule],
   )
 
+  const handleSearchSubmit = useCallback(
+    async (value: string) => {
+      const filterValue = value.toLowerCase()
+      setFilteredRegistry({
+        ...registry,
+        downloads: registry.downloads.filter(
+          ({ abr, lng, aln, reg, des, lds, inf }) =>
+            abr.toLowerCase().includes(filterValue) ||
+            lng?.toLowerCase().includes(filterValue) ||
+            aln?.toLowerCase().includes(filterValue) ||
+            reg?.toLowerCase().includes(filterValue) ||
+            des.toLowerCase().includes(filterValue) ||
+            inf?.toLowerCase().includes(filterValue) ||
+            lds?.some(({ des: ldsDes }) => ldsDes.toLowerCase().includes(filterValue)),
+        ),
+      })
+    },
+    [registry],
+  )
+
   useEffect(() => {
     if (!registry.version && isVisible) {
       uploadLanguagesISO()
@@ -52,6 +77,7 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     downloadedModules,
     languagesISO6392,
     handleDownloadModule,
+    handleSearchSubmit,
   }
 }
 

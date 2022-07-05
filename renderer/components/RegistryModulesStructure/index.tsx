@@ -7,22 +7,24 @@ import RegistryModulesTable from '../RegistryModulesTable'
 const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => {
   const { modulesStructure, downloadedModules, className, style, qa, onDownload } = props
 
-  const { preparedStructure, toggleModuleType, toggleModuleLang } = useBase(props)
+  const { preparedStructure, structureOpened, toggleModuleType, toggleModuleLang } = useBase(props)
 
   return (
     <div className={`flex w-full h-96 overflow-y-scroll ${className}`} style={style} data-qa={qa}>
       <ul className="w-full">
-        {preparedStructure.map(({ type, label, languages, isOpen }) => (
+        {preparedStructure.map(({ type, label, languages }) => (
           <li key={type} className="mb-2">
             <div className="sticky top-0 bg-white z-30">
               <button className="flex items-center font-medium" data-type={type} onClick={toggleModuleType}>
-                <ChevronRightIcon className={`w-4 h-4 mr-1 transition-transform ${isOpen && 'rotate-90'}`} />
+                <ChevronRightIcon
+                  className={`w-4 h-4 mr-1 transition-transform ${structureOpened[type]?.isOpen && 'rotate-90'}`}
+                />
                 <span>{label}</span>
               </button>
             </div>
-            {isOpen && (
+            {structureOpened[type]?.isOpen && (
               <ul className="w-full">
-                {languages.map(({ lang, label: labelLang, isOpen: isOpenLang }) => (
+                {languages.map(({ lang, label: labelLang }) => (
                   <li key={lang} className="mb-2 pl-4">
                     <div className="sticky top-6 bg-white z-20">
                       <button
@@ -32,12 +34,14 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                         onClick={toggleModuleLang}
                       >
                         <ChevronRightIcon
-                          className={`w-4 h-4 mr-1 transition-transform ${isOpenLang && 'rotate-90'}`}
+                          className={`w-4 h-4 mr-1 transition-transform ${
+                            structureOpened[type]?.languages?.[lang]?.isOpen && 'rotate-90'
+                          }`}
                         />
                         <span>{labelLang}</span>
                       </button>
                     </div>
-                    {isOpenLang && (
+                    {structureOpened[type]?.languages?.[lang]?.isOpen && (
                       <RegistryModulesTable
                         modules={modulesStructure[type][lang]}
                         downloadedModules={downloadedModules}

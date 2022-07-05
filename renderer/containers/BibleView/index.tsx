@@ -14,7 +14,7 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, onGetDictionaryTopi
 
   return (
     <div className="absolute inset-0 flex flex-col">
-      <div className="flex flex-shrink-0 w-full h-10 py-2 px-3 bg-blue-300">
+      <div className="flex flex-shrink-0 w-full h-12 py-2 px-3 bg-blue-300">
         <InputSearch placeholder="Иоан 3:16" onSubmit={handleSearchSubmit} />
       </div>
       <Scrollable className={`p-4 text-lg select-text bg-gray-50 selection:bg-gray-300`}>
