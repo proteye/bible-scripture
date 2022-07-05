@@ -4,7 +4,7 @@ export type TPreparedRegistryModules = {
   [key in EModuleType]: { [lng: string]: IRegistryDownload[] }
 }
 
-export type TLanguagesISO639 = {
+export type TLanguagesISO6392 = {
   [lang: string]: { int: string[]; native: string[] }
 }
 

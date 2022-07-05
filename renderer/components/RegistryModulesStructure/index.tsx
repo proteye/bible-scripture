@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import noop from 'helpers/noop'
 import { ChevronRightIcon } from '@heroicons/react/outline'
 import { IRegistryModulesStructureProps } from './types'
 import useBase from './useBase'
@@ -57,7 +56,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
 }
 
 RegistryModulesStructure.defaultProps = {
-  languagesISO: {},
+  languagesISO6392: {},
   className: '',
 }
 

@@ -6,20 +6,18 @@ export const prepareRegistryModules = (downloads: IRegistryDownload[]): TPrepare
 
   const result = moduleTypeKeys.reduce((prev, curr) => ({ ...prev, [curr]: {} }), {} as TPreparedRegistryModules)
 
-  downloads
-    .sort((a, b) => (/[^a-z]/i.test(a.lng) ? 1 : /[^a-z]/i.test(b.lng) ? -1 : a.lng?.localeCompare(b.lng)))
-    .forEach((item) => {
-      const { fil, lng } = item
-      const splittedFil = fil.split('.')
-      const lastFilPart = splittedFil?.[splittedFil.length - 1]
-      const type = moduleTypeKeys.includes(lastFilPart) ? (lastFilPart as EModuleType) : EModuleType.bible
-      const lang = lng ?? 'all'
+  downloads.forEach((item) => {
+    const { fil, lng } = item
+    const splittedFil = fil.split('.')
+    const lastFilPart = splittedFil?.[splittedFil.length - 1]
+    const type = moduleTypeKeys.includes(lastFilPart) ? (lastFilPart as EModuleType) : EModuleType.bible
+    const lang = lng ?? 'all'
 
-      if (!result[type][lang]) {
-        result[type][lang] = []
-      }
-      result[type][lang].push(item)
-    })
+    if (!result[type][lang]) {
+      result[type][lang] = []
+    }
+    result[type][lang].push(item)
+  })
 
   return result
 }

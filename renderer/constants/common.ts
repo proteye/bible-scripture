@@ -5,4 +5,4 @@ export const sanitizeDefaultOptions = {
   },
 }
 
-export const languagesISO639Url = '/json/ISO_639-2.min.json'
+export const languagesISO6392Url = '/json/ISO_639-2.min.json'

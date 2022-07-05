@@ -3,12 +3,12 @@ import { ipcRenderer } from 'electron'
 import { IRegistry } from '@common/types'
 import { IModulesDialogProps } from './types'
 import { prepareRegistryModules } from 'helpers/prepareRegistryModules'
-import { TLanguagesISO639 } from 'types/common'
-import { languagesISO639Url } from 'constants/common'
+import { TLanguagesISO6392 } from 'types/common'
+import { getLanguagesISO6392 } from 'helpers/getLanguagesISO6392'
 
 const useBase = ({ isVisible }: IModulesDialogProps) => {
   const [registry, setRegistry] = useState<IRegistry>({ version: 0, hosts: [], downloads: [] })
-  const [languagesISO, setLanguagesISO] = useState<TLanguagesISO639>({})
+  const [languagesISO6392, setLanguagesISO6392] = useState<TLanguagesISO6392>({})
 
   const modulesStructure = useMemo(() => prepareRegistryModules(registry.downloads), [registry.downloads])
 
@@ -22,8 +22,8 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
   }, [])
 
   const uploadLanguagesISO = useCallback(async () => {
-    const data: TLanguagesISO639 = await fetch(languagesISO639Url).then((res) => res.json())
-    setLanguagesISO(data)
+    const data: TLanguagesISO6392 = await getLanguagesISO6392()
+    setLanguagesISO6392(data)
   }, [])
 
   const handleDownloadModule = useCallback(
@@ -41,8 +41,8 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
   }, [registry, isVisible, getRegistry])
 
   return {
-    languagesISO,
     modulesStructure,
+    languagesISO6392,
     handleDownloadModule,
   }
 }
