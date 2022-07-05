@@ -15,8 +15,8 @@ const getModules = (): Promise<TModulesList> => {
 
   return new Promise((resolve) => {
     db.all(
-      'SELECT id, type, short_name AS shortName, long_name AS longName, description, filename FROM modules',
-      (e: any, modules: TModulesList) => {
+      'SELECT id, type, short_name AS shortName, long_name AS longName, description, filename, size FROM modules',
+      (_e: any, modules: TModulesList) => {
         resolve(modules || [])
       },
     )

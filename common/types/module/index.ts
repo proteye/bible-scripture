@@ -11,6 +11,7 @@ export interface IModuleInfo {
   type: TModuleType
   description: string
   filename: string
+  size: number
 }
 
 export type TModuleType =

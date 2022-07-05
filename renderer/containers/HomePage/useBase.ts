@@ -71,8 +71,7 @@ const useBase = () => {
   )
 
   const getModules = useCallback(async () => {
-    const modules = await ipcRenderer.invoke('getModules')
-
+    const modules: TModulesList = await ipcRenderer.invoke('getModules')
     const bibles = modules.filter(({ type }) => type === 'bible')
     setBibles(bibles)
   }, [])

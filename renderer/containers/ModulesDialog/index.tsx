@@ -8,7 +8,7 @@ import useBase from './useBase'
 export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
   const { isVisible, onClose } = props
 
-  const { modulesStructure, languagesISO6392, handleDownloadModule } = useBase(props)
+  const { modulesStructure, downloadedModules, languagesISO6392, handleDownloadModule } = useBase(props)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
@@ -16,6 +16,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
         <div className="sm:flex sm:items-start">
           <RegistryModulesStructure
             modulesStructure={modulesStructure}
+            downloadedModules={downloadedModules}
             languagesISO6392={languagesISO6392}
             onDownload={handleDownloadModule}
           />

@@ -5,7 +5,7 @@ import useBase from './useBase'
 import RegistryModulesTable from '../RegistryModulesTable'
 
 const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => {
-  const { modulesStructure, className, style, qa, onDownload } = props
+  const { modulesStructure, downloadedModules, className, style, qa, onDownload } = props
 
   const { preparedStructure, toggleModuleType, toggleModuleLang } = useBase(props)
 
@@ -26,7 +26,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                   <li key={lang} className="mb-2 pl-4">
                     <div className="sticky top-6 bg-white z-20">
                       <button
-                        className="flex items-center font-normal text-gray-600"
+                        className="flex items-center font-normal text-gray-700"
                         data-type={type}
                         data-lang={lang}
                         onClick={toggleModuleLang}
@@ -40,6 +40,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                     {isOpenLang && (
                       <RegistryModulesTable
                         modules={modulesStructure[type][lang]}
+                        downloadedModules={downloadedModules}
                         theadClassName="sticky top-12 z-10"
                         onDownload={onDownload}
                       />

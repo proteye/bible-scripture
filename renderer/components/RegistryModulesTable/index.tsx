@@ -5,11 +5,11 @@ import { IRegistryModulesTableProps } from './types'
 import useBase from './useBase'
 
 const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
-  const { modules = [], theadClassName, className, style, qa } = props
+  const { theadClassName, className, style, qa } = props
 
-  const { handleDownload } = useBase(props)
+  const { preparedModules, handleDownload } = useBase(props)
 
-  if (!modules.length) {
+  if (!preparedModules.length) {
     return <div className="flex justify-center w-full text-gray-500">Nothing found</div>
   }
 
@@ -26,16 +26,17 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
           </tr>
         </thead>
         <tbody>
-          {modules.map(({ abr, upd, siz }, index) => (
-            <tr key={abr} className="hover:bg-blue-100 cursor-default">
+          {preparedModules.map(({ abr, upd, siz, exists }, index) => (
+            <tr key={abr} className={`${exists && 'bg-yellow-100'} hover:bg-blue-100 cursor-default`}>
               <td className="px-4">{index + 1}</td>
               <td className="px-4">{abr}</td>
               <td className="px-4">{upd}</td>
               <td className="px-4">{siz}</td>
               <td className="flex justify-center">
                 <button
-                  className="text-gray-600 hover:text-blue-600 active:text-blue-800"
+                  className="text-gray-600 hover:text-blue-600 active:text-blue-800 disabled:text-gray-400"
                   data-abr={abr}
+                  disabled={exists}
                   onClick={handleDownload}
                 >
                   <DownloadIcon className="w-6 h-6" />
@@ -52,6 +53,7 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
 RegistryModulesTable.defaultProps = {
   className: '',
   theadClassName: '',
+  downloadedModules: [],
   onDownload: noop,
 }
 
