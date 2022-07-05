@@ -8,14 +8,14 @@ import useBase from './useBase'
 export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
   const { isVisible, onClose } = props
 
-  const { modulesStructure, downloadedModules, languagesISO6392, handleDownloadModule, handleSearchSubmit } =
+  const { modulesStructure, downloadedModules, languagesISO6392, handleDownloadModule, handleFilterModules } =
     useBase(props)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <div className="bg-white px-4 py-4 sm:p-6 sm:pb-4">
         <div className="flex flex-shrink-0 w-full h-12 py-2 px-3 rounded bg-blue-300">
-          <InputSearch placeholder="Filter modules..." onSubmit={handleSearchSubmit} />
+          <InputSearch placeholder="Filter modules..." onChange={handleFilterModules} />
         </div>
         <div className="mt-2 sm:flex sm:items-start">
           <RegistryModulesStructure

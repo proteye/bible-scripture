@@ -11,6 +11,8 @@ const useBase = ({ modulesStructure, languagesISO6392 }: IRegistryModulesStructu
   const [preparedStructure, setPreparedStructure] = useState(defaultPreparedStructure)
   const [structureOpened, setStructureOpened] = useState({} as TModuleTypeOpen)
 
+  const isEmpty = useMemo(() => preparedStructure.every(({ languages }) => !languages.length), [preparedStructure])
+
   const toggleModuleType = (event: MouseEvent<HTMLButtonElement>) => {
     const moduleType = event.currentTarget.dataset['type']
 
@@ -43,7 +45,7 @@ const useBase = ({ modulesStructure, languagesISO6392 }: IRegistryModulesStructu
     setPreparedStructure(defaultPreparedStructure)
   }, [defaultPreparedStructure])
 
-  return { preparedStructure, structureOpened, toggleModuleType, toggleModuleLang }
+  return { preparedStructure, structureOpened, isEmpty, toggleModuleType, toggleModuleLang }
 }
 
 export default useBase

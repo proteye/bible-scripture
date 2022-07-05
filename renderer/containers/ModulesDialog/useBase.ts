@@ -44,7 +44,7 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     [downloadModule],
   )
 
-  const handleSearchSubmit = useCallback(
+  const handleFilterModules = useCallback(
     async (value: string) => {
       const filterValue = value.toLowerCase()
       setFilteredRegistry({
@@ -72,12 +72,18 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     }
   }, [registry, isVisible, getRegistry])
 
+  useEffect(() => {
+    if (!isVisible) {
+      setFilteredRegistry(registry)
+    }
+  }, [registry, isVisible])
+
   return {
     modulesStructure,
     downloadedModules,
     languagesISO6392,
     handleDownloadModule,
-    handleSearchSubmit,
+    handleFilterModules,
   }
 }
 
