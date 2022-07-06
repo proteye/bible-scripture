@@ -20,7 +20,7 @@ export const prepareVerseText = ({
   strongNumbersPrefix?: string
   onMouseEnter?: (e: TAny) => void
 }) => {
-  const spaceClearedText = text.replace(/<n>.+?n>/gi, '').replace(/(<[SJfim]>)\s*(.+?)\s*([SJfim]>)/gi, '$1$2$3')
+  const spaceClearedText = text.replace(/<n>.+?n>/gi, '').replace(/\s+(<[SJfim]>)\s*(.+?)\s*([SJfim]>)/gi, '$1$2$3')
   const preparedMakkefText = spaceClearedText.split(MAKKEF).join(` ${MAKKEF} `)
   const splittedText = preparedMakkefText.split(' ')
   const preparedSplittedText = splittedText.reduce(

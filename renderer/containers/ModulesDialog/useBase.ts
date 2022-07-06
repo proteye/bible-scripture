@@ -30,6 +30,7 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
 
   const downloadModule = useCallback(async (moduleName: string) => {
     await ipcRenderer.invoke('downloadModule', moduleName)
+    getDownloadedModules()
   }, [])
 
   const uploadLanguagesISO = useCallback(async () => {
