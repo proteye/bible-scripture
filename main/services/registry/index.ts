@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync, existsSync, unlink } from 'fs'
 import { IRegistry, IRegistryInfoJson, IRegistryJson } from 'common/types'
 import registryConfig from '../../config/registryConfig'
-import { convertRegistryDownloads } from './helpers'
-import { getUrl, download, unzip } from '../../helpers'
+import { getUrl, download, unzip, convertRegistryDownloads } from '../../helpers'
+import { TDownloadResult } from '../../types'
 
 const registry: IRegistry = { version: 0, hosts: [], downloads: [] }
 
@@ -31,7 +31,7 @@ const syncRegistry = async () => {
     const infoDest = `${registryConfig.path}/${registryConfig.infoFilename}`
 
     let index = 0
-    let result = false
+    let result: TDownloadResult = false
     let url = ''
     let infoUrl = ''
     let currentRegistryInfo: IRegistryInfoJson = { version: 0 }

@@ -1,67 +1,34 @@
-import { createWriteStream, unlink, WriteStream } from 'fs'
-import { get as getHttp } from 'http'
-import { get as getHttps } from 'https'
+import { createWriteStream, statSync, unlink } from 'fs'
+import { pipeline } from 'stream'
+import { promisify } from 'util'
+import fetch from 'node-fetch'
+import { TDownloadResult } from '../types'
 
-const getFile = (
-  url: string,
-  dest: string,
-  file: WriteStream,
-  resolve: (value: boolean | PromiseLike<boolean>) => void,
-  reject: (reason?: any) => void,
-) => {
-  const get = url.includes('https://') ? getHttps : getHttp
+const download = async (url: string, dest: string): Promise<TDownloadResult> => {
+  const response = await fetch(url)
 
-  return get(url, (res) => {
-    if (res.statusCode >= 400) {
-      unlink(dest, (err) => {
-        if (err) {
-          console.error(err.message)
-          resolve(false)
-        }
-      })
-      resolve(false)
-      return
-    }
+  if (!response.ok) {
+    console.error(`download: unexpected response ${response.statusText}`)
+    return false
+  }
 
-    if (res.statusCode === 301 || res.statusCode === 302) {
-      return getFile(res.headers.location, dest, file, resolve, reject)
-    }
+  const streamPipeline = promisify(pipeline)
+  const file = createWriteStream(dest)
 
-    res.pipe(file)
-
-    file.on('finish', () => {
-      file.close()
-      resolve(true)
-    })
-
-    file.on('error', (err) => {
-      unlink(dest, (err) => {
-        if (err) {
-          console.error(err.message)
-          resolve(false)
-        }
-      })
-      console.error(err.message)
-      resolve(false)
-    })
-  }).on('error', (err) => {
+  try {
+    await streamPipeline(response.body, file)
+  } catch (e) {
+    console.error(e.message)
     unlink(dest, (err) => {
       if (err) {
         console.error(err.message)
-        resolve(false)
       }
     })
-    console.error(err.message)
-    resolve(false)
-  })
-}
 
-const download = (url: string, dest: string): Promise<boolean> => {
-  const file = createWriteStream(dest)
+    return false
+  }
 
-  return new Promise((resolve, reject) => {
-    getFile(url, dest, file, resolve, reject)
-  })
+  return statSync(dest)
 }
 
 export default download

@@ -6,6 +6,7 @@ import { IModules } from './types'
 import moduleConfig from '../../config/moduleConfig'
 import registry from '../registry'
 import { download, unzip } from '../../helpers'
+import { TDownloadResult } from '../../types'
 
 const MODULES_DB = 'modules'
 const modules: IModules = {}
@@ -74,6 +75,11 @@ const syncModules = async (): Promise<TModulesList> => {
 const getDownloadUrls = (moduleName: TModuleName) => {
   const { hosts, downloads } = registry.getRegistry()
   const downloadInfo = downloads.find(({ abr }) => abr === moduleName)
+
+  if (!downloadInfo) {
+    return []
+  }
+
   const hostsMap = hosts.reduce((prev, curr) => ({ ...prev, [curr.alias]: curr }), {})
 
   return downloadInfo.url
@@ -90,8 +96,12 @@ const downloadModule = async (moduleName: TModuleName) => {
   try {
     const downloadUrls = getDownloadUrls(moduleName)
 
+    if (!downloadUrls.length) {
+      return null
+    }
+
     let index = 0
-    let result = false
+    let result: TDownloadResult = false
     let dest = ''
     let filename = ''
 
@@ -106,7 +116,7 @@ const downloadModule = async (moduleName: TModuleName) => {
     if (!result) {
       return null
     }
-
+    console.log('download', result)
     const files = await unzip(dest, moduleConfig.path, true)
     await unlink(dest)
 
