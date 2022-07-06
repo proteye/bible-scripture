@@ -1,7 +1,8 @@
 import { readFileSync, writeFileSync, existsSync, unlink } from 'fs'
+import fetch from 'node-fetch'
 import { IRegistry, IRegistryInfoJson, IRegistryJson } from 'common/types'
 import registryConfig from '../../config/registryConfig'
-import { getUrl, download, unzip, convertRegistryDownloads } from '../../helpers'
+import { download, unzip, convertRegistryDownloads } from '../../helpers'
 import { TDownloadResult } from '../../types'
 
 const registry: IRegistry = { version: 0, hosts: [], downloads: [] }
@@ -36,6 +37,7 @@ const syncRegistry = async () => {
     let infoUrl = ''
     let currentRegistryInfo: IRegistryInfoJson = { version: 0 }
     let registryInfo: IRegistryInfoJson = null
+    let response = null
 
     // read current "registry_info"
     if (existsSync(infoDest)) {
@@ -43,11 +45,14 @@ const syncRegistry = async () => {
     }
 
     // read "registry_info" from server
-    while (!registryInfo?.version && index < registryConfig.urls.length) {
+    while (!response?.ok && index < registryConfig.urls.length) {
       infoUrl = registryConfig.urls[index].info
-      registryInfo = await getUrl(infoUrl)
+      response = await fetch(infoUrl)
       index += 1
     }
+
+    const body = await response.text()
+    registryInfo = JSON.parse(body.trim())
 
     // check "registry_info" versions
     const isLastRegistry = registryInfo?.version <= currentRegistryInfo?.version

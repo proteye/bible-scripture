@@ -7,7 +7,7 @@ const registryConfig = {
   infoFilename: 'registry_info.json',
   urls: [
     {
-      info: 'https://dl.dropbox.com/s/1odi2f2tyn1oqyx/registry_info.json',
+      info: 'https://dl.dropbox.com/s/1odi2f2tyn1oqyx123/registry_info.json',
       registry: 'https://dl.dropbox.com/s/peatcjj6azrnj0u/registry.zip',
     },
     {
