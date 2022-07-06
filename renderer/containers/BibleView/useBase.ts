@@ -73,6 +73,9 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
     await ipcRenderer.invoke('openBible', moduleName, uid)
     const info = await ipcRenderer.invoke('getBibleInfo', uid)
     const books = await ipcRenderer.invoke('getBibleBooks', uid)
+    if (!books?.length) {
+      return
+    }
     const verses = await ipcRenderer.invoke('getBibleVerses', uid, {
       bookNumber: books[0].bookNumber,
       chapter: 1,
