@@ -17,7 +17,17 @@ const getModules = (): Promise<TModulesList> => {
   return new Promise((resolve) => {
     db.all(
       'SELECT id, type, short_name AS shortName, long_name AS longName, description, filename, size FROM modules',
-      (_e: any, modules: TModulesList) => {
+      (err: any, modules: TModulesList) => {
+        if (err) {
+          db.all(
+            'SELECT id, type, short_name AS shortName, long_name AS longName, description, filename, size FROM modules',
+            (_err: any, modules: TModulesList) => {
+              resolve(modules || [])
+            },
+          )
+          return
+        }
+
         resolve(modules || [])
       },
     )
@@ -92,78 +102,79 @@ const getDownloadUrls = (moduleName: TModuleName) => {
     .sort((a, b) => a.priority - b.priority)
 }
 
-const downloadModule = async (moduleName: TModuleName) => {
-  try {
-    const downloadUrls = getDownloadUrls(moduleName)
+const downloadModule = async (moduleName: TModuleName) =>
+  new Promise(async (resolve) => {
+    try {
+      const downloadUrls = getDownloadUrls(moduleName)
 
-    if (!downloadUrls.length) {
-      return null
-    }
+      if (!downloadUrls.length) {
+        return resolve(null)
+      }
 
-    let index = 0
-    let result: TDownloadResult = false
-    let dest = ''
-    let filename = ''
+      let index = 0
+      let result: TDownloadResult = false
+      let dest = ''
+      let filename = ''
 
-    while (!result && index < downloadUrls.length) {
-      const url = downloadUrls[index].path
-      filename = decodeURIComponent(url.split('/').pop())
-      dest = `${moduleConfig.path}/${filename}`
-      result = await download(downloadUrls[index].path, dest)
-      index += 1
-    }
+      while (!result && index < downloadUrls.length) {
+        const url = downloadUrls[index].path
+        filename = decodeURIComponent(url.split('/').pop())
+        dest = `${moduleConfig.path}/${filename}`
+        result = await download(downloadUrls[index].path, dest)
+        index += 1
+      }
 
-    if (!result) {
-      return null
-    }
+      if (!result) {
+        return resolve(null)
+      }
 
-    const files = await unzip(dest, moduleConfig.path, true)
-    await unlinkSync(dest)
+      const files = await unzip(dest, moduleConfig.path, true)
+      unlinkSync(dest)
 
-    if (typeof files === 'string') {
-      return null
-    }
+      if (typeof files === 'string') {
+        return resolve(null)
+      }
 
-    const modules = (files as string[])
-      .filter((file) => file.includes(moduleConfig.extension))
-      .map((filename) => {
-        const splittedFile = filename.split('.')
-        const id = splittedFile[0]
-        const type = splittedFile.length > 2 ? (splittedFile[1] as TModuleType) : 'bible'
-        const fileStats = statSync(`${moduleConfig.path}/${filename}`)
+      const modules = (files as string[])
+        .filter((file) => file.includes(moduleConfig.extension))
+        .map((filename) => {
+          const splittedFile = filename.split('.')
+          const id = splittedFile[0]
+          const type = splittedFile.length > 2 ? (splittedFile[1] as TModuleType) : 'bible'
+          const fileStats = statSync(`${moduleConfig.path}/${filename}`)
 
-        return {
-          id,
-          type,
-          shortName: id,
-          longName: '',
-          description: '',
-          filename,
-          size: fileStats.size,
-        }
+          return {
+            id,
+            type,
+            shortName: id,
+            longName: '',
+            description: '',
+            filename,
+            size: fileStats.size,
+          }
+        })
+
+      const db = editOrCreateDb(MODULES_DB)
+
+      db.serialize(() => {
+        const stmt = db.prepare(
+          'INSERT OR REPLACE INTO modules(id, type, short_name, long_name, description, filename, size) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        )
+        modules.forEach(({ id, type, shortName, longName, description, filename, size }) => {
+          stmt.run(id, type, shortName, longName, description, filename, size)
+        })
+        stmt.finalize()
       })
 
-    const db = editOrCreateDb(MODULES_DB)
+      closeDb(MODULES_DB)
 
-    db.serialize(() => {
-      const stmt = db.prepare(
-        'INSERT OR REPLACE INTO modules(id, type, short_name, long_name, description, filename, size) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      )
-      modules.forEach(({ id, type, shortName, longName, description, filename, size }) => {
-        stmt.run(id, type, shortName, longName, description, filename, size)
-      })
-      stmt.finalize()
-    })
+      return resolve(modules)
+    } catch (err) {
+      console.error(err)
+    }
 
-    closeDb(MODULES_DB)
-
-    return modules
-  } catch (err) {
-    console.error(err)
-  }
-
-  return null
-}
+    resolve(null)
+  })
 
 const openModule = (moduleName: TModuleName, uniqId?: TUid) => {
   if (!modules[moduleName]) {

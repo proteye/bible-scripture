@@ -22,6 +22,7 @@ export const HomePage: NextPage = () => {
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
+    closeTabsByModuleName,
     toggleShowInstant,
     toggleShowModules,
   } = useBase()
@@ -64,7 +65,7 @@ export const HomePage: NextPage = () => {
         </div>
         {isShowInstant && <InstantView htmlText={instantHtmlText} />}
       </div>
-      <ModulesDialog isVisible={isShowModules} onClose={toggleShowModules} />
+      <ModulesDialog isVisible={isShowModules} onCloseTabs={closeTabsByModuleName} onClose={toggleShowModules} />
     </div>
   )
 }

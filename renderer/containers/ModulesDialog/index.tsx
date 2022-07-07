@@ -13,12 +13,16 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
     downloadedModules,
     languagesISO6392,
     selectedModules,
+    downloadCount,
+    removeCount,
     isModulesSelected,
     isOnlyDeletableModules,
     handleSelectModule,
     handleDownloadModule,
+    handleRemoveModule,
     handleFilterModules,
     handleDownload,
+    handleRemove,
   } = useBase(props)
 
   return (
@@ -35,6 +39,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
             languagesISO6392={languagesISO6392}
             onSelect={handleSelectModule}
             onDownload={handleDownloadModule}
+            onRemove={handleRemoveModule}
           />
         </div>
       </div>
@@ -44,8 +49,9 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
             type="button"
             className={`w-full inline-flex justify-center px-4 py-2 rounded border border-transparent shadow bg-red-600 text-base font-medium text-white hover:bg-red-700 active:shadow-sm active:bg-red-800 active:disabled:bg-red-400 active:disabled:shadow disabled:text-gray-50 disabled:bg-red-400 sm:ml-3 sm:w-auto sm:text-sm`}
             disabled={!isModulesSelected}
+            onClick={handleRemove}
           >
-            Delete selected
+            Delete selected {removeCount > 0 ? `(${removeCount})` : ''}
           </button>
         ) : (
           <button
@@ -54,7 +60,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
             disabled={!isModulesSelected}
             onClick={handleDownload}
           >
-            Download
+            Download {downloadCount > 0 ? `(${downloadCount})` : ''}
           </button>
         )}
         <button
@@ -70,5 +76,6 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
 }
 
 ModulesDialog.defaultProps = {
+  onCloseTabs: noop,
   onClose: noop,
 }

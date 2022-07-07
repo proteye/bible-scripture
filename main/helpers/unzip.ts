@@ -4,7 +4,7 @@ import { Extract, Parse } from 'unzipper'
 
 const unzip = (srcFile: string, destPath: string, isModule = false): Promise<boolean | string | string[]> => {
   const readStream = createReadStream(srcFile)
-  const moduleName = srcFile.split('/').pop().split('.')[0]
+  const moduleFileName = srcFile.split('/').pop().replace('.zip', '')
   let stream = null
   let files = []
 
@@ -17,7 +17,7 @@ const unzip = (srcFile: string, destPath: string, isModule = false): Promise<boo
         const type = entry.type // 'Directory' or 'File'
         if (type === 'File') {
           if (fileName[0] === '.') {
-            fileName = `${moduleName}${fileName}`
+            fileName = `${moduleFileName}${fileName}`
           }
           entry.pipe(createWriteStream(`${destPath}/${fileName}`))
           files.push(fileName)

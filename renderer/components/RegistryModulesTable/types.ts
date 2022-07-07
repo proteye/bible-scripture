@@ -8,6 +8,7 @@ export interface IRegistryModulesTableProps extends IComponentDefaultProps {
   theadClassName?: string
   onSelect?(moduleName: string): void
   onDownload?(moduleName: string): void
+  onRemove?(moduleName: string): void
 }
 
 export interface IPreparedRegistryDownload extends IRegistryDownload {

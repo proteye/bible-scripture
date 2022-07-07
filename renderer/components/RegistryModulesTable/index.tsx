@@ -7,7 +7,7 @@ import useBase from './useBase'
 const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
   const { selectedModules, theadClassName, className, style, qa } = props
 
-  const { preparedModules, handleDownload, handleSelect } = useBase(props)
+  const { preparedModules, handleSelect, handleDownload, handleRemove } = useBase(props)
 
   if (!preparedModules.length) {
     return <div className="flex justify-center w-full text-gray-500">Nothing found</div>
@@ -58,6 +58,7 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
                   <button
                     className="p-1 rounded border border-transparent shadow-sm text-white bg-red-600 hover:bg-red-700 active:shadow-none active:bg-red-800 active:disabled:bg-gray-100 active:disabled:shadow-sm disabled:text-gray-400 disabled:bg-gray-100"
                     data-abr={abr}
+                    onClick={handleRemove}
                   >
                     <TrashIcon className="w-5 h-5" />
                   </button>
@@ -86,6 +87,7 @@ RegistryModulesTable.defaultProps = {
   selectedModules: {},
   onSelect: noop,
   onDownload: noop,
+  onRemove: noop,
 }
 
 export default RegistryModulesTable

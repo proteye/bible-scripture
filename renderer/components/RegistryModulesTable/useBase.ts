@@ -4,7 +4,7 @@ import convertBytes from 'helpers/convertBytes'
 import convertRegistrySize from 'helpers/convertRegistrySize'
 import { IPreparedRegistryDownload, IRegistryModulesTableProps } from './types'
 
-const useBase = ({ modules = [], downloadedModules, onSelect, onDownload }: IRegistryModulesTableProps) => {
+const useBase = ({ modules = [], downloadedModules, onSelect, onDownload, onRemove }: IRegistryModulesTableProps) => {
   const preparedModules: IPreparedRegistryDownload[] = useMemo(() => {
     if (!downloadedModules?.length) {
       return modules
@@ -22,18 +22,24 @@ const useBase = ({ modules = [], downloadedModules, onSelect, onDownload }: IReg
     )
   }, [modules, downloadedModules])
 
+  const handleSelect = (event: ChangeEvent<HTMLInputElement> | MouseEvent<HTMLTableRowElement>) => {
+    const moduleName = event.currentTarget.dataset['abr']
+    onSelect(moduleName)
+  }
+
   const handleDownload = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
     const moduleName = event.currentTarget.dataset['abr']
     onDownload(moduleName)
   }
 
-  const handleSelect = (event: ChangeEvent<HTMLInputElement> | MouseEvent<HTMLTableRowElement>) => {
+  const handleRemove = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
     const moduleName = event.currentTarget.dataset['abr']
-    onSelect(moduleName)
+    onRemove(moduleName)
   }
 
-  return { preparedModules, handleDownload, handleSelect }
+  return { preparedModules, handleSelect, handleDownload, handleRemove }
 }
 
 export default useBase

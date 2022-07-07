@@ -7,17 +7,12 @@ import { TLanguagesISO6392 } from 'types/common'
 import { getLanguagesISO6392 } from 'helpers/getLanguagesISO6392'
 import { TSelectedModules } from 'components/RegistryModulesTable/types'
 
-const useBase = ({ isVisible }: IModulesDialogProps) => {
+const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
   const [registry, setRegistry] = useState<IRegistry>({ version: 0, hosts: [], downloads: [] })
   const [filteredRegistry, setFilteredRegistry] = useState<IRegistry>(registry)
   const [downloadedModules, setDownloadedModules] = useState<TModulesList>([])
   const [languagesISO6392, setLanguagesISO6392] = useState<TLanguagesISO6392>({})
   const [selectedModules, setSelectedModules] = useState<TSelectedModules>({})
-
-  const selectedModulesNames = useMemo(
-    () => Object.keys(selectedModules).filter((key) => selectedModules[key]),
-    [selectedModules],
-  )
 
   const modulesStructure = useMemo(
     () => prepareRegistryModules(filteredRegistry.downloads),
@@ -28,9 +23,19 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     [downloadedModules],
   )
 
-  const isModulesSelected = selectedModulesNames.length > 0
+  const selectedModuleNames = useMemo(
+    () => Object.keys(selectedModules).filter((key) => selectedModules[key]),
+    [selectedModules],
+  )
+
+  const selectedDownloadModules = useMemo(
+    () => Object.keys(selectedModules).filter((key) => selectedModules[key] && !downloadedModulesMap[key]),
+    [selectedModules, downloadedModulesMap],
+  )
+
+  const isModulesSelected = selectedModuleNames.length > 0
   const isOnlyDeletableModules =
-    isModulesSelected && selectedModulesNames.every((moduleName) => downloadedModulesMap[moduleName])
+    isModulesSelected && selectedModuleNames.every((moduleName) => downloadedModulesMap[moduleName])
 
   const getRegistry = useCallback(async () => {
     const registry = await ipcRenderer.invoke('getRegistry')
@@ -43,15 +48,26 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     setDownloadedModules(modules)
   }, [])
 
-  const downloadModule = useCallback(async (moduleName: string) => {
-    await ipcRenderer.invoke('downloadModule', moduleName)
-    getDownloadedModules()
-  }, [])
+  const downloadModule = useCallback(
+    async (moduleName: string) => {
+      await ipcRenderer.invoke('downloadModule', moduleName)
+      getDownloadedModules()
+    },
+    [getDownloadedModules],
+  )
 
-  const uploadLanguagesISO = useCallback(async () => {
+  const removeModule = useCallback(
+    async (moduleName: string) => {
+      await ipcRenderer.invoke('removeModule', moduleName)
+      getDownloadedModules()
+    },
+    [getDownloadedModules],
+  )
+
+  const downloadLanguagesISO = useCallback(async () => {
     const data: TLanguagesISO6392 = await getLanguagesISO6392()
     setLanguagesISO6392(data)
-  }, [])
+  }, [getLanguagesISO6392])
 
   const handleSelectModule = (moduleName: string) => {
     setSelectedModules((prevState) => ({ ...prevState, [moduleName]: !prevState[moduleName] }))
@@ -64,9 +80,17 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     [downloadModule],
   )
 
+  const handleRemoveModule = useCallback(
+    async (moduleName: string) => {
+      removeModule(moduleName)
+      onCloseTabs(moduleName)
+    },
+    [removeModule, onCloseTabs],
+  )
+
   const handleFilterModules = useCallback(
     async (value: string) => {
-      const filterValue = value.toLowerCase()
+      const filterValue = value.trim().toLowerCase()
       setFilteredRegistry({
         ...registry,
         downloads: registry.downloads.filter(
@@ -85,14 +109,27 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
   )
 
   const handleDownload = useCallback(() => {
+    selectedDownloadModules.forEach((moduleName) => downloadModule(moduleName))
+    setSelectedModules({})
+  }, [selectedDownloadModules, downloadModule])
+
+  const handleRemove = useCallback(() => {
+    if (!isOnlyDeletableModules) {
+      return
+    }
+
     Object.keys(selectedModules)
-      .filter((key) => selectedModules[key] && !downloadedModulesMap[key])
-      .forEach((moduleName) => downloadModule(moduleName))
-  }, [selectedModules, downloadedModulesMap, downloadModule])
+      .filter((key) => selectedModules[key])
+      .forEach((moduleName) => {
+        removeModule(moduleName)
+        onCloseTabs(moduleName)
+      })
+    setSelectedModules({})
+  }, [selectedModules, isOnlyDeletableModules, removeModule, onCloseTabs])
 
   useEffect(() => {
     if (!registry.version && isVisible) {
-      uploadLanguagesISO()
+      downloadLanguagesISO()
       getDownloadedModules()
       getRegistry()
     }
@@ -110,12 +147,16 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     downloadedModules,
     languagesISO6392,
     selectedModules,
+    downloadCount: selectedDownloadModules.length,
+    removeCount: selectedModuleNames.length,
     isModulesSelected,
     isOnlyDeletableModules,
     handleSelectModule,
     handleDownloadModule,
+    handleRemoveModule,
     handleFilterModules,
     handleDownload,
+    handleRemove,
   }
 }
 

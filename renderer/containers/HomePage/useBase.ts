@@ -70,6 +70,18 @@ const useBase = () => {
     [tabs, selectedIndex, handleSelectTab],
   )
 
+  const closeTabsByModuleName = useCallback(
+    (moduleName: string) => {
+      const isExist = tabs.find(({ value }) => moduleName === value)
+
+      if (isExist) {
+        setTabs((prevState) => prevState.filter(({ value }) => moduleName !== value))
+        handleSelectTab(0)
+      }
+    },
+    [tabs, handleSelectTab],
+  )
+
   const getModules = useCallback(async () => {
     const modules: TModulesList = await ipcRenderer.invoke('getModules')
     const bibles = modules.filter(({ type }) => type === 'bible')
@@ -134,6 +146,7 @@ const useBase = () => {
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
+    closeTabsByModuleName,
     toggleShowInstant,
     toggleShowModules,
   }
