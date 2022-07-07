@@ -201,4 +201,22 @@ const closeModule = (moduleName: TModuleName) => {
   return closeDb(moduleName)
 }
 
-export default { getModules, downloadModule, syncModules, openModule, closeModuleByUid, closeModule }
+const removeModule = async (moduleName: TModuleName) => {
+  const dest = `${moduleConfig.path}/${moduleName}${moduleConfig.extension}`
+  const db = editOrCreateDb(MODULES_DB)
+
+  try {
+    closeModule(moduleName)
+    await unlink(dest)
+    db.run('DELETE FROM modules WHERE id=?', [moduleName], (err: TAny) => {
+      console.error(err)
+    })
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+
+  return true
+}
+
+export default { getModules, downloadModule, syncModules, openModule, closeModuleByUid, closeModule, removeModule }

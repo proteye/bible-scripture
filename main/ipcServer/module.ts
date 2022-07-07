@@ -21,3 +21,7 @@ ipcMain.handle('closeModuleByUid', async (_event, moduleName: TModuleName, uniqI
 ipcMain.handle('closeModule', async (_event, moduleName: TModuleName) => {
   return module.closeModule(moduleName)
 })
+
+ipcMain.handle('removeModule', async (_event, moduleName: TModuleName) => {
+  return module.removeModule(moduleName)
+})
