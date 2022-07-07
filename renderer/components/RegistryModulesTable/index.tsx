@@ -7,7 +7,7 @@ import useBase from './useBase'
 const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
   const { theadClassName, className, style, qa } = props
 
-  const { preparedModules, handleDownload } = useBase(props)
+  const { preparedModules, selected, handleDownload, handleSelect } = useBase(props)
 
   if (!preparedModules.length) {
     return <div className="flex justify-center w-full text-gray-500">Nothing found</div>
@@ -18,6 +18,7 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
       <table className="table-fixed w-full">
         <thead className={theadClassName}>
           <tr>
+            <th className="px-4 bg-blue-300"></th>
             <th className="px-4 bg-blue-300">#</th>
             <th className="px-4 bg-blue-300">Name</th>
             <th className="px-4 bg-blue-300">Last update</th>
@@ -27,7 +28,15 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
         </thead>
         <tbody>
           {preparedModules.map(({ abr, upd, siz, exists }, index) => (
-            <tr key={abr} className={`${exists && 'bg-yellow-100'} hover:bg-blue-100 cursor-default`}>
+            <tr
+              key={abr}
+              className={`${exists && 'bg-yellow-100'} hover:bg-blue-100 cursor-default`}
+              data-abr={abr}
+              onClick={handleSelect}
+            >
+              <td className="px-4">
+                <input type="checkbox" className="rounded text-blue-500" checked={selected[abr]} />
+              </td>
               <td className="px-4">{index + 1}</td>
               <td className="px-4">{abr}</td>
               <td className="px-4">{upd}</td>

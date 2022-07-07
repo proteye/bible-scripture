@@ -12,3 +12,7 @@ export interface IPreparedRegistryDownload extends IRegistryDownload {
   // Is already downloaded?
   exists?: boolean
 }
+
+export type TSelectedState = {
+  [moduleName: string]: boolean
+}
