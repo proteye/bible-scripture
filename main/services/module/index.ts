@@ -1,5 +1,5 @@
-import { statSync } from 'fs'
-import { readdir, unlink } from 'fs/promises'
+import { statSync, readdirSync, unlinkSync } from 'fs'
+import { readdir } from 'fs/promises'
 import { TUid, TModuleName, TModulesList, TModuleType, IRegistryHost, TAny } from 'common/types'
 import { editOrCreateDb, openDb, closeDb } from '../../database'
 import { IModules } from './types'
@@ -118,7 +118,7 @@ const downloadModule = async (moduleName: TModuleName) => {
     }
 
     const files = await unzip(dest, moduleConfig.path, true)
-    await unlink(dest)
+    await unlinkSync(dest)
 
     if (typeof files === 'string') {
       return null
@@ -201,22 +201,27 @@ const closeModule = (moduleName: TModuleName) => {
   return closeDb(moduleName)
 }
 
-const removeModule = async (moduleName: TModuleName) => {
-  const dest = `${moduleConfig.path}/${moduleName}${moduleConfig.extension}`
-  const db = editOrCreateDb(MODULES_DB)
+const removeModule = async (moduleName: TModuleName) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      closeModule(moduleName)
 
-  try {
-    closeModule(moduleName)
-    await unlink(dest)
-    db.run('DELETE FROM modules WHERE id=?', [moduleName], (err: TAny) => {
+      readdirSync(moduleConfig.path)
+        .filter((file) => file.startsWith(`${moduleName}.`))
+        .map((file) => unlinkSync(`${moduleConfig.path}/${file}`))
+
+      const db = editOrCreateDb(MODULES_DB)
+      db.run('DELETE FROM modules WHERE id=?', [moduleName], (err: TAny) => {
+        if (err) {
+          throw err
+        }
+
+        resolve(true)
+      })
+    } catch (err) {
       console.error(err)
-    })
-  } catch (err) {
-    console.error(err)
-    return false
-  }
-
-  return true
-}
+      reject(err.message)
+    }
+  })
 
 export default { getModules, downloadModule, syncModules, openModule, closeModuleByUid, closeModule, removeModule }
