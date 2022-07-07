@@ -14,8 +14,8 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
   }
 
   return (
-    <div className={`flex w-full h-full pr-3 text-sm ${className}`} style={style} data-qa={qa}>
-      <table className="table-fixed w-full">
+    <div className={`flex w-full h-full pl-1 pr-3 text-sm ${className}`} style={style} data-qa={qa}>
+      <table className="table-fixed w-full rounded shadow">
         <thead className={theadClassName}>
           <tr>
             <th className="w-12 bg-blue-300"></th>
@@ -30,13 +30,20 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
           {preparedModules.map(({ abr, des, upd, siz, exists }, index) => (
             <tr
               key={abr}
-              className={`${exists && 'bg-yellow-100'} hover:bg-blue-100 cursor-default`}
+              className={`${
+                exists ? 'bg-yellow-100' : 'even:bg-gray-50'
+              } group border-t border-dashed first:border-none hover:bg-blue-100 cursor-default`}
               data-abr={abr}
               onClick={handleSelect}
             >
-              <td>
+              <td className="group-last:rounded-bl">
                 <div className="flex justify-center">
-                  <input type="checkbox" className="rounded text-blue-500" checked={selectedModules[abr]} />
+                  <input
+                    type="checkbox"
+                    className="rounded shadow-sm text-blue-600 focus:ring-0 focus:ring-offset-0"
+                    checked={!!selectedModules[abr]}
+                    readOnly
+                  />
                 </div>
               </td>
               <td>{index + 1}</td>
@@ -46,7 +53,7 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
               </td>
               <td>{upd}</td>
               <td>{siz}</td>
-              <td className="text-center">
+              <td className="text-center group-last:rounded-br">
                 {exists ? (
                   <button
                     className="p-1 rounded border border-transparent shadow-sm text-white bg-red-600 hover:bg-red-700 active:shadow-none active:bg-red-800 active:disabled:bg-gray-100 active:disabled:shadow-sm disabled:text-gray-400 disabled:bg-gray-100"

@@ -36,7 +36,9 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                       <li key={lang} className="mb-2 pl-4">
                         <div className="sticky top-6 bg-white z-20">
                           <button
-                            className="flex items-center w-full font-normal text-gray-700 hover:bg-gray-100"
+                            className={`flex items-center w-full font-normal hover:text-blue-600 ${
+                              structureOpened[type]?.languages?.[lang]?.isOpen ? 'text-gray-900' : 'text-gray-600'
+                            }`}
                             data-type={type}
                             data-lang={lang}
                             onClick={toggleModuleLang}

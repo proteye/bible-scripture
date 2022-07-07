@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo } from 'react'
+import { ChangeEvent, MouseEvent, useMemo } from 'react'
 import { IModuleInfo } from '@common/types'
 import convertBytes from 'helpers/convertBytes'
 import convertRegistrySize from 'helpers/convertRegistrySize'
@@ -28,7 +28,7 @@ const useBase = ({ modules = [], downloadedModules, onSelect, onDownload }: IReg
     onDownload(moduleName)
   }
 
-  const handleSelect = (event: MouseEvent<HTMLTableRowElement>) => {
+  const handleSelect = (event: ChangeEvent<HTMLInputElement> | MouseEvent<HTMLTableRowElement>) => {
     const moduleName = event.currentTarget.dataset['abr']
     onSelect(moduleName)
   }
