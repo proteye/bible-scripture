@@ -1,12 +1,10 @@
-import { MouseEvent, useMemo, useState } from 'react'
+import { MouseEvent, useMemo } from 'react'
 import { IModuleInfo } from '@common/types'
 import convertBytes from 'helpers/convertBytes'
 import convertRegistrySize from 'helpers/convertRegistrySize'
-import { IPreparedRegistryDownload, IRegistryModulesTableProps, TSelectedState } from './types'
+import { IPreparedRegistryDownload, IRegistryModulesTableProps } from './types'
 
-const useBase = ({ modules = [], downloadedModules, onDownload }: IRegistryModulesTableProps) => {
-  const [selected, setSelected] = useState<TSelectedState>({})
-
+const useBase = ({ modules = [], downloadedModules, onSelect, onDownload }: IRegistryModulesTableProps) => {
   const preparedModules: IPreparedRegistryDownload[] = useMemo(() => {
     if (!downloadedModules?.length) {
       return modules
@@ -32,10 +30,10 @@ const useBase = ({ modules = [], downloadedModules, onDownload }: IRegistryModul
 
   const handleSelect = (event: MouseEvent<HTMLTableRowElement>) => {
     const moduleName = event.currentTarget.dataset['abr']
-    setSelected((prevState) => ({ ...prevState, [moduleName]: !prevState[moduleName] }))
+    onSelect(moduleName)
   }
 
-  return { preparedModules, selected, handleDownload, handleSelect }
+  return { preparedModules, handleDownload, handleSelect }
 }
 
 export default useBase

@@ -5,12 +5,16 @@ import { IModulesDialogProps } from './types'
 import { prepareRegistryModules } from 'helpers/prepareRegistryModules'
 import { TLanguagesISO6392 } from 'types/common'
 import { getLanguagesISO6392 } from 'helpers/getLanguagesISO6392'
+import { TSelectedModules } from 'components/RegistryModulesTable/types'
 
 const useBase = ({ isVisible }: IModulesDialogProps) => {
   const [registry, setRegistry] = useState<IRegistry>({ version: 0, hosts: [], downloads: [] })
   const [filteredRegistry, setFilteredRegistry] = useState<IRegistry>(registry)
   const [downloadedModules, setDownloadedModules] = useState<TModulesList>([])
   const [languagesISO6392, setLanguagesISO6392] = useState<TLanguagesISO6392>({})
+  const [selectedModules, setSelectedModules] = useState<TSelectedModules>({})
+
+  const isModulesSelected = Object.values(selectedModules).some((val) => val)
 
   const modulesStructure = useMemo(
     () => prepareRegistryModules(filteredRegistry.downloads),
@@ -37,6 +41,10 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     const data: TLanguagesISO6392 = await getLanguagesISO6392()
     setLanguagesISO6392(data)
   }, [])
+
+  const handleSelectModule = (moduleName: string) => {
+    setSelectedModules((prevState) => ({ ...prevState, [moduleName]: !prevState[moduleName] }))
+  }
 
   const handleDownloadModule = useCallback(
     async (moduleName: string) => {
@@ -65,6 +73,12 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     [registry],
   )
 
+  const handleDownload = useCallback(() => {
+    Object.keys(selectedModules)
+      .filter((key) => selectedModules[key])
+      .forEach((moduleName) => downloadModule(moduleName))
+  }, [selectedModules, downloadModule])
+
   useEffect(() => {
     if (!registry.version && isVisible) {
       uploadLanguagesISO()
@@ -83,8 +97,12 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     modulesStructure,
     downloadedModules,
     languagesISO6392,
+    selectedModules,
+    isModulesSelected,
+    handleSelectModule,
     handleDownloadModule,
     handleFilterModules,
+    handleDownload,
   }
 }
 

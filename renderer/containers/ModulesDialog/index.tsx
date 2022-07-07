@@ -8,8 +8,17 @@ import useBase from './useBase'
 export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
   const { isVisible, onClose } = props
 
-  const { modulesStructure, downloadedModules, languagesISO6392, handleDownloadModule, handleFilterModules } =
-    useBase(props)
+  const {
+    modulesStructure,
+    downloadedModules,
+    languagesISO6392,
+    selectedModules,
+    isModulesSelected,
+    handleSelectModule,
+    handleDownloadModule,
+    handleFilterModules,
+    handleDownload,
+  } = useBase(props)
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
@@ -21,7 +30,9 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
           <RegistryModulesStructure
             modulesStructure={modulesStructure}
             downloadedModules={downloadedModules}
+            selectedModules={selectedModules}
             languagesISO6392={languagesISO6392}
+            onSelect={handleSelectModule}
             onDownload={handleDownloadModule}
           />
         </div>
@@ -29,13 +40,15 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
       <div className="bg-gray-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
         <button
           type="button"
-          className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 active:outline-none active:ring-2 active:ring-offset-2 active:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+          className="w-full inline-flex justify-center px-4 py-2 rounded border border-transparent shadow bg-blue-600 text-base font-medium text-white hover:bg-blue-700 active:shadow-sm active:bg-blue-800 active:disabled:bg-blue-400 active:disabled:shadow disabled:text-gray-50 disabled:bg-blue-400 sm:ml-3 sm:w-auto sm:text-sm"
+          disabled={!isModulesSelected}
+          onClick={handleDownload}
         >
           Download
         </button>
         <button
           type="button"
-          className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none active:ring-2 active:ring-offset-2 active:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          className="w-full inline-flex justify-center px-4 py-2 mt-3 rounded border border-gray-300 shadow bg-white text-base font-medium text-gray-700 hover:bg-gray-50 active:shadow-sm active:bg-gray-100 sm:mt-0 sm:w-auto sm:text-sm"
           onClick={onClose}
         >
           Cancel

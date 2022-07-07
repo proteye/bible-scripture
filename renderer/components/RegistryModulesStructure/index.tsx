@@ -5,7 +5,7 @@ import useBase from './useBase'
 import RegistryModulesTable from '../RegistryModulesTable'
 
 const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => {
-  const { modulesStructure, downloadedModules, className, style, qa, onDownload } = props
+  const { modulesStructure, downloadedModules, selectedModules, className, style, qa, onSelect, onDownload } = props
 
   const { preparedStructure, structureOpened, isEmpty, toggleModuleType, toggleModuleLang } = useBase(props)
 
@@ -49,7 +49,9 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                           <RegistryModulesTable
                             modules={modulesStructure[type][lang]}
                             downloadedModules={downloadedModules}
+                            selectedModules={selectedModules}
                             theadClassName="sticky top-12 z-10"
+                            onSelect={onSelect}
                             onDownload={onDownload}
                           />
                         )}
