@@ -14,12 +14,23 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
   const [languagesISO6392, setLanguagesISO6392] = useState<TLanguagesISO6392>({})
   const [selectedModules, setSelectedModules] = useState<TSelectedModules>({})
 
-  const isModulesSelected = Object.values(selectedModules).some((val) => val)
+  const selectedModulesNames = useMemo(
+    () => Object.keys(selectedModules).filter((key) => selectedModules[key]),
+    [selectedModules],
+  )
 
   const modulesStructure = useMemo(
     () => prepareRegistryModules(filteredRegistry.downloads),
     [filteredRegistry.downloads],
   )
+  const downloadedModulesMap = useMemo(
+    () => downloadedModules.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {}),
+    [downloadedModules],
+  )
+
+  const isModulesSelected = selectedModulesNames.length > 0
+  const isOnlyDeletableModules =
+    isModulesSelected && selectedModulesNames.every((moduleName) => downloadedModulesMap[moduleName])
 
   const getRegistry = useCallback(async () => {
     const registry = await ipcRenderer.invoke('getRegistry')
@@ -75,9 +86,9 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
 
   const handleDownload = useCallback(() => {
     Object.keys(selectedModules)
-      .filter((key) => selectedModules[key])
+      .filter((key) => selectedModules[key] && !downloadedModulesMap[key])
       .forEach((moduleName) => downloadModule(moduleName))
-  }, [selectedModules, downloadModule])
+  }, [selectedModules, downloadedModulesMap, downloadModule])
 
   useEffect(() => {
     if (!registry.version && isVisible) {
@@ -90,6 +101,7 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
   useEffect(() => {
     if (!isVisible) {
       setFilteredRegistry(registry)
+      setSelectedModules({})
     }
   }, [registry, isVisible])
 
@@ -99,6 +111,7 @@ const useBase = ({ isVisible }: IModulesDialogProps) => {
     languagesISO6392,
     selectedModules,
     isModulesSelected,
+    isOnlyDeletableModules,
     handleSelectModule,
     handleDownloadModule,
     handleFilterModules,

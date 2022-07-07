@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import noop from 'helpers/noop'
-import { DownloadIcon } from '@heroicons/react/outline'
+import { DownloadIcon, TrashIcon } from '@heroicons/react/outline'
 import { IRegistryModulesTableProps } from './types'
 import useBase from './useBase'
 
@@ -47,14 +47,22 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
               <td>{upd}</td>
               <td>{siz}</td>
               <td className="text-center">
-                <button
-                  className="p-1 rounded border border-gray-300 shadow-sm text-gray-600 bg-white hover:bg-gray-50 active:shadow-none active:bg-gray-100 active:disabled:bg-gray-100 active:disabled:shadow-sm disabled:text-gray-400 disabled:bg-gray-100"
-                  data-abr={abr}
-                  disabled={exists}
-                  onClick={handleDownload}
-                >
-                  <DownloadIcon className="w-6 h-6" />
-                </button>
+                {exists ? (
+                  <button
+                    className="p-1 rounded border border-transparent shadow-sm text-white bg-red-600 hover:bg-red-700 active:shadow-none active:bg-red-800 active:disabled:bg-gray-100 active:disabled:shadow-sm disabled:text-gray-400 disabled:bg-gray-100"
+                    data-abr={abr}
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </button>
+                ) : (
+                  <button
+                    className="p-1 rounded border border-gray-300 shadow-sm text-gray-600 bg-white hover:bg-gray-50 active:shadow-none active:bg-gray-100 active:disabled:bg-gray-100 active:disabled:shadow-sm disabled:text-gray-400 disabled:bg-gray-100"
+                    data-abr={abr}
+                    onClick={handleDownload}
+                  >
+                    <DownloadIcon className="w-5 h-5" />
+                  </button>
+                )}
               </td>
             </tr>
           ))}

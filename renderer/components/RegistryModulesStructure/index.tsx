@@ -19,7 +19,11 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
             languages.length > 0 ? (
               <li key={type} className="mb-2">
                 <div className="sticky top-0 bg-white z-30">
-                  <button className="flex items-center font-medium" data-type={type} onClick={toggleModuleType}>
+                  <button
+                    className="flex items-center w-full font-medium hover:bg-blue-100"
+                    data-type={type}
+                    onClick={toggleModuleType}
+                  >
                     <ChevronRightIcon
                       className={`w-4 h-4 mr-1 transition-transform ${structureOpened[type]?.isOpen && 'rotate-90'}`}
                     />
@@ -32,7 +36,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                       <li key={lang} className="mb-2 pl-4">
                         <div className="sticky top-6 bg-white z-20">
                           <button
-                            className="flex items-center font-normal text-gray-700"
+                            className="flex items-center w-full font-normal text-gray-700 hover:bg-gray-100"
                             data-type={type}
                             data-lang={lang}
                             onClick={toggleModuleLang}
