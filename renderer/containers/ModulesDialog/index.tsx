@@ -18,6 +18,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
     isModulesSelected,
     isOnlyDeletableModules,
     handleSelectModule,
+    handleSelectModules,
     handleDownloadModule,
     handleRemoveModule,
     handleFilterModules,
@@ -38,6 +39,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
             selectedModules={selectedModules}
             languagesISO6392={languagesISO6392}
             onSelect={handleSelectModule}
+            onSelectAll={handleSelectModules}
             onDownload={handleDownloadModule}
             onRemove={handleRemoveModule}
           />

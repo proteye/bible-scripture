@@ -5,9 +5,9 @@ import { IRegistryModulesTableProps } from './types'
 import useBase from './useBase'
 
 const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
-  const { selectedModules, theadClassName, className, style, qa } = props
+  const { type, lang, selectedModules, theadClassName, className, style, qa } = props
 
-  const { preparedModules, handleSelect, handleDownload, handleRemove } = useBase(props)
+  const { preparedModules, handleSelect, handleSelectAll, handleDownload, handleRemove } = useBase(props)
 
   if (!preparedModules.length) {
     return <div className="flex justify-center w-full text-gray-500">Nothing found</div>
@@ -18,7 +18,17 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
       <table className="table-fixed w-full rounded shadow">
         <thead className={theadClassName}>
           <tr>
-            <th className="w-12 bg-blue-300"></th>
+            <th className="w-12 text-center bg-blue-300">
+              <input
+                type="checkbox"
+                className="rounded shadow-sm text-blue-600 focus:ring-0 focus:ring-offset-0"
+                defaultChecked={false}
+                data-type={type}
+                data-lang={lang}
+                onChange={handleSelectAll}
+                readOnly
+              />
+            </th>
             <th className="w-12 bg-blue-300">#</th>
             <th className="px-4 bg-blue-300">Name</th>
             <th className="w-28 bg-blue-300">Last update</th>

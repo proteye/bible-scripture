@@ -6,6 +6,7 @@ import { prepareRegistryModules } from 'helpers/prepareRegistryModules'
 import { TLanguagesISO6392 } from 'types/common'
 import { getLanguagesISO6392 } from 'helpers/getLanguagesISO6392'
 import { TSelectedModules } from 'components/RegistryModulesTable/types'
+import { getModuleType } from 'helpers/getModuleType'
 
 const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
   const [registry, setRegistry] = useState<IRegistry>({ version: 0, hosts: [], downloads: [] })
@@ -73,6 +74,14 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
     setSelectedModules((prevState) => ({ ...prevState, [moduleName]: !prevState[moduleName] }))
   }
 
+  const handleSelectModules = (type: string, lang: string, isSelected: boolean) => {
+    const selectedModules = filteredRegistry.downloads
+      .filter(({ lng, fil }) => type === getModuleType(fil) && lang === lng)
+      .map(({ abr }) => abr)
+      .reduce((prev, curr) => ({ ...prev, [curr]: isSelected }), {})
+    setSelectedModules((prevState) => ({ ...prevState, ...selectedModules }))
+  }
+
   const handleDownloadModule = useCallback(
     async (moduleName: string) => {
       downloadModule(moduleName)
@@ -128,10 +137,12 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
   }, [selectedModules, isOnlyDeletableModules, removeModule, onCloseTabs])
 
   useEffect(() => {
-    if (!registry.version && isVisible) {
-      downloadLanguagesISO()
+    if (isVisible) {
+      if (!registry.version) {
+        downloadLanguagesISO()
+        getRegistry()
+      }
       getDownloadedModules()
-      getRegistry()
     }
   }, [registry, isVisible, getRegistry])
 
@@ -152,6 +163,7 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
     isModulesSelected,
     isOnlyDeletableModules,
     handleSelectModule,
+    handleSelectModules,
     handleDownloadModule,
     handleRemoveModule,
     handleFilterModules,
