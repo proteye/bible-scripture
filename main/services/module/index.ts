@@ -1,6 +1,16 @@
 import { statSync, readdirSync, unlinkSync } from 'fs'
 import { readdir } from 'fs/promises'
-import { TUid, TModuleName, TModulesList, TModuleType, IRegistryHost, TAny } from 'common/types'
+import {
+  TUid,
+  TModuleName,
+  TModulesList,
+  TModuleType,
+  IRegistryHost,
+  TAny,
+  IModuleInfo,
+  IDownloadProgress,
+  TDownloadProgressCallback,
+} from 'common/types'
 import { editOrCreateDb, openDb, closeDb } from '../../database'
 import { IModules } from './types'
 import moduleConfig from '../../config/moduleConfig'
@@ -102,8 +112,8 @@ const getDownloadUrls = (moduleName: TModuleName) => {
     .sort((a, b) => a.priority - b.priority)
 }
 
-const downloadModule = async (moduleName: TModuleName) =>
-  new Promise(async (resolve) => {
+const downloadModule = async (moduleName: TModuleName, onProgress?: TDownloadProgressCallback) =>
+  new Promise<IModuleInfo[] | null>(async (resolve) => {
     try {
       const downloadUrls = getDownloadUrls(moduleName)
 
@@ -120,7 +130,7 @@ const downloadModule = async (moduleName: TModuleName) =>
         const url = downloadUrls[index].path
         filename = decodeURIComponent(url.split('/').pop())
         dest = `${moduleConfig.path}/${filename}`
-        result = await download(downloadUrls[index].path, dest)
+        result = await download(downloadUrls[index].path, dest, onProgress)
         index += 1
       }
 

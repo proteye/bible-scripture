@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ipcRenderer } from 'electron'
-import { IRegistry, TModulesList } from '@common/types'
+import { IDownloadProgress, IModuleInfo, IRegistry, TModulesList } from '@common/types'
 import { IModulesDialogProps } from './types'
 import { prepareRegistryModules } from 'helpers/prepareRegistryModules'
 import { TLanguagesISO6392 } from 'types/common'
 import { getLanguagesISO6392 } from 'helpers/getLanguagesISO6392'
-import { TSelectedModules } from 'components/RegistryModulesTable/types'
+import { TDownloadingModules, TSelectedModules } from 'components/RegistryModulesTable/types'
 import { getModuleType } from 'helpers/getModuleType'
+import { getDownloadProgress } from 'helpers/getDownloadProgress'
 
 const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
   const [registry, setRegistry] = useState<IRegistry>({ version: 0, hosts: [], downloads: [] })
   const [filteredRegistry, setFilteredRegistry] = useState<IRegistry>(registry)
   const [downloadedModules, setDownloadedModules] = useState<TModulesList>([])
+  const [downloadingModules, setDownloadingModules] = useState<TDownloadingModules>({})
   const [languagesISO6392, setLanguagesISO6392] = useState<TLanguagesISO6392>({})
   const [selectedModules, setSelectedModules] = useState<TSelectedModules>({})
 
@@ -49,13 +51,39 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
     setDownloadedModules(modules)
   }, [])
 
-  const downloadModule = useCallback(
-    async (moduleName: string) => {
-      await ipcRenderer.invoke('downloadModule', moduleName)
-      getDownloadedModules()
-    },
-    [getDownloadedModules],
-  )
+  const downloadModule = async (
+    moduleName: string,
+    onProgress?: (moduleName: string, progress: IDownloadProgress) => void,
+  ) =>
+    new Promise<IModuleInfo[]>((resolve, reject) => {
+      ipcRenderer.send('downloadModule', moduleName)
+
+      const onDownloadProgress = (_event, downloadModuleName: string, progress: IDownloadProgress) => {
+        onProgress?.(downloadModuleName, progress)
+      }
+      const onDownloadEnd = (_event, downloadModuleName: string, downloadedModules: IModuleInfo[]) => {
+        if (downloadModuleName === moduleName) {
+          ipcRenderer.removeListener('downloadEnd', onDownloadEnd)
+          ipcRenderer.removeListener('downloadProgress', onDownloadProgress)
+          ipcRenderer.removeListener('downloadError', onDownloadError)
+          resolve(downloadedModules)
+        }
+      }
+      const onDownloadError = (_event, downloadModuleName, error) => {
+        if (downloadModuleName === moduleName) {
+          ipcRenderer.removeListener('downloadEnd', onDownloadEnd)
+          ipcRenderer.removeListener('downloadProgress', onDownloadProgress)
+          ipcRenderer.removeListener('downloadError', onDownloadError)
+          reject(error)
+        }
+      }
+
+      ipcRenderer.on('downloadProgress', onDownloadProgress)
+
+      ipcRenderer.on('downloadEnd', onDownloadEnd)
+
+      ipcRenderer.on('downloadError', onDownloadError)
+    })
 
   const removeModule = useCallback(
     async (moduleName: string) => {
@@ -70,6 +98,10 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
     setLanguagesISO6392(data)
   }, [getLanguagesISO6392])
 
+  const onDownloadProgress = (moduleName: string, progress: IDownloadProgress) => {
+    setDownloadingModules((prevState) => ({ ...prevState, [moduleName]: getDownloadProgress(progress) }))
+  }
+
   const handleSelectModule = (moduleName: string) => {
     setSelectedModules((prevState) => ({ ...prevState, [moduleName]: !prevState[moduleName] }))
   }
@@ -82,12 +114,17 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
     setSelectedModules((prevState) => ({ ...prevState, ...selectedModules }))
   }
 
-  const handleDownloadModule = useCallback(
-    async (moduleName: string) => {
-      downloadModule(moduleName)
-    },
-    [downloadModule],
-  )
+  const handleDownloadModule = useCallback(async (moduleName: string) => {
+    const downloadedModules = await downloadModule(moduleName, onDownloadProgress)
+      .catch((err) => {
+        console.error(err.message)
+        return []
+      })
+      .finally(() => {
+        setDownloadingModules((prevState) => ({ ...prevState, [moduleName]: null }))
+      })
+    setDownloadedModules((prevState) => [...prevState, ...downloadedModules])
+  }, [])
 
   const handleRemoveModule = useCallback(
     async (moduleName: string) => {
@@ -118,9 +155,9 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
   )
 
   const handleDownload = useCallback(() => {
-    selectedDownloadModules.forEach((moduleName) => downloadModule(moduleName))
+    selectedDownloadModules.forEach((moduleName) => handleDownloadModule(moduleName))
     setSelectedModules({})
-  }, [selectedDownloadModules, downloadModule])
+  }, [selectedDownloadModules, handleDownloadModule])
 
   const handleRemove = useCallback(() => {
     if (!isOnlyDeletableModules) {
@@ -149,6 +186,7 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
   useEffect(() => {
     if (!isVisible) {
       setFilteredRegistry(registry)
+      setDownloadingModules({})
       setSelectedModules({})
     }
   }, [registry, isVisible])
@@ -156,6 +194,7 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
   return {
     modulesStructure,
     downloadedModules,
+    downloadingModules,
     languagesISO6392,
     selectedModules,
     downloadCount: selectedDownloadModules.length,

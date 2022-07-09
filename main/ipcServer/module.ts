@@ -6,8 +6,17 @@ ipcMain.handle('getModules', async (_event) => {
   return module.getModules()
 })
 
-ipcMain.handle('downloadModule', async (_event, moduleName: TModuleName) => {
-  return module.downloadModule(moduleName)
+ipcMain.on('downloadModule', async (event, moduleName: TModuleName) => {
+  const sender = event.sender
+
+  await module
+    .downloadModule(moduleName, (progress) => sender.send('downloadProgress', moduleName, progress))
+    .then((data) => {
+      sender.send('downloadEnd', moduleName, data)
+    })
+    .catch(() => {
+      sender.send('downloadError', moduleName, { message: `Error module "${moduleName}" download` })
+    })
 })
 
 ipcMain.handle('openModule', async (_event, moduleName: TModuleName, uniqId: TId) => {

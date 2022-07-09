@@ -11,6 +11,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
   const {
     modulesStructure,
     downloadedModules,
+    downloadingModules,
     languagesISO6392,
     selectedModules,
     downloadCount,
@@ -36,6 +37,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
           <RegistryModulesStructure
             modulesStructure={modulesStructure}
             downloadedModules={downloadedModules}
+            downloadingModules={downloadingModules}
             selectedModules={selectedModules}
             languagesISO6392={languagesISO6392}
             onSelect={handleSelectModule}

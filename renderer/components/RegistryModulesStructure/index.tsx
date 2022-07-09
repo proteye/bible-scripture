@@ -8,6 +8,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
   const {
     modulesStructure,
     downloadedModules,
+    downloadingModules,
     selectedModules,
     className,
     style,
@@ -68,6 +69,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                             lang={lang}
                             modules={modulesStructure[type][lang]}
                             downloadedModules={downloadedModules}
+                            downloadingModules={downloadingModules}
                             selectedModules={selectedModules}
                             theadClassName="sticky top-12 z-10"
                             onSelect={onSelect}

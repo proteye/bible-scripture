@@ -5,7 +5,7 @@ import { IRegistryModulesTableProps } from './types'
 import useBase from './useBase'
 
 const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
-  const { type, lang, selectedModules, theadClassName, className, style, qa } = props
+  const { type, lang, downloadingModules, selectedModules, theadClassName, className, style, qa } = props
 
   const { preparedModules, handleSelect, handleSelectAll, handleDownload, handleRemove } = useBase(props)
 
@@ -33,7 +33,7 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
             <th className="px-4 bg-blue-300">Name</th>
             <th className="w-28 bg-blue-300">Last update</th>
             <th className="w-20 bg-blue-300">Size</th>
-            <th className="w-12 bg-blue-300"></th>
+            <th className="w-24 bg-blue-300"></th>
           </tr>
         </thead>
         <tbody>
@@ -44,7 +44,7 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
                 exists ? 'bg-yellow-100' : 'even:bg-gray-50'
               } group border-t border-dashed first:border-none hover:bg-blue-100 cursor-default`}
               data-abr={abr}
-              onClick={handleSelect}
+              onClick={downloadingModules[abr] > 0 ? undefined : handleSelect}
             >
               <td className="group-last:rounded-bl">
                 <div className="flex justify-center">
@@ -72,6 +72,10 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
                   >
                     <TrashIcon className="w-5 h-5" />
                   </button>
+                ) : downloadingModules[abr] > 0 ? (
+                  <span className="text-xs font-medium">
+                    {downloadingModules[abr] < 100 ? `${downloadingModules[abr]}%` : 'Unpacking...'}
+                  </span>
                 ) : (
                   <button
                     className="p-1 rounded border border-gray-300 shadow-sm text-gray-600 bg-white hover:bg-gray-50 active:shadow-none active:bg-gray-100 active:disabled:bg-gray-100 active:disabled:shadow-sm disabled:text-gray-400 disabled:bg-gray-100"
@@ -94,6 +98,7 @@ RegistryModulesTable.defaultProps = {
   className: '',
   theadClassName: '',
   downloadedModules: [],
+  downloadingModules: {},
   selectedModules: {},
   onSelect: noop,
   onDownload: noop,

@@ -1,4 +1,4 @@
-import { IRegistryDownload, TModulesList } from '@common/types'
+import { IDownloadProgress, IRegistryDownload, TModulesList } from '@common/types'
 import { IComponentDefaultProps } from 'components/types'
 
 export interface IRegistryModulesTableProps extends IComponentDefaultProps {
@@ -6,6 +6,7 @@ export interface IRegistryModulesTableProps extends IComponentDefaultProps {
   lang: string
   modules: IRegistryDownload[]
   downloadedModules?: TModulesList
+  downloadingModules?: TDownloadingModules
   selectedModules?: TSelectedModules
   theadClassName?: string
   onSelect?(moduleName: string): void
@@ -21,4 +22,8 @@ export interface IPreparedRegistryDownload extends IRegistryDownload {
 
 export type TSelectedModules = {
   [moduleName: string]: boolean
+}
+
+export type TDownloadingModules = {
+  [moduleName: string]: number | null
 }

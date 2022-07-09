@@ -14,6 +14,15 @@ export interface IModuleInfo {
   size: number
 }
 
+export interface IDownloadProgress {
+  /** Total size in bytes */
+  total: number
+  /** Downloaded size in bytes */
+  downloaded: number
+}
+
+export type TDownloadProgressCallback = (progress: IDownloadProgress) => void
+
 export type TModuleType =
   | 'bible'
   | 'dictionary'
