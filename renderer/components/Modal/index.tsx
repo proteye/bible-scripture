@@ -4,7 +4,7 @@ import noop from 'helpers/noop'
 import Portal from '../Portal'
 import { IModalProps } from './types'
 
-const Modal: FC<IModalProps> = ({ children, isVisible, onClose }) => {
+const Modal: FC<IModalProps> = ({ isVisible, title, children, onClose }) => {
   if (!isVisible) {
     return null
   }
@@ -17,6 +17,11 @@ const Modal: FC<IModalProps> = ({ children, isVisible, onClose }) => {
           <div className="fixed inset-0" onClick={onClose}></div>
           <div className="flex items-end sm:items-center justify-center min-h-full p-4 sm:p-0 text-center">
             <div className="relative w-full sm:my-8 sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
+              {title && (
+                <div className="flex items-center justify-center h-8 bg-slate-100">
+                  <h1 className="text-md font-bold">{title}</h1>
+                </div>
+              )}
               {children}
             </div>
           </div>

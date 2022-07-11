@@ -28,8 +28,8 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
   } = useBase(props)
 
   return (
-    <Modal isVisible={isVisible} onClose={onClose}>
-      <div className="bg-white px-4 py-4 sm:p-6 sm:pb-4">
+    <Modal title="Modules" isVisible={isVisible} onClose={onClose}>
+      <div className="bg-white px-4 py-4 sm:px-6 sm:py-4">
         <div className="flex flex-shrink-0 w-full h-12 py-2 px-3 rounded bg-blue-300">
           <InputSearch placeholder="Filter modules..." onChange={handleFilterModules} />
         </div>
@@ -55,7 +55,7 @@ export const ModulesDialog: FC<IModulesDialogProps> = (props) => {
             disabled={!isModulesSelected}
             onClick={handleRemove}
           >
-            Delete selected {removeCount > 0 ? `(${removeCount})` : ''}
+            Delete {removeCount > 0 ? `(${removeCount})` : ''}
           </button>
         ) : (
           <button
