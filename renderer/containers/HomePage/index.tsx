@@ -54,6 +54,7 @@ export const HomePage: NextPage = () => {
                 <BibleView
                   key={`${index}-${value}`}
                   moduleName={value}
+                  isGetDictionaryTopic={isShowInstant}
                   onGetDictionaryTopic={handleGetDictionaryTopic}
                 />
               </Tab>
