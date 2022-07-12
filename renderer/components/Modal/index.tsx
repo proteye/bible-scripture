@@ -21,8 +21,11 @@ const Modal: FC<IModalProps> = ({ isVisible, title, isShowClose, isClickableBack
               <header className="relative flex items-center justify-center h-8 bg-slate-200">
                 {title && <span className="text-md font-bold">{title}</span>}
                 {isShowClose && (
-                  <button className="group absolute right-2 rounded hover:shadow active:shadow-sm" onClick={onClose}>
-                    <XIcon className="w-5 h-5 text-gray-600 group-hover:text-gray-700" />
+                  <button
+                    className="group absolute right-2 rounded hover:bg-red-300 hover:shadow active:shadow-sm"
+                    onClick={onClose}
+                  >
+                    <XIcon className="w-5 h-5 text-gray-500 group-hover:text-gray-700" />
                   </button>
                 )}
               </header>

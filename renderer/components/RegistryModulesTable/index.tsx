@@ -41,7 +41,7 @@ const RegistryModulesTable: FC<IRegistryModulesTableProps> = (props) => {
             <tr
               key={abr}
               className={`${
-                exists ? 'bg-yellow-100' : 'even:bg-gray-50'
+                exists ? 'bg-yellow-100' : 'even:bg-gray-100'
               } group border-t border-dashed first:border-none hover:bg-blue-100 cursor-default`}
               data-abr={abr}
               onClick={downloadingModules[abr] > 0 ? undefined : handleSelect}

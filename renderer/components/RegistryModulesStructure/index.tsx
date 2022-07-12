@@ -19,7 +19,8 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
     onRemove,
   } = props
 
-  const { preparedStructure, structureOpened, isEmpty, toggleModuleType, toggleModuleLang } = useBase(props)
+  const { preparedStructure, structureOpened, modulesCounts, isEmpty, toggleModuleType, toggleModuleLang } =
+    useBase(props)
 
   return (
     <div className={`flex w-full h-96 overflow-y-scroll ${className}`} style={style} data-qa={qa}>
@@ -40,6 +41,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                       className={`w-4 h-4 mr-1 transition-transform ${structureOpened[type]?.isOpen && 'rotate-90'}`}
                     />
                     <span>{label}</span>
+                    <span className="ml-1 text-xs text-gray-400">({modulesCounts[type] ?? 0})</span>
                   </button>
                 </div>
                 {structureOpened[type]?.isOpen && (
@@ -61,6 +63,7 @@ const RegistryModulesStructure: FC<IRegistryModulesStructureProps> = (props) => 
                               }`}
                             />
                             <span>{labelLang}</span>
+                            <span className="ml-1 text-xs text-gray-400">({modulesStructure[type][lang]?.length})</span>
                           </button>
                         </div>
                         {structureOpened[type]?.languages?.[lang]?.isOpen && (

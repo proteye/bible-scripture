@@ -13,6 +13,24 @@ const useBase = ({ modulesStructure, languagesISO6392 }: IRegistryModulesStructu
 
   const isEmpty = useMemo(() => preparedStructure.every(({ languages }) => !languages.length), [preparedStructure])
 
+  const modulesCounts = useMemo(() => {
+    if (isEmpty) {
+      return {}
+    }
+
+    const counts = {}
+
+    Object.keys(modulesStructure).forEach((type) => {
+      const count = Object.keys(modulesStructure[type]).reduce(
+        (prev, curr) => prev + (modulesStructure[type][curr]?.length ?? 0),
+        0,
+      )
+      counts[type] = count
+    })
+
+    return counts
+  }, [isEmpty, modulesStructure])
+
   const toggleModuleType = (event: MouseEvent<HTMLButtonElement>) => {
     const moduleType = event.currentTarget.dataset['type']
 
@@ -45,7 +63,7 @@ const useBase = ({ modulesStructure, languagesISO6392 }: IRegistryModulesStructu
     setPreparedStructure(defaultPreparedStructure)
   }, [defaultPreparedStructure])
 
-  return { preparedStructure, structureOpened, isEmpty, toggleModuleType, toggleModuleLang }
+  return { preparedStructure, structureOpened, modulesCounts, isEmpty, toggleModuleType, toggleModuleLang }
 }
 
 export default useBase
