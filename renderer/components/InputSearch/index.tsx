@@ -23,9 +23,9 @@ const InputSearch: FC<IInputSearchProps> = ({ className, style, qa, ...props }) 
 }
 
 InputSearch.defaultProps = {
-  qa: 'InputSearch',
   initialValue: '',
   placeholder: 'Enter a verse reference',
+  className: '',
   onChange: noop,
   onSubmit: noop,
 }

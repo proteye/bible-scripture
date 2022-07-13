@@ -1,4 +1,5 @@
 export * from './module'
+export * from './registry'
 export * from './bible'
 export * from './dictionary'
 
@@ -9,7 +10,10 @@ export type TId = string
 export type TUid = string
 
 export type TChannelName =
+  | 'getRegistry'
+  | 'getModules'
   | 'openModule'
+  | 'downloadModule'
   | 'closeModuleByUid'
   | 'closeModule'
   | 'openBible'

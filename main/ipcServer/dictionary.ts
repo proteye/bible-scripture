@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron'
 import { TId, TModuleName } from 'common/types'
-import { IGetDictionaryTopicProps, IGetMorphologyIndicationProps } from '../models/dictionary/types'
-import { dictionary } from '../models'
+import { IGetDictionaryTopicProps, IGetMorphologyIndicationProps } from '../services/dictionary/types'
+import { dictionary } from '../services'
 
 ipcMain.handle('openDictionary', async (_event, moduleName: TModuleName, uid: TId) => {
   return await dictionary.openDictionary(moduleName, uid)

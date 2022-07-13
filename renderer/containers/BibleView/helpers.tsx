@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEvent } from 'react'
 import { IBibleVerse, IBibleInfo, TAny } from '@common/types'
 import { IBiblePreapredVerse } from './types'
 import { MAKKEF, morphologyRegexp, NT_BEGIN_BOOK_NUMBER, PIPE, strongRegexp } from './constants'
@@ -13,17 +13,23 @@ export const prepareVerseText = ({
   text,
   bookNumber,
   strongNumbersPrefix,
+  isHover,
   onMouseEnter,
 }: {
   text: string
   bookNumber: number
   strongNumbersPrefix?: string
-  onMouseEnter?: (e: TAny) => void
+  isHover?: boolean
+  onMouseEnter?: (e: MouseEvent<HTMLSpanElement>) => void
 }) => {
-  const spaceClearedText = text.replace(/(<[Sfim]>)\s*(.+?)\s*([Sfim]>)/gi, '$1$2$3')
+  const spaceClearedText = text.replace(/<n>.+?n>/gi, '').replace(/\s+(<[SJfim]>)\s*(.+?)\s*([SJfim]>)/gi, '$1$2$3')
   const preparedMakkefText = spaceClearedText.split(MAKKEF).join(` ${MAKKEF} `)
   const splittedText = preparedMakkefText.split(' ')
-  const preparedSplittedText = splittedText.reduce((prev, curr, idx) => curr === MAKKEF || splittedText[idx + 1] === MAKKEF ? prev.concat(curr) : prev.concat(curr, ' '), [])
+  const preparedSplittedText = splittedText.reduce(
+    (prev, curr, idx) =>
+      curr === MAKKEF || splittedText[idx + 1] === MAKKEF ? prev.concat(curr) : prev.concat(curr, ' '),
+    [],
+  )
 
   return preparedSplittedText.map((word, index) => {
     // Strong
@@ -36,6 +42,7 @@ export const prepareVerseText = ({
 
     const preparedWord = word
       .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
+      .replace(/<\/?J>/gi, '')
       .replace(/<pb\/>/gi, '')
       .replace(/<\/?t>/gi, '"')
 
@@ -44,13 +51,13 @@ export const prepareVerseText = ({
     }
 
     if (preparedWord === MAKKEF || preparedWord === PIPE) {
-      return <span>{preparedWord}</span>
+      return <span key={`${index}-${preparedWord}`}>{preparedWord}</span>
     }
 
     return (
       <span
         key={`${index}-${preparedWord}`}
-        className="hover:bg-blue-200 selection:hover:bg-blue-200"
+        className={isHover ? 'hover:bg-blue-200 selection:hover:bg-blue-200' : ''}
         data-strong={strongNumber ? `${strongPrefix}${strongNumber}` : null}
         data-morphology={morphologyIndication}
         onMouseEnter={onMouseEnter}
@@ -64,6 +71,7 @@ export const prepareVerseText = ({
 export const prepareVerses = (
   verses: IBibleVerse[],
   strongNumbersPrefix: string,
+  isHover: boolean,
   onMouseEnter: (e: TAny) => void,
 ): IBiblePreapredVerse[] =>
   verses?.map((verse: IBibleVerse) => ({
@@ -72,6 +80,7 @@ export const prepareVerses = (
       text: verse.text,
       bookNumber: verse.bookNumber,
       strongNumbersPrefix,
+      isHover,
       onMouseEnter,
     }),
   }))

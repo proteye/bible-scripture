@@ -5,8 +5,8 @@ import { IBibleViewProps } from './types'
 
 import useBase from './useBase'
 
-export const BibleView: FC<IBibleViewProps> = ({ moduleName, onGetDictionaryTopic }) => {
-  const { verses, language, verseClass, handleSearchSubmit } = useBase({ moduleName, onGetDictionaryTopic })
+export const BibleView: FC<IBibleViewProps> = (props) => {
+  const { verses, language, verseClass, handleSearchSubmit } = useBase(props)
 
   if (!language) {
     return null
@@ -14,17 +14,17 @@ export const BibleView: FC<IBibleViewProps> = ({ moduleName, onGetDictionaryTopi
 
   return (
     <div className="absolute inset-0 flex flex-col">
-      <div className="flex flex-shrink-0 w-full h-10 py-2 px-3 bg-blue-300">
+      <div className="flex flex-shrink-0 w-full h-12 py-2 px-3 bg-blue-300">
         <InputSearch placeholder="Иоан 3:16" onSubmit={handleSearchSubmit} />
       </div>
-      <Scrollable className={`p-4 text-lg select-text bg-gray-50 selection:bg-gray-300`}>
+      <Scrollable className={`p-4 text-lg select-text text-gray-800 bg-white selection:bg-gray-300`}>
         <ContentByLang lang={language}>
           {verses.map(({ verse, preparedText }) => (
             <div key={verse}>
               <span className={verseClass}>
                 {verse}
-                {language !== 'iw' ? '.' : ''}
-              </span>{' '}
+                {language !== 'iw' ? '. ' : ' '}
+              </span>
               {preparedText}
             </div>
           ))}

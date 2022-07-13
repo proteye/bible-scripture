@@ -2,7 +2,7 @@ import { app } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 import { closeAllDb } from './database'
-import { module } from './models'
+import { module, registry } from './services'
 import './ipcServer'
 
 const isProd: boolean = process.env.NODE_ENV === 'production'
@@ -22,6 +22,7 @@ if (isProd) {
   })
 
   await module.syncModules()
+  await registry.syncRegistry()
 
   if (isProd) {
     await mainWindow.loadURL('app://./home.html')

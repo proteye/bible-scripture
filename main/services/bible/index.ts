@@ -60,7 +60,17 @@ const getBibleBooks = (uid: TUid) => {
     bible.all(
       'SELECT book_number AS bookNumber, short_name AS shortName, long_name AS longName, book_color AS bookColor, is_present AS isPresent FROM books_all WHERE is_present=1',
       (_: any, books: IBibleBook[]) => {
-        resolve(books || [])
+        if (!books) {
+          bible.all(
+            'SELECT book_number AS bookNumber, short_name AS shortName, long_name AS longName, book_color AS bookColor FROM books',
+            (_: any, books: IBibleBook[]) => {
+              resolve(books ?? [])
+            },
+          )
+          return
+        }
+
+        resolve(books)
       },
     )
   })
