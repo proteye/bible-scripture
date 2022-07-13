@@ -3,6 +3,7 @@ import { ipcRenderer } from 'electron'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import { IDownloadProgress, IModuleInfo, IRegistry, TModulesList } from '@common/types'
 import { IModulesDialogProps } from './types'
+import modulesConfig from 'config/modules'
 import { prepareRegistryModules } from 'helpers/prepareRegistryModules'
 import { TLanguagesISO6392 } from 'types/common'
 import { getLanguagesISO6392 } from 'helpers/getLanguagesISO6392'
@@ -43,6 +44,12 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
 
   const getRegistry = useCallback(async () => {
     const registry = await ipcRenderer.invoke('getRegistry')
+
+    // Hide hidden modules
+    if (!modulesConfig.isShowHidden) {
+      registry.downloads = registry.downloads.filter(({ hid }) => !hid)
+    }
+
     setRegistry(registry)
     setFilteredRegistry(registry)
   }, [])

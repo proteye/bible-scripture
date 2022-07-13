@@ -7,4 +7,4 @@ dist
 .DS_Store
 resources/modules
 resources/registry
-renderer/.env*
+renderer/.env*.local
