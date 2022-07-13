@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, MouseEvent } from 'react'
 import { ipcRenderer } from 'electron'
 import { nanoid } from 'nanoid'
 import { IBibleInfo, IBibleBook } from '@common/types'
@@ -7,7 +7,7 @@ import { getBookNumberByName } from 'helpers/getBookNumber'
 import { verseRegexp } from './constants'
 import { getStrongNumbersPrefix, prepareVerses } from './helpers'
 
-const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
+const useBase = ({ moduleName, isGetDictionaryTopic, onGetDictionaryTopic }: IBibleViewProps) => {
   const [info, setInfo] = useState<IBibleInfo[]>([])
   const [books, setBooks] = useState<IBibleBook[]>([])
   const [verses, setVerses] = useState<IBiblePreapredVerse[]>([])
@@ -32,7 +32,11 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
   }, [language])
 
   const handleVerseMouseEnter = useCallback(
-    (e) => {
+    (e: MouseEvent<HTMLSpanElement>) => {
+      if (!isGetDictionaryTopic) {
+        return
+      }
+
       const strong = e.currentTarget.dataset['strong']
       const morphology = e.currentTarget.dataset['morphology']
 
@@ -40,7 +44,7 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
         onGetDictionaryTopic?.(strong, morphology)
       }
     },
-    [onGetDictionaryTopic],
+    [isGetDictionaryTopic, onGetDictionaryTopic],
   )
 
   const handleSearchSubmit = useCallback(
@@ -59,10 +63,10 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
           bookNumber,
           chapter,
         })
-        setVerses(prepareVerses(verses, getStrongNumbersPrefix(info), handleVerseMouseEnter))
+        setVerses(prepareVerses(verses, getStrongNumbersPrefix(info), isGetDictionaryTopic, handleVerseMouseEnter))
       }
     },
-    [books, handleVerseMouseEnter],
+    [isGetDictionaryTopic, handleVerseMouseEnter],
   )
 
   const getBible = useCallback(async () => {
@@ -73,14 +77,17 @@ const useBase = ({ moduleName, onGetDictionaryTopic }: IBibleViewProps) => {
     await ipcRenderer.invoke('openBible', moduleName, uid)
     const info = await ipcRenderer.invoke('getBibleInfo', uid)
     const books = await ipcRenderer.invoke('getBibleBooks', uid)
+    if (!books?.length) {
+      return
+    }
     const verses = await ipcRenderer.invoke('getBibleVerses', uid, {
       bookNumber: books[0].bookNumber,
       chapter: 1,
     })
     setInfo(info)
     setBooks(books)
-    setVerses(prepareVerses(verses, getStrongNumbersPrefix(info), handleVerseMouseEnter))
-  }, [handleVerseMouseEnter])
+    setVerses(prepareVerses(verses, getStrongNumbersPrefix(info), isGetDictionaryTopic, handleVerseMouseEnter))
+  }, [isGetDictionaryTopic, handleVerseMouseEnter])
 
   useEffect(() => {
     getBible()

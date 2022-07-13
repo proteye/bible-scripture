@@ -20,6 +20,7 @@ const Scrollable: FC<IScrollableProps> = forwardRef<TAny, IScrollableProps>(
 
 Scrollable.defaultProps = {
   dimensions: { width: null, height: null },
+  className: '',
   qa: 'Scrollable',
 }
 

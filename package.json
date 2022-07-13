@@ -2,7 +2,7 @@
   "private": true,
   "name": "bible-scripture",
   "description": "Bible Scripture is the Bible study application",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "Ramil Zaynetdinov <ramil.zv@gmail.com>",
   "main": "app/background.js",
   "scripts": {
@@ -13,16 +13,22 @@
   "dependencies": {
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
-    "sqlite3": "^5.0.8"
+    "node-fetch": "^2.6.7",
+    "sqlite3": "^5.0.8",
+    "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "@heroicons/react": "^1.0.6",
     "@tailwindcss/forms": "^0.5.2",
     "@types/nanoid": "^3.0.0",
     "@types/node": "^17.0.39",
+    "@types/node-fetch": "^2.6.2",
     "@types/react": "^18.0.11",
+    "@types/react-dom": "^18.0.5",
     "@types/sqlite3": "^3.1.8",
+    "@types/unzipper": "^0.10.5",
     "autoprefixer": "^10.4.7",
+    "beautiful-react-hooks": "^3.7.0",
     "electron": "^19.0.3",
     "electron-builder": "^23.1.0",
     "next": "^12.1.6",

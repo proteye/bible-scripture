@@ -1,9 +1,22 @@
 import { ipcMain } from 'electron'
 import { TId, TModuleName } from 'common/types'
-import { module } from '../models'
+import { module } from '../services'
 
 ipcMain.handle('getModules', async (_event) => {
   return module.getModules()
+})
+
+ipcMain.on('downloadModule', async (event, moduleName: TModuleName) => {
+  const sender = event.sender
+
+  await module
+    .downloadModule(moduleName, (progress) => sender.send('downloadProgress', moduleName, progress))
+    .then((data) => {
+      sender.send('downloadEnd', moduleName, data)
+    })
+    .catch(() => {
+      sender.send('downloadError', moduleName, { message: `Error module "${moduleName}" download` })
+    })
 })
 
 ipcMain.handle('openModule', async (_event, moduleName: TModuleName, uniqId: TId) => {
@@ -16,4 +29,8 @@ ipcMain.handle('closeModuleByUid', async (_event, moduleName: TModuleName, uniqI
 
 ipcMain.handle('closeModule', async (_event, moduleName: TModuleName) => {
   return module.closeModule(moduleName)
+})
+
+ipcMain.handle('removeModule', async (_event, moduleName: TModuleName) => {
+  return module.removeModule(moduleName)
 })

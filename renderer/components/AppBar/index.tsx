@@ -7,4 +7,8 @@ const AppBar: FC<IAppBarProps> = ({ className, children }) => (
   </div>
 )
 
+AppBar.defaultProps = {
+  className: '',
+}
+
 export default AppBar
