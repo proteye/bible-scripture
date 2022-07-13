@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ipcRenderer } from 'electron'
+import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import { IDownloadProgress, IModuleInfo, IRegistry, TModulesList } from '@common/types'
 import { IModulesDialogProps } from './types'
 import { prepareRegistryModules } from 'helpers/prepareRegistryModules'
@@ -134,25 +135,22 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
     [removeModule, onCloseTabs],
   )
 
-  const handleFilterModules = useCallback(
-    async (value: string) => {
-      const filterValue = value.trim().toLowerCase()
-      setFilteredRegistry({
-        ...registry,
-        downloads: registry.downloads.filter(
-          ({ abr, lng, aln, reg, des, lds, inf }) =>
-            abr.toLowerCase().includes(filterValue) ||
-            lng?.toLowerCase().includes(filterValue) ||
-            aln?.toLowerCase().includes(filterValue) ||
-            reg?.toLowerCase().includes(filterValue) ||
-            des.toLowerCase().includes(filterValue) ||
-            inf?.toLowerCase().includes(filterValue) ||
-            lds?.some(({ des: ldsDes }) => ldsDes.toLowerCase().includes(filterValue)),
-        ),
-      })
-    },
-    [registry],
-  )
+  const handleFilterModules = useDebouncedCallback((value: string) => {
+    const filterValue = value.trim().toLowerCase()
+    setFilteredRegistry({
+      ...registry,
+      downloads: registry.downloads.filter(
+        ({ abr, lng, aln, reg, des, lds, inf }) =>
+          abr.toLowerCase().includes(filterValue) ||
+          lng?.toLowerCase().includes(filterValue) ||
+          aln?.toLowerCase().includes(filterValue) ||
+          reg?.toLowerCase().includes(filterValue) ||
+          des.toLowerCase().includes(filterValue) ||
+          inf?.toLowerCase().includes(filterValue) ||
+          lds?.some(({ des: ldsDes }) => ldsDes.toLowerCase().includes(filterValue)),
+      ),
+    })
+  })
 
   const handleDownload = useCallback(() => {
     selectedDownloadModules.forEach((moduleName) => handleDownloadModule(moduleName))
