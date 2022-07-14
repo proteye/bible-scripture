@@ -8,7 +8,6 @@ import {
   IRegistryHost,
   TAny,
   IModuleInfo,
-  IDownloadProgress,
   TDownloadProgressCallback,
 } from 'common/types'
 import { editOrCreateDb, openDb, closeDb } from '../../database'
@@ -18,7 +17,7 @@ import registry from '../registry'
 import { download, unzip } from '../../helpers'
 import { TDownloadResult } from '../../types'
 
-const MODULES_DB = 'modules'
+const MODULES_DB = moduleConfig.internalDb.modules
 const modules: IModules = {}
 
 const getModules = (): Promise<TModulesList> => {
@@ -51,7 +50,12 @@ const syncModules = async (): Promise<TModulesList> => {
     const files = await readdir(moduleConfig.path)
 
     const modules = files
-      .filter((file) => file.includes(moduleConfig.extension) && !file.includes(MODULES_DB))
+      .filter(
+        (file) =>
+          file.includes(moduleConfig.extension) &&
+          !file.includes(MODULES_DB) &&
+          !file.includes(moduleConfig.internalDb.dictionariesLookup),
+      )
       .map((file) => {
         const splittedFile = file.split('.')
         const id = splittedFile[0]
