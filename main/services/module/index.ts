@@ -16,8 +16,11 @@ import moduleConfig from '../../config/moduleConfig'
 import registry from '../registry'
 import { download, unzip } from '../../helpers'
 import { TDownloadResult } from '../../types'
+import dbQueries from '../../constants/dbQueries'
+import databases from '../../constants/databases'
+import suffixes from '../../constants/suffixes'
 
-const MODULES_DB = moduleConfig.internalDb.modules
+const MODULES_DB = databases.modules
 const modules: IModules = {}
 
 const getModules = (): Promise<TModulesList> => {
@@ -25,11 +28,11 @@ const getModules = (): Promise<TModulesList> => {
 
   return new Promise((resolve) => {
     db.all(
-      'SELECT id, type, short_name AS shortName, long_name AS longName, description, filename, size FROM modules',
+      'SELECT name, type, lang, description, filename, last_modified AS lastModified, size FROM modules',
       (err: any, modules: TModulesList) => {
         if (err) {
           db.all(
-            'SELECT id, type, short_name AS shortName, long_name AS longName, description, filename, size FROM modules',
+            'SELECT name, type, lang, description, filename, last_modified AS lastModified, size FROM modules',
             (_err: any, modules: TModulesList) => {
               resolve(modules || [])
             },
@@ -54,21 +57,21 @@ const syncModules = async (): Promise<TModulesList> => {
         (file) =>
           file.includes(moduleConfig.extension) &&
           !file.includes(MODULES_DB) &&
-          !file.includes(moduleConfig.internalDb.dictionariesLookup),
+          !file.includes(databases.dictionariesLookup),
       )
       .map((file) => {
         const splittedFile = file.split('.')
-        const id = splittedFile[0]
+        const name = splittedFile[0]
         const type = splittedFile.length > 2 ? (splittedFile[1] as TModuleType) : 'bible'
         const fileStats = statSync(`${moduleConfig.path}/${file}`)
 
         return {
-          id,
+          name,
           type,
-          shortName: id,
-          longName: '',
+          lang: '',
           description: '',
           filename: file,
+          lastModified: fileStats.mtime,
           size: fileStats.size,
         }
       })
@@ -76,14 +79,10 @@ const syncModules = async (): Promise<TModulesList> => {
     const db = editOrCreateDb(MODULES_DB)
 
     db.serialize(() => {
-      db.run(
-        'CREATE TABLE IF NOT EXISTS modules (id TEXT, type TEXT, short_name TEXT, long_name TEXT, description TEXT, filename TEXT, size INTEGER, created_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL, PRIMARY KEY (id, type))',
-      )
-      const stmt = db.prepare(
-        'INSERT OR REPLACE INTO modules(id, type, short_name, long_name, description, filename, size) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      )
-      modules.forEach(({ id, type, shortName, longName, description, filename, size }) => {
-        stmt.run(id, type, shortName, longName, description, filename, size)
+      db.run(dbQueries.modules.modules.create)
+      const stmt = db.prepare(dbQueries.modules.modules.insert)
+      modules.forEach(({ name, type, lang, description, filename, lastModified, size }) => {
+        stmt.run(name, type, lang, description, filename, lastModified, size)
       })
       stmt.finalize()
     })
@@ -153,34 +152,77 @@ const downloadModule = async (moduleName: TModuleName, onProgress?: TDownloadPro
         .filter((file) => file.includes(moduleConfig.extension))
         .map((filename) => {
           const splittedFile = filename.split('.')
-          const id = splittedFile[0]
+          const name = splittedFile[0]
           const type = splittedFile.length > 2 ? (splittedFile[1] as TModuleType) : 'bible'
           const fileStats = statSync(`${moduleConfig.path}/${filename}`)
 
           return {
-            id,
+            name,
             type,
-            shortName: id,
-            longName: '',
+            lang: '',
             description: '',
             filename,
+            lastModified: fileStats.mtime,
             size: fileStats.size,
           }
         })
+      const dictionaries = modules
+        .filter(({ type }) => type === 'dictionary')
+        .map(({ name, lang, lastModified }) => ({
+          name,
+          type: '',
+          lang,
+          matchingType: 1,
+          dictionaryRows: 0,
+          wordsRows: 0,
+          lastModified,
+          isChanged: false,
+          isIndexedSuccessfully: false,
+        }))
 
       const db = editOrCreateDb(MODULES_DB)
-
       db.serialize(() => {
-        const stmt = db.prepare(
-          'INSERT OR REPLACE INTO modules(id, type, short_name, long_name, description, filename, size) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        )
-        modules.forEach(({ id, type, shortName, longName, description, filename, size }) => {
-          stmt.run(id, type, shortName, longName, description, filename, size)
+        const stmt = db.prepare(dbQueries.modules.modules.insert)
+        modules.forEach(({ name, type, lang, description, filename, lastModified, size }) => {
+          stmt.run(name, type, lang, description, filename, lastModified, size)
         })
         stmt.finalize()
       })
-
       closeDb(MODULES_DB)
+
+      if (dictionaries.length > 0) {
+        const db = editOrCreateDb(databases.dictionariesLookup)
+        db.serialize(() => {
+          const stmt = db.prepare(dbQueries.dictionariesLookup.dictionaries.insert)
+          dictionaries.forEach(
+            ({
+              name,
+              type,
+              lang,
+              matchingType,
+              dictionaryRows,
+              wordsRows,
+              lastModified,
+              isChanged,
+              isIndexedSuccessfully,
+            }) => {
+              stmt.run(
+                name,
+                type,
+                lang,
+                matchingType,
+                dictionaryRows,
+                wordsRows,
+                lastModified,
+                isChanged,
+                isIndexedSuccessfully,
+              )
+            },
+          )
+          stmt.finalize()
+        })
+        closeDb(databases.dictionariesLookup)
+      }
 
       return resolve(modules)
     } catch (err) {
@@ -231,18 +273,34 @@ const removeModule = async (moduleName: TModuleName) =>
     try {
       closeModule(moduleName)
 
-      readdirSync(moduleConfig.path)
-        .filter((file) => file.startsWith(`${moduleName}.`))
-        .map((file) => unlinkSync(`${moduleConfig.path}/${file}`))
+      const files = readdirSync(moduleConfig.path).filter((file) => file.startsWith(`${moduleName}.`))
+      const dictionaries = files.filter((file) => file.includes(suffixes.dictionary))
+
+      files.map((file) => unlinkSync(`${moduleConfig.path}/${file}`))
 
       const db = editOrCreateDb(MODULES_DB)
-      db.run('DELETE FROM modules WHERE id=?', [moduleName], (err: TAny) => {
+      db.run('DELETE FROM modules WHERE name=?', [moduleName], (err: TAny) => {
         if (err) {
           throw err
         }
 
-        resolve(true)
+        if (!dictionaries.length) {
+          resolve(true)
+        }
       })
+      closeDb(MODULES_DB)
+
+      if (dictionaries.length > 0) {
+        const db = editOrCreateDb(databases.dictionariesLookup)
+        db.run('DELETE FROM dictionaries WHERE name=?', [moduleName], (err: TAny) => {
+          if (err) {
+            throw err
+          }
+
+          resolve(true)
+        })
+        closeDb(databases.dictionariesLookup)
+      }
     } catch (err) {
       console.error(err)
       reject(err.message)

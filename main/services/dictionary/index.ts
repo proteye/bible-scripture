@@ -10,15 +10,17 @@ import { IDictionaryByName, IDictionaryByUid, IGetDictionaryTopicProps, IGetMorp
 import { editOrCreateDb, closeDb } from '../../database'
 import { module } from '../index'
 import moduleConfig from '../../config/moduleConfig'
+import dbQueries from '../../constants/dbQueries'
+import databases from '../../constants/databases'
+import suffixes from '../../constants/suffixes'
 
-const DICT_LOOKUP_DB = moduleConfig.internalDb.dictionariesLookup
-const dictionarySuffix = '.dictionary'
+const DICT_LOOKUP_DB = databases.dictionariesLookup
 
 const dictionaryByUid: IDictionaryByUid = {}
 const dictionaryByName: IDictionaryByName = {}
 
 const openDictionary = (moduleName: TModuleName, uid: TUid) => {
-  const _moduleName = moduleName + dictionarySuffix
+  const _moduleName = moduleName + suffixes.dictionary
   dictionaryByUid[uid] = _moduleName
 
   if (!dictionaryByName[_moduleName]) {
@@ -108,7 +110,7 @@ const syncDictionaries = async (): Promise<void> => {
     const files = readdirSync(moduleConfig.path)
 
     const dictionaries = files
-      .filter((file) => file.includes(moduleConfig.extension) && file.includes(dictionarySuffix))
+      .filter((file) => file.includes(moduleConfig.extension) && file.includes(suffixes.dictionary))
       .map((file) => {
         const splittedFile = file.split('.')
         const name = splittedFile[0]
@@ -117,8 +119,8 @@ const syncDictionaries = async (): Promise<void> => {
         return {
           name,
           type: '',
-          language: '',
-          matchingType: '',
+          lang: '',
+          matchingType: 1,
           dictionaryRows: 0,
           wordsRows: 0,
           lastModified: fileStats.mtime,
@@ -130,18 +132,13 @@ const syncDictionaries = async (): Promise<void> => {
     const db = editOrCreateDb(DICT_LOOKUP_DB)
 
     db.serialize(() => {
-      db.run(
-        'CREATE TABLE IF NOT EXISTS dictionaries (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, type TEXT NOT NULL, language TEXT NOT NULL, matching_type INTEGER NOT NULL, dictionary_rows INTEGER NOT NULL, words_rows INTEGER NOT NULL, last_modified TIMESTAMP NOT NULL, is_changed INTEGER NOT NULL, is_indexed_successfully INTEGER NOT NULL, created_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL, updated_at TIMESTAMP default CURRENT_TIMESTAMP NOT NULL)',
-      )
-
-      const stmt = db.prepare(
-        'INSERT OR REPLACE INTO dictionaries(name, type, language, matching_type, dictionary_rows, words_rows, last_modified, is_changed, is_indexed_successfully) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      )
+      db.run(dbQueries.dictionariesLookup.dictionaries.create)
+      const stmt = db.prepare(dbQueries.dictionariesLookup.dictionaries.insert)
       dictionaries.forEach(
         ({
           name,
           type,
-          language,
+          lang,
           matchingType,
           dictionaryRows,
           wordsRows,
@@ -152,7 +149,7 @@ const syncDictionaries = async (): Promise<void> => {
           stmt.run(
             name,
             type,
-            language,
+            lang,
             matchingType,
             dictionaryRows,
             wordsRows,

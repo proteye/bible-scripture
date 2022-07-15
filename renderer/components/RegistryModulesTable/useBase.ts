@@ -18,7 +18,7 @@ const useBase = ({
     }
 
     const downloadedModulesMap = downloadedModules.reduce(
-      (prev, curr) => ({ ...prev, [curr.id]: curr }),
+      (prev, curr) => ({ ...prev, [curr.name]: curr }),
       {} as IModuleInfo,
     )
 

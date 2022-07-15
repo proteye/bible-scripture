@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "main:typecheck": "cd main && tsc --noEmit",
+    "renderer:typecheck": "cd renderer && tsc --noEmit"
   },
   "dependencies": {
     "electron-serve": "^1.1.0",

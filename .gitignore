@@ -5,6 +5,7 @@ app
 dist
 .vscode
 .DS_Store
+*.tsbuildinfo
 resources/modules
 resources/registry
 renderer/.env*.local

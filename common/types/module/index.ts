@@ -1,16 +1,14 @@
-export type TModuleId = string
-
 export type TModuleName = string
 
 export type TModulesList = IModuleInfo[]
 
 export interface IModuleInfo {
-  id: TModuleId
-  shortName: string
-  longName: string
+  name: TModuleName
   type: TModuleType
+  lang: string
   description: string
   filename: string
+  lastModified: Date
   size: number
 }
 

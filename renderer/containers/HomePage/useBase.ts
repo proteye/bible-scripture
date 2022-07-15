@@ -40,7 +40,7 @@ const useBase = () => {
 
   const uid = useMemo(() => nanoid(), [])
 
-  const contextMenuItems = useMemo(() => bibles.map(({ id, shortName }) => ({ title: shortName, value: id })), [bibles])
+  const contextMenuItems = useMemo(() => bibles.map(({ name }) => ({ title: name, value: name })), [bibles])
 
   const handleChangeTab = useCallback(
     (index: number) => {

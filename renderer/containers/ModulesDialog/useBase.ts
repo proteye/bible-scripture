@@ -24,7 +24,7 @@ const useBase = ({ isVisible, onCloseTabs }: IModulesDialogProps) => {
     [filteredRegistry.downloads],
   )
   const downloadedModulesMap = useMemo(
-    () => downloadedModules.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {}),
+    () => downloadedModules.reduce((prev, curr) => ({ ...prev, [curr.name]: curr }), {}),
     [downloadedModules],
   )
 
