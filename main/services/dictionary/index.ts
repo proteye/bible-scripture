@@ -124,8 +124,8 @@ const syncDictionaries = async (): Promise<void> => {
           dictionaryRows: 0,
           wordsRows: 0,
           lastModified: fileStats.mtime,
-          isChanged: false,
-          isIndexedSuccessfully: false,
+          isChanged: 1,
+          isIndexedSuccessfully: 0,
         }
       })
 

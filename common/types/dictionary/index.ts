@@ -3,6 +3,68 @@ export interface IDictionaryInfo {
   value: string
 }
 
+export interface IDictionaryLookupDictionaries {
+  id: number
+  name: string
+  type: string
+  lang: string
+  matchingType: number
+  dictionaryRows: number
+  wordsRows: number
+  lastModified: Date
+  isChanged: 0 | 1
+  isIndexedSuccessfully: 0 | 1
+}
+
+export interface IDictionaryLookupReferences {
+  topic: string
+  bookNumber: number
+  chapterNumber: number
+  verseNumber: number
+  dictionaryId: number
+}
+
+export interface IDictionaryLookupTopics {
+  topic: string
+  topicNf2: string
+  topicHash: number
+  dictionaryId: number
+}
+
+export interface IDictionaryLookupWords {
+  wordNf1: string
+  wordNf2: string
+  topicHash1: number
+  topicHash2: number
+  topicHash3: number
+  bookNumber: number
+  chapterNumber: number
+  verseNumber: number
+  sourceDictionaryId: number
+  targetDictionaryId: number
+}
+
+export interface IDictionaryViewTopicsByTopic {
+  id: number
+  topic: string
+  topicNf2: string
+  language: string
+  dictionaryName: string
+  dictionaryType: string
+}
+
+export interface IDictionaryViewTopicsByWord {
+  wordNf: string
+  topic: string
+  language: string
+  dictionaryName: string
+  dictionaryType: string
+  dictionaryMatchingType: number
+  bookNumber: number
+  chapterNumber: number
+  verseNumber: number
+}
+
 export interface IDictionaryDictionary {
   topic: string
   definition: string
@@ -10,12 +72,6 @@ export interface IDictionaryDictionary {
   lexeme: string
   transliteration: string
   pronunciation: string
-}
-
-export interface IDictionaryLookupWords {
-  topic: string
-  topicNf2: string
-  topicHash: number
 }
 
 export interface IDictionaryMorphologyIndications {
@@ -34,10 +90,7 @@ export interface IDictionaryCognateStrongNumbers {
   strongNumber: string
 }
 
-export interface IDictionarySynonymousStrongNumbers {
-  groupId: number
-  strongNumber: string
-}
+export interface IDictionarySynonymousStrongNumbers extends IDictionaryCognateStrongNumbers {}
 
 export interface IDictionaryWords {
   variation: string
@@ -47,26 +100,8 @@ export interface IDictionaryWords {
   verseNumber: number
 }
 
-export interface IDictionaryLookupWords {
-  word_nf1: string
-  word_nf2: string
-  topic_hash1: number
-  topic_hash2: number
-  topic_hash3: number
-  bookNumber: number
-  chapterNumber: number
-  verseNumber: number
-}
-
 export interface IDictionaryWordsProcessing {
   type: string
   input: string
   output: string
-}
-
-export interface IDictionaryLookupReferences {
-  topic: string
-  bookNumber: number
-  chapterNumber: number
-  verseNumber: number
 }

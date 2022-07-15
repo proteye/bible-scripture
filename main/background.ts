@@ -21,9 +21,9 @@ if (isProd) {
     height: 600,
   })
 
+  await registry.syncRegistry()
   await module.syncModules()
   await dictionary.syncDictionaries()
-  await registry.syncRegistry()
 
   if (isProd) {
     await mainWindow.loadURL('app://./home.html')
