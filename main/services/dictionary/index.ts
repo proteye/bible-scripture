@@ -4,7 +4,7 @@ import {
   IDictionaryInfo,
   TUid,
   TModuleName,
-  IDictionaryMorphologyIndications,
+  IDictionaryMorphologyIndication,
 } from 'common/types'
 import { IDictionaryByName, IDictionaryByUid, IGetDictionaryTopicProps, IGetMorphologyIndicationProps } from './types'
 import { editOrCreateDb, closeDb } from '../../database'
@@ -98,7 +98,7 @@ const getMorphologyIndication = (uid: TUid, { indication }: IGetMorphologyIndica
     dictionary.all(
       'SELECT indication, applicable_to AS applicableTo, meaning FROM morphology_indications WHERE indication IN (?,?,?)',
       indicationValue,
-      (_: any, item: IDictionaryMorphologyIndications[]) => {
+      (_: any, item: IDictionaryMorphologyIndication[]) => {
         resolve(item ? item.reverse() : [])
       },
     )

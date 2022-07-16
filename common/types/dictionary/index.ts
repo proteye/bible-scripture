@@ -3,10 +3,56 @@ export interface IDictionaryInfo {
   value: string
 }
 
-export interface IDictionaryLookupDictionaries {
+export interface IDictionaryDictionary {
+  topic: string
+  definition: string
+  shortDefinition: string
+  lexeme: string
+  transliteration: string
+  pronunciation: string
+}
+
+export interface IDictionaryWord {
+  variation: string
+  standardForm: string
+  bookNumber: number
+  chapterNumber: number
+  verseNumber: number
+}
+
+export interface IDictionaryMorphologyIndication {
+  indication: string
+  applicableTo: string
+  meaning: string
+}
+
+export interface IDictionaryMorphologyTopic {
+  indication: string
+  topic: string
+}
+
+export interface IDictionaryCognateStrongNumber {
+  groupId: number
+  strongNumber: string
+}
+
+export interface IDictionarySynonymousStrongNumber extends IDictionaryCognateStrongNumber {}
+
+export interface IDictionaryWordsProcessing {
+  type: 'pre' | 'post'
+  input: string
+  output: string
+}
+
+export type TDictionaryType = 'explanatory' | 'concordance' | 'language' | 'lexicon' | 'strong lexicon' | 'translator'
+
+/**
+ * Lookup tables
+ */
+export interface IDictionaryLookupDictionary {
   id: number
   name: string
-  type: string
+  type: TDictionaryType
   lang: string
   matchingType: number
   dictionaryRows: number
@@ -16,22 +62,14 @@ export interface IDictionaryLookupDictionaries {
   isIndexedSuccessfully: 0 | 1
 }
 
-export interface IDictionaryLookupReferences {
-  topic: string
-  bookNumber: number
-  chapterNumber: number
-  verseNumber: number
-  dictionaryId: number
-}
-
-export interface IDictionaryLookupTopics {
+export interface IDictionaryLookupTopic {
   topic: string
   topicNf2: string
   topicHash: number
   dictionaryId: number
 }
 
-export interface IDictionaryLookupWords {
+export interface IDictionaryLookupWord {
   wordNf1: string
   wordNf2: string
   topicHash1: number
@@ -44,13 +82,21 @@ export interface IDictionaryLookupWords {
   targetDictionaryId: number
 }
 
+export interface IDictionaryLookupReference {
+  topic: string
+  bookNumber: number
+  chapterNumber: number
+  verseNumber: number
+  dictionaryId: number
+}
+
 export interface IDictionaryViewTopicsByTopic {
   id: number
   topic: string
   topicNf2: string
   language: string
   dictionaryName: string
-  dictionaryType: string
+  dictionaryType: TDictionaryType
 }
 
 export interface IDictionaryViewTopicsByWord {
@@ -58,50 +104,9 @@ export interface IDictionaryViewTopicsByWord {
   topic: string
   language: string
   dictionaryName: string
-  dictionaryType: string
+  dictionaryType: TDictionaryType
   dictionaryMatchingType: number
   bookNumber: number
   chapterNumber: number
   verseNumber: number
-}
-
-export interface IDictionaryDictionary {
-  topic: string
-  definition: string
-  shortDefinition: string
-  lexeme: string
-  transliteration: string
-  pronunciation: string
-}
-
-export interface IDictionaryMorphologyIndications {
-  indication: string
-  applicableTo: string
-  meaning: string
-}
-
-export interface IDictionaryMorphologyTopics {
-  indication: string
-  topic: string
-}
-
-export interface IDictionaryCognateStrongNumbers {
-  groupId: number
-  strongNumber: string
-}
-
-export interface IDictionarySynonymousStrongNumbers extends IDictionaryCognateStrongNumbers {}
-
-export interface IDictionaryWords {
-  variation: string
-  standardForm: string
-  bookNumber: number
-  chapterNumber: number
-  verseNumber: number
-}
-
-export interface IDictionaryWordsProcessing {
-  type: string
-  input: string
-  output: string
 }

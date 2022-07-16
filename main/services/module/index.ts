@@ -176,8 +176,8 @@ const downloadModule = async (moduleName: TModuleName, onProgress?: TDownloadPro
           dictionaryRows: 0,
           wordsRows: 0,
           lastModified,
-          isChanged: false,
-          isIndexedSuccessfully: false,
+          isChanged: 1,
+          isIndexedSuccessfully: 0,
         }))
 
       const db = editOrCreateDb(MODULES_DB)
