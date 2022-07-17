@@ -118,7 +118,7 @@ const createMainMenu = (webContents: WebContents) => {
   Menu.setApplicationMenu(menu)
 
   ipcMain.on('isShowInstantDetails', (_e, isShow) => {
-    ;(template[4].submenu[0] as MenuItem).checked = isShow
+    ;(template[4].submenu[0] as unknown as MenuItem).checked = isShow
     const menu = Menu.buildFromTemplate(template as unknown as MenuItem[])
     Menu.setApplicationMenu(menu)
   })
