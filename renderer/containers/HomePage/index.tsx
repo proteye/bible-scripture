@@ -9,6 +9,7 @@ import { BibleView } from 'containers/BibleView'
 import { InstantView } from 'containers/InstantView'
 import useBase from './useBase'
 import { ModulesDialog } from 'containers/ModulesDialog'
+import { DictionarySettingsDialog } from 'containers/DictionarySettingsDialog'
 
 export const HomePage: NextPage = () => {
   const {
@@ -18,6 +19,7 @@ export const HomePage: NextPage = () => {
     instantHtmlText,
     isShowInstant,
     isShowModules,
+    isShowDictionarySettings,
     handleChangeTab,
     handleAddTab,
     handleCloseTab,
@@ -25,6 +27,7 @@ export const HomePage: NextPage = () => {
     closeTabsByModuleName,
     toggleShowInstant,
     toggleShowModules,
+    toggleShowDictionarySettings,
   } = useBase()
 
   return (
@@ -63,6 +66,7 @@ export const HomePage: NextPage = () => {
         {isShowInstant && <InstantView htmlText={instantHtmlText} />}
       </div>
       <ModulesDialog isVisible={isShowModules} onCloseTabs={closeTabsByModuleName} onClose={toggleShowModules} />
+      <DictionarySettingsDialog isVisible={isShowDictionarySettings} onClose={toggleShowDictionarySettings} />
     </div>
   )
 }

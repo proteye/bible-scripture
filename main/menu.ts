@@ -20,6 +20,18 @@ const getTemplate = (webContents: WebContents) => [
               label: 'Download modules...',
               click: (menuItem: MenuItem) => handleClick(menuItem, webContents),
             },
+            {
+              id: 'dictionarySettings',
+              label: 'Dictionary settings...',
+              click: (menuItem: MenuItem) => handleClick(menuItem, webContents),
+            },
+            { type: 'separator' },
+            {
+              id: 'preferences',
+              label: 'Preferences...',
+              accelerator: 'CmdOrCtrl+,',
+              click: (menuItem: MenuItem) => handleClick(menuItem, webContents),
+            },
             { type: 'separator' },
             { role: 'services' },
             { type: 'separator' },

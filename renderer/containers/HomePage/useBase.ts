@@ -18,6 +18,7 @@ const useBase = () => {
   const [morphology, setMorphology] = useState<IDictionaryMorphologyIndication[]>([])
   const [isShowInstant, toggleShowInstant] = useVisibleSwitch(true)
   const [isShowModules, toggleShowModules] = useVisibleSwitch(false)
+  const [isShowDictionarySettings, toggleShowDictionarySettings] = useVisibleSwitch(false)
 
   const morphologyMeaningHtml = useMemo(() => {
     const meanings = morphology.map(({ meaning }) => meaning)
@@ -139,6 +140,11 @@ const useBase = () => {
         case 'downloadModules':
           toggleShowModules()
           break
+        case 'dictionarySettings':
+          toggleShowDictionarySettings()
+          break
+        case 'preferences':
+          break
         case 'instantDetails':
           toggleShowInstant()
           break
@@ -159,6 +165,7 @@ const useBase = () => {
     instantHtmlText,
     isShowInstant,
     isShowModules,
+    isShowDictionarySettings,
     handleChangeTab,
     handleAddTab,
     handleCloseTab,
@@ -166,6 +173,7 @@ const useBase = () => {
     closeTabsByModuleName,
     toggleShowInstant,
     toggleShowModules,
+    toggleShowDictionarySettings,
   }
 }
 
