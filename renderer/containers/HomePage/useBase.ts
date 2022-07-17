@@ -3,7 +3,7 @@ import useDimensions from 'hooks/useDimensions'
 import { getNumberFromString } from 'helpers/getNumberFromString'
 import { ITabProps } from 'components/Tab/types'
 import { ipcRenderer } from 'electron'
-import { IDictionaryDictionary, IDictionaryMorphologyIndications, TModulesList } from '@common/types'
+import { IDictionaryDictionary, IDictionaryMorphologyIndication, TModulesList } from '@common/types'
 import { nanoid } from 'nanoid'
 import useTabs from 'hooks/useTabs'
 import { defaultTheme } from 'constants/theme'
@@ -15,7 +15,7 @@ const useBase = () => {
   const [bibles, setBibles] = useState<TModulesList>([])
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
-  const [morphology, setMorphology] = useState<IDictionaryMorphologyIndications[]>([])
+  const [morphology, setMorphology] = useState<IDictionaryMorphologyIndication[]>([])
   const [isShowInstant, toggleShowInstant] = useVisibleSwitch(true)
   const [isShowModules, toggleShowModules] = useVisibleSwitch(false)
 
@@ -132,6 +132,23 @@ const useBase = () => {
       getModules()
     }
   }, [isShowModules, getModules])
+
+  useEffect(() => {
+    ipcRenderer.on('main-menu-command', (_e, menuItemId) => {
+      switch (menuItemId) {
+        case 'downloadModules':
+          toggleShowModules()
+          break
+        case 'instantDetails':
+          toggleShowInstant()
+          break
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    ipcRenderer.send('isShowInstantDetails', isShowInstant)
+  }, [isShowInstant])
 
   return {
     tabs,

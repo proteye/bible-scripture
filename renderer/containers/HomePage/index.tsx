@@ -34,16 +34,12 @@ export const HomePage: NextPage = () => {
       </Head>
       <AppBar className="items-center justify-center">
         <button
-          className="flex items-center justify-center w-10 h-10 mx-2 rounded shadow-md bg-gradient-to-b from-white to-gray-100 active:shadow-sm"
+          className={`flex items-center justify-center w-10 h-10 mx-2 rounded ${
+            isShowInstant ? 'shadow-sm bg-yellow-100' : 'shadow-md bg-gradient-to-b from-white to-gray-100'
+          } active:shadow-sm`}
           onClick={toggleShowInstant}
         >
-          <LightningBoltIcon className="w-6 h-6 text-gray-700" />
-        </button>
-        <button
-          className="flex items-center justify-center w-10 h-10 mx-2 rounded shadow-md bg-gradient-to-b from-white to-gray-100 active:shadow-sm"
-          onClick={toggleShowModules}
-        >
-          <CollectionIcon className="w-6 h-6 text-gray-700" />
+          <LightningBoltIcon className={`w-6 h-6 ${isShowInstant ? 'text-gray-900' : 'text-gray-700'}`} />
         </button>
       </AppBar>
       <div className="absolute inset-0 flex flex-col mt-16">

@@ -1,6 +1,7 @@
 import { app } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
+import createMainMenu from './menu'
 import { closeAllDb } from './database'
 import { dictionary, module, registry } from './services'
 import './ipcServer'
@@ -20,6 +21,8 @@ if (isProd) {
     width: 1000,
     height: 600,
   })
+
+  createMainMenu(mainWindow.webContents)
 
   await registry.syncRegistry()
   await module.syncModules()
