@@ -33,7 +33,60 @@ export const DictionarySettingsDialog: FC<IDictionarySettingsDialogProps> = (pro
         </div>
       }
     >
-      <div className="bg-white">Dictionary settings...</div>
+      <div className="p-4 sm:px-6 bg-white">
+        <ul className="flex flex-col space-y-6 sm:space-y-4">
+          <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
+            <div className="sm:col-span-2 font-medium">Hebrew dictionary:</div>
+            <div className="sm:col-span-3">
+              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <option disabled selected hidden>
+                  Select dictionary...
+                </option>
+                <option>Halot</option>
+                <option>BDAG3</option>
+              </select>
+            </div>
+          </li>
+          <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
+            <div className="sm:col-span-2 font-medium">Greek dictionary:</div>
+            <div className="sm:col-span-3">
+              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <option disabled selected hidden>
+                  Select dictionary...
+                </option>
+                <option>Halot</option>
+                <option>BDAG3</option>
+              </select>
+            </div>
+          </li>
+          <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
+            <div className="sm:col-span-2 font-medium">Dictionary by Strong:</div>
+            <div className="sm:col-span-3">
+              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <option disabled selected hidden>
+                  Select dictionary...
+                </option>
+                <option>Журом</option>
+                <option>Стронг</option>
+              </select>
+            </div>
+          </li>
+          <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
+            <div className="sm:col-span-2 font-medium">Instant Details dictionary:</div>
+            <div className="sm:col-span-3">
+              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <option disabled selected hidden>
+                  Select dictionary...
+                </option>
+                <option>Журом</option>
+                <option>Стронг</option>
+                <option>Halot</option>
+                <option>BDAG3</option>
+              </select>
+            </div>
+          </li>
+        </ul>
+      </div>
     </Modal>
   )
 }

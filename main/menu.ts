@@ -16,13 +16,13 @@ const getTemplate = (webContents: WebContents) => [
             { role: 'about' },
             { type: 'separator' },
             {
-              id: 'downloadModules',
-              label: 'Download modules...',
+              id: 'dictionarySettings',
+              label: 'Dictionary settings...',
               click: (menuItem: MenuItem) => handleClick(menuItem, webContents),
             },
             {
-              id: 'dictionarySettings',
-              label: 'Dictionary settings...',
+              id: 'downloadModules',
+              label: 'Download modules...',
               click: (menuItem: MenuItem) => handleClick(menuItem, webContents),
             },
             { type: 'separator' },
