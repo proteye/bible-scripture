@@ -168,10 +168,11 @@ const downloadModule = async (moduleName: TModuleName, onProgress?: TDownloadPro
         })
       const dictionaries = modules
         .filter(({ type }) => type === 'dictionary')
-        .map(({ name, lang, lastModified }) => ({
+        .map(({ name, lang, description, lastModified }) => ({
           name,
           type: '',
           lang,
+          description,
           matchingType: 1,
           dictionaryRows: 0,
           wordsRows: 0,
@@ -199,6 +200,7 @@ const downloadModule = async (moduleName: TModuleName, onProgress?: TDownloadPro
               name,
               type,
               lang,
+              description,
               matchingType,
               dictionaryRows,
               wordsRows,
@@ -210,6 +212,7 @@ const downloadModule = async (moduleName: TModuleName, onProgress?: TDownloadPro
                 name,
                 type,
                 lang,
+                description,
                 matchingType,
                 dictionaryRows,
                 wordsRows,

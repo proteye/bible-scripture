@@ -54,6 +54,7 @@ export interface IDictionaryLookupDictionary {
   name: string
   type: TDictionaryType
   lang: string
+  description: string
   matchingType: number
   dictionaryRows: number
   wordsRows: number
