@@ -22,3 +22,7 @@ ipcMain.handle('getDictionaryByTopic', async (_event, uid: TId, props: IGetDicti
 ipcMain.handle('getMorphologyIndication', async (_event, uid: TId, props: IGetMorphologyIndicationProps) => {
   return await dictionary.getMorphologyIndication(uid, props)
 })
+
+ipcMain.handle('getLookupDictionaries', async () => {
+  return await dictionary.getLookupDictionaries()
+})

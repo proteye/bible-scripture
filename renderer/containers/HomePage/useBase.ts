@@ -89,6 +89,11 @@ const useBase = () => {
     setBibles(bibles)
   }, [])
 
+  const getDictionaries = useCallback(async () => {
+    const dictionaries = await ipcRenderer.invoke('getLookupDictionaries')
+    console.log('dictionaries', dictionaries)
+  }, [])
+
   const openDictionary = useCallback(async () => {
     await ipcRenderer.invoke('openDictionary', dictionaryModuleName, uid)
   }, [uid])
@@ -112,12 +117,13 @@ const useBase = () => {
 
   useEffect(() => {
     getModules()
+    getDictionaries()
     openDictionary()
 
     return () => {
       ipcRenderer.invoke('closeDictionaryByUid', uid)
     }
-  }, [getModules, openDictionary])
+  }, [getModules, getDictionaries, openDictionary])
 
   // Clear Instant when closed
   useEffect(() => {
@@ -134,6 +140,11 @@ const useBase = () => {
     }
   }, [isShowModules, getModules])
 
+  useEffect(() => {
+    if (!isShowModules) {
+      getModules()
+    }
+  }, [isShowModules, getModules])
   useEffect(() => {
     ipcRenderer.on('main-menu-command', (_e, menuItemId) => {
       switch (menuItemId) {

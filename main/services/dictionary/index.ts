@@ -5,6 +5,7 @@ import {
   TUid,
   TModuleName,
   IDictionaryMorphologyIndication,
+  IDictionaryLookupDictionary,
 } from 'common/types'
 import { IDictionaryByName, IDictionaryByUid, IGetDictionaryTopicProps, IGetMorphologyIndicationProps } from './types'
 import { editOrCreateDb, closeDb } from '../../database'
@@ -15,6 +16,7 @@ import databases from '../../constants/databases'
 import suffixes from '../../constants/suffixes'
 
 const DICT_LOOKUP_DB = databases.dictionariesLookup
+const DICT_LOOKUP_ID = 'lookup'
 
 const dictionaryByUid: IDictionaryByUid = {}
 const dictionaryByName: IDictionaryByName = {}
@@ -54,6 +56,14 @@ const closeDictionaryByUid = (uid: TUid) => {
   module.closeModuleByUid(moduleName, uid)
 
   return module.closeModuleByUid(moduleName, uid)
+}
+
+const openLookupDictionary = () => {
+  return module.openModule(DICT_LOOKUP_DB, DICT_LOOKUP_ID)
+}
+
+const closeLookupDictionary = () => {
+  return module.closeModule(DICT_LOOKUP_DB)
 }
 
 const getDictionaryInfo = (uid: TUid) => {
@@ -102,6 +112,16 @@ const getMorphologyIndication = (uid: TUid, { indication }: IGetMorphologyIndica
         resolve(item ? item.reverse() : [])
       },
     )
+  })
+}
+
+const getLookupDictionaries = () => {
+  return new Promise((resolve) => {
+    const lookupDictionary = openLookupDictionary()
+
+    lookupDictionary.all('SELECT id, name, type, lang, description, matching_type, dictionary_rows, words_rows, last_modified, is_changed, is_indexed_successfully FROM dictionaries', (_: any, result: IDictionaryLookupDictionary[]) => {
+      resolve(result || [])
+    })
   })
 }
 
@@ -174,8 +194,11 @@ const syncDictionaries = async (): Promise<void> => {
 export default {
   openDictionary,
   closeDictionaryByUid,
+  openLookupDictionary,
+  closeLookupDictionary,
   getDictionaryInfo,
   getDictionaryByTopic,
   getMorphologyIndication,
+  getLookupDictionaries,
   syncDictionaries,
 }
