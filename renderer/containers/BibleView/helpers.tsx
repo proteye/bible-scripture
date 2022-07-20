@@ -22,7 +22,10 @@ export const prepareVerseText = ({
   isHover?: boolean
   onMouseEnter?: (e: MouseEvent<HTMLSpanElement>) => void
 }) => {
-  const spaceClearedText = text.replace(/<n>.+?n>/gi, '').replace(/\s+(<[SJfim]>)\s*(.+?)\s*([SJfim]>)/gi, '$1$2$3')
+  const spaceClearedText = text
+    .replace(/<n>.+?n>/gi, '')
+    .replace(/\s+(<[SJefimt]>)\s*(.+?)\s*([SJefimt]>)/gi, '$1$2$3')
+    .replace(/([:,\.]<S>.+?S>)\s*/gi, '$1 ')
   const preparedMakkefText = spaceClearedText.split(MAKKEF).join(` ${MAKKEF} `)
   const splittedText = preparedMakkefText.split(' ')
   const preparedSplittedText = splittedText.reduce(
@@ -30,6 +33,10 @@ export const prepareVerseText = ({
       curr === MAKKEF || splittedText[idx + 1] === MAKKEF ? prev.concat(curr) : prev.concat(curr, ' '),
     [],
   )
+  let isJesus = false
+  let isJesusEnd = false
+  let isEmphasized = false
+  let isEmphasizedEnd = false
 
   return preparedSplittedText.map((word, index) => {
     // Strong
@@ -39,12 +46,21 @@ export const prepareVerseText = ({
     // Morphology
     const morphologyMatches = word.match(morphologyRegexp)
     const morphologyIndication = morphologyMatches?.length > 1 ? morphologyMatches[1] : null
+    // Jesus said?
+    isJesus = isJesus || word.includes('<J>')
+    isJesusEnd = word.includes('</J>')
+    // Is emphasized?
+    isEmphasized = isEmphasized || word.includes('<e>')
+    isEmphasizedEnd = word.includes('</e>')
 
     const preparedWord = word
-      .replace(/<[Sfim]>.+?[Sfim]>/gi, '')
+      .replace(/<[Smfhn]>.+?[Smfhn]>/gi, '')
       .replace(/<\/?J>/gi, '')
-      .replace(/<pb\/>/gi, '')
+      .replace(/<\/?e>/gi, '')
+      .replace(/<\/?i>/gi, '')
       .replace(/<\/?t>/gi, '"')
+      .replace(/<pb\/>/gi, '')
+      .replace(/<br\/>/gi, '')
 
     if (preparedWord === ' ') {
       return ' '
@@ -54,10 +70,28 @@ export const prepareVerseText = ({
       return <span key={`${index}-${preparedWord}`}>{preparedWord}</span>
     }
 
+    let className = `${isJesus ? 'text-red-700' : ''}${isEmphasized && !isJesus ? ' text-black' : ''}${
+      isEmphasized ? ' font-bold' : ''
+    }`
+
+    if (isHover) {
+      className += ' hover:bg-blue-200 selection:hover:bg-blue-200'
+    }
+
+    if (isJesusEnd) {
+      isJesus = false
+      isJesusEnd = false
+    }
+
+    if (isEmphasizedEnd) {
+      isEmphasized = false
+      isEmphasizedEnd = false
+    }
+
     return (
       <span
         key={`${index}-${preparedWord}`}
-        className={isHover ? 'hover:bg-blue-200 selection:hover:bg-blue-200' : ''}
+        className={className}
         data-strong={strongNumber ? `${strongPrefix}${strongNumber}` : null}
         data-morphology={morphologyIndication}
         onMouseEnter={onMouseEnter}
