@@ -49,11 +49,14 @@ export type TDictionaryType = 'explanatory' | 'concordance' | 'language' | 'lexi
 /**
  * Lookup tables
  */
+export type TLookupDictionaryList = IDictionaryLookupDictionary[]
+
 export interface IDictionaryLookupDictionary {
   id: number
   name: string
   type: TDictionaryType
   lang: string
+  isStrong: boolean
   description: string
   matchingType: number
   dictionaryRows: number

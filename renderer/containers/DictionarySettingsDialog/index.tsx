@@ -4,11 +4,12 @@ import { Modal } from 'components'
 import { IDictionarySettingsDialogProps } from './types'
 import noop from 'helpers/noop'
 import useBase from './useBase'
+import { ESelectedDictionaryType } from 'types/dictionary'
 
 export const DictionarySettingsDialog: FC<IDictionarySettingsDialogProps> = (props) => {
   const { isVisible, onClose } = props
 
-  const { result } = useBase(props)
+  const { selectedDictionaries, selectOptions, handleSelect, handleSave } = useBase(props)
 
   return (
     <Modal
@@ -20,6 +21,7 @@ export const DictionarySettingsDialog: FC<IDictionarySettingsDialogProps> = (pro
           <button
             type="button"
             className={`w-full inline-flex justify-center px-4 py-2 rounded border border-transparent shadow bg-blue-600 text-base font-medium text-white hover:bg-blue-700 active:shadow-sm active:bg-blue-800 active:disabled:bg-blue-400 active:disabled:shadow disabled:text-gray-50 disabled:bg-blue-400 sm:ml-3 sm:w-auto sm:text-sm`}
+            onClick={handleSave}
           >
             Save
           </button>
@@ -38,50 +40,68 @@ export const DictionarySettingsDialog: FC<IDictionarySettingsDialogProps> = (pro
           <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
             <div className="sm:col-span-2 font-medium">Hebrew dictionary:</div>
             <div className="sm:col-span-3">
-              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option disabled selected hidden>
+              <select
+                defaultValue={'selected'}
+                value={selectedDictionaries?.[ESelectedDictionaryType.hebrew]?.name ?? 'selected'}
+                className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                data-type="hebrew"
+                onChange={handleSelect}
+              >
+                <option disabled hidden value="selected">
                   Select dictionary...
                 </option>
-                <option>Halot</option>
-                <option>BDAG3</option>
+                {selectOptions}
               </select>
             </div>
           </li>
           <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
             <div className="sm:col-span-2 font-medium">Greek dictionary:</div>
             <div className="sm:col-span-3">
-              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option disabled selected hidden>
+              <select
+                defaultValue={'selected'}
+                value={selectedDictionaries?.[ESelectedDictionaryType.greek]?.name ?? 'selected'}
+                className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                data-type="greek"
+                onChange={handleSelect}
+              >
+                <option disabled hidden value="selected">
                   Select dictionary...
                 </option>
-                <option>Halot</option>
-                <option>BDAG3</option>
+                {selectOptions}
               </select>
             </div>
           </li>
           <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
             <div className="sm:col-span-2 font-medium">Dictionary by Strong:</div>
             <div className="sm:col-span-3">
-              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option disabled selected hidden>
+              <select
+                defaultValue={'selected'}
+                value={selectedDictionaries?.[ESelectedDictionaryType.strong]?.name ?? 'selected'}
+                className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                data-type="strong"
+                onChange={handleSelect}
+              >
+                <option disabled hidden value="selected">
                   Select dictionary...
                 </option>
-                <option>Журом</option>
-                <option>Стронг</option>
+                {selectOptions}
               </select>
             </div>
           </li>
           <li className="grid grid-cols-1 gap-1 sm:grid-cols-5 sm:gap-4">
             <div className="sm:col-span-2 font-medium">Instant Details dictionary:</div>
             <div className="sm:col-span-3">
-              <select className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                <option disabled selected hidden>
+              <select
+                defaultValue={'selected'}
+                value={selectedDictionaries?.[ESelectedDictionaryType.instantDetails]?.name ?? 'selected'}
+                className="block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                data-type="instantDetails"
+                onChange={handleSelect}
+              >
+                <option disabled hidden value="selected">
                   Select dictionary...
                 </option>
-                <option>Журом</option>
-                <option>Стронг</option>
-                <option>Halot</option>
-                <option>BDAG3</option>
+                {selectOptions}
               </select>
             </div>
           </li>
@@ -92,6 +112,5 @@ export const DictionarySettingsDialog: FC<IDictionarySettingsDialogProps> = (pro
 }
 
 DictionarySettingsDialog.defaultProps = {
-  onCloseTabs: noop,
   onClose: noop,
 }

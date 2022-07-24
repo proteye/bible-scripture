@@ -119,9 +119,12 @@ const getLookupDictionaries = () => {
   return new Promise((resolve) => {
     const lookupDictionary = openLookupDictionary()
 
-    lookupDictionary.all('SELECT id, name, type, lang, description, matching_type, dictionary_rows, words_rows, last_modified, is_changed, is_indexed_successfully FROM dictionaries', (_: any, result: IDictionaryLookupDictionary[]) => {
-      resolve(result || [])
-    })
+    lookupDictionary.all(
+      'SELECT id, name, type, lang, is_strong AS isStrong, description, matching_type AS matchingType, dictionary_rows AS dictionaryRows, words_rows AS wordsRows, last_modified AS lastModified, is_changed AS isChanged, is_indexed_successfully AS isIndexedSuccessfully FROM dictionaries',
+      (_: any, result: IDictionaryLookupDictionary[]) => {
+        resolve(result || [])
+      },
+    )
   })
 }
 
@@ -140,6 +143,7 @@ const syncDictionaries = async (): Promise<void> => {
           name,
           type: '',
           lang: '',
+          isStrong: false,
           description: '',
           matchingType: 1,
           dictionaryRows: 0,
@@ -160,6 +164,7 @@ const syncDictionaries = async (): Promise<void> => {
           name,
           type,
           lang,
+          isStrong,
           description,
           matchingType,
           dictionaryRows,
@@ -172,6 +177,7 @@ const syncDictionaries = async (): Promise<void> => {
             name,
             type,
             lang,
+            isStrong,
             description,
             matchingType,
             dictionaryRows,

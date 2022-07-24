@@ -3,16 +3,24 @@ import useDimensions from 'hooks/useDimensions'
 import { getNumberFromString } from 'helpers/getNumberFromString'
 import { ITabProps } from 'components/Tab/types'
 import { ipcRenderer } from 'electron'
-import { IDictionaryDictionary, IDictionaryMorphologyIndication, TModulesList } from '@common/types'
+import {
+  IDictionaryDictionary,
+  IDictionaryMorphologyIndication,
+  TModulesList,
+  TLookupDictionaryList,
+} from '@common/types'
 import { nanoid } from 'nanoid'
 import useTabs from 'hooks/useTabs'
 import { defaultTheme } from 'constants/theme'
 import useVisibleSwitch from 'hooks/useVisibleSwitch'
+import { TSelectedDictionaries } from 'types/dictionary'
 
 const dictionaryModuleName = 'Журом'
 
 const useBase = () => {
   const [bibles, setBibles] = useState<TModulesList>([])
+  const [dictionaries, setDictionaries] = useState<TLookupDictionaryList>([])
+  const [selectedDictionaries, setSelectedDictionaries] = useState<TSelectedDictionaries>({})
   const [tabs, setTabs] = useState<ITabProps[]>([])
   const [topic, setTopic] = useState<IDictionaryDictionary>(null)
   const [morphology, setMorphology] = useState<IDictionaryMorphologyIndication[]>([])
@@ -91,7 +99,7 @@ const useBase = () => {
 
   const getDictionaries = useCallback(async () => {
     const dictionaries = await ipcRenderer.invoke('getLookupDictionaries')
-    console.log('dictionaries', dictionaries)
+    setDictionaries(dictionaries)
   }, [])
 
   const openDictionary = useCallback(async () => {
@@ -174,6 +182,8 @@ const useBase = () => {
     dimensions: { width, height: scrollHeight },
     contextMenuItems,
     instantHtmlText,
+    dictionaries,
+    selectedDictionaries,
     isShowInstant,
     isShowModules,
     isShowDictionarySettings,
@@ -181,6 +191,7 @@ const useBase = () => {
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
+    setSelectedDictionaries,
     closeTabsByModuleName,
     toggleShowInstant,
     toggleShowModules,

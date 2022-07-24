@@ -11,12 +11,14 @@ import useBase from './useBase'
 import { ModulesDialog } from 'containers/ModulesDialog'
 import { DictionarySettingsDialog } from 'containers/DictionarySettingsDialog'
 
-export const HomePage: NextPage = () => {
+export const MainPage: NextPage = () => {
   const {
     tabs,
     selectedIndex,
     contextMenuItems,
     instantHtmlText,
+    dictionaries,
+    selectedDictionaries,
     isShowInstant,
     isShowModules,
     isShowDictionarySettings,
@@ -24,6 +26,7 @@ export const HomePage: NextPage = () => {
     handleAddTab,
     handleCloseTab,
     handleGetDictionaryTopic,
+    setSelectedDictionaries,
     closeTabsByModuleName,
     toggleShowInstant,
     toggleShowModules,
@@ -66,7 +69,13 @@ export const HomePage: NextPage = () => {
         {isShowInstant && <InstantView htmlText={instantHtmlText} />}
       </div>
       <ModulesDialog isVisible={isShowModules} onCloseTabs={closeTabsByModuleName} onClose={toggleShowModules} />
-      <DictionarySettingsDialog isVisible={isShowDictionarySettings} onClose={toggleShowDictionarySettings} />
+      <DictionarySettingsDialog
+        dictionaries={dictionaries}
+        selectedDictionaries={selectedDictionaries}
+        isVisible={isShowDictionarySettings}
+        onSave={setSelectedDictionaries}
+        onClose={toggleShowDictionarySettings}
+      />
     </div>
   )
 }
