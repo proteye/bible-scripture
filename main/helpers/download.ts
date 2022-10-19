@@ -18,13 +18,13 @@ const download = async (
   }
 
   const totalSize = +response.headers.get('Content-Length')
-  onProgress({ total: totalSize, downloaded: 1 })
+  onProgress?.({ total: totalSize, downloaded: 1 })
 
   let downloadedSize = 0
 
   response.body.on('data', (chunk) => {
     downloadedSize += chunk?.length
-    onProgress({ total: totalSize, downloaded: downloadedSize })
+    onProgress?.({ total: totalSize, downloaded: downloadedSize })
   })
 
   const streamPipeline = promisify(pipeline)
